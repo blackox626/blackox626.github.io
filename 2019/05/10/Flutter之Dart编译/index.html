@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，xcode clean 以及删除DerivedData目录重新build依然不行，flutter module工程中执行flutter clean然后xcode bui">
+<meta name="keywords" content="flutter,dart">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter之Dart编译">
+<meta property="og:url" content="https://blackox626.github.io/2019/05/10/Flutter之Dart编译/index.html">
+<meta property="og:site_name" content="BLACK_OX">
+<meta property="og:description" content="前言App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，xcode clean 以及删除DerivedData目录重新build依然不行，flutter module工程中执行flutter clean然后xcode bui">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://blackox626.github.io/images/EE59B87DD73CEB189C46052BADD56287.jpg">
+<meta property="og:image" content="https://blackox626.github.io/images/FF93ABB9061A133EDE7E7150C79BE7FA.jpg">
+<meta property="og:image" content="https://blackox626.github.io/images/EE64BE371786FCFEC704F8E82C5D26BF.jpg">
+<meta property="og:updated_time" content="2019-05-10T18:41:03.913Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flutter之Dart编译">
+<meta name="twitter:description" content="前言App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，xcode clean 以及删除DerivedData目录重新build依然不行，flutter module工程中执行flutter clean然后xcode bui">
+<meta name="twitter:image" content="https://blackox626.github.io/images/EE59B87DD73CEB189C46052BADD56287.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BLACK_OX" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://blackox626.github.io/2019/05/10/Flutter之Dart编译/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Flutter之Dart编译 | BLACK_OX</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BLACK_OX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">好记性不如烂笔头...</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/10/Flutter之Dart编译/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="攻城狮 程序猿...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flutter之Dart编译
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-10 20:46:25" itemprop="dateCreated datePublished" datetime="2019-05-10T20:46:25+08:00">2019-05-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-11 02:41:03" itemprop="dateModified" datetime="2019-05-11T02:41:03+08:00">2019-05-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/05/10/Flutter之Dart编译/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/10/Flutter之Dart编译/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/05/10/Flutter之Dart编译/" class="leancloud_visitors" data-flag-title="Flutter之Dart编译">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">47k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">43 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，<strong>xcode clean</strong> 以及删除<strong>DerivedData</strong>目录重新build依然不行，flutter module工程中执行flutter clean然后xcode build是正常的，所以应该是dart编译产物有缓存导致的。接下来看下dart编译过程。</p>
+<a id="more"></a>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/flutter module</span><br><span class="line">flutter build ios --debug --simulator</span><br></pre></td></tr></table></figure>
+<p>进入到flutter module工程目录 执行flutter build ios命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Running Xcode build...                                                  </span><br><span class="line">                                                   </span><br><span class="line"> ├─Assembling Flutter resources...                           3.6s</span><br><span class="line"> └─Compiling, linking and signing...                        25.4s</span><br><span class="line">Xcode build done.                                           43.9s</span><br></pre></td></tr></table></figure>
+<p>可以看到会进行xcode build，进到.ios目录通过xcode开发runner工程</p>
+<p><img src="/images/EE59B87DD73CEB189C46052BADD56287.jpg" alt="IMAGE"></p>
+<p>可以看到build phases中这样一段脚本，这里就是执行dart代码编译的入口。</p>
+<h3 id="xcode-backend-sh"><a href="#xcode-backend-sh" class="headerlink" title="xcode_backend.sh"></a>xcode_backend.sh</h3><p>进入到脚本所在目录，看下build对应的方法 <strong>BuildApp</strong> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> == 0 ]]; <span class="keyword">then</span></span><br><span class="line">  <span class="comment"># Backwards-compatibility: if no args are provided, build.</span></span><br><span class="line">  BuildApp</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">    <span class="string">"build"</span>)</span><br><span class="line">      BuildApp ;;</span><br><span class="line">    <span class="string">"thin"</span>)</span><br><span class="line">      ThinAppFrameworks ;;</span><br><span class="line">    <span class="string">"embed"</span>)</span><br><span class="line">      EmbedFlutterFrameworks ;;</span><br><span class="line">  <span class="keyword">esac</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">BuildApp</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">  </span><br><span class="line">  StreamOutput <span class="string">" ├─Assembling Flutter resources..."</span></span><br><span class="line">  RunCommand <span class="string">"<span class="variable">$&#123;FLUTTER_ROOT&#125;</span>/bin/flutter"</span> --suppress-analytics             \</span><br><span class="line">    <span class="variable">$&#123;verbose_flag&#125;</span>                                                         \</span><br><span class="line">    build bundle                                                            \</span><br><span class="line">    --target-platform=ios                                                   \</span><br><span class="line">    --target=<span class="string">"<span class="variable">$&#123;target_path&#125;</span>"</span>                                               \</span><br><span class="line">    --<span class="variable">$&#123;build_mode&#125;</span>                                                         \</span><br><span class="line">    --depfile=<span class="string">"<span class="variable">$&#123;build_dir&#125;</span>/snapshot_blob.bin.d"</span>                            \</span><br><span class="line">    --asset-dir=<span class="string">"<span class="variable">$&#123;derived_dir&#125;</span>/App.framework/<span class="variable">$&#123;assets_path&#125;</span>"</span>               \</span><br><span class="line">    <span class="variable">$&#123;precompilation_flag&#125;</span>                                                  \</span><br><span class="line">    <span class="variable">$&#123;flutter_engine_flag&#125;</span>                                                  \</span><br><span class="line">    <span class="variable">$&#123;local_engine_flag&#125;</span>                                                    \</span><br><span class="line">    <span class="variable">$&#123;track_widget_creation_flag&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> [[ $? -ne 0 ]]; <span class="keyword">then</span></span><br><span class="line">    EchoError <span class="string">"Failed to package <span class="variable">$&#123;project_path&#125;</span>."</span></span><br><span class="line">    <span class="built_in">exit</span> -1</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line">  StreamOutput <span class="string">"done"</span></span><br><span class="line">  StreamOutput <span class="string">" └─Compiling, linking and signing..."</span></span><br><span class="line"></span><br><span class="line">  RunCommand <span class="built_in">popd</span> &gt; /dev/null</span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Project <span class="variable">$&#123;project_path&#125;</span> built and packaged successfully."</span></span><br><span class="line">  <span class="built_in">return</span> 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到 ├─Assembling Flutter resources…  在build ios 执行过程中出现过，flutter build bundle 就会开始真正的dart编译<br>–depfile 指定参与编译的dart文件路径集合<br>–asset-dir 指定资源产物的目录</p>
+<h3 id="flutter命令"><a href="#flutter命令" class="headerlink" title="flutter命令"></a>flutter命令</h3><p>路径  <strong>$FLUTTER_ROOT/bin/flutter</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">FLUTTER_TOOLS_DIR=<span class="string">"<span class="variable">$FLUTTER_ROOT</span>/packages/flutter_tools"</span></span><br><span class="line">SNAPSHOT_PATH=<span class="string">"<span class="variable">$FLUTTER_ROOT</span>/bin/cache/flutter_tools.snapshot"</span></span><br><span class="line">STAMP_PATH=<span class="string">"<span class="variable">$FLUTTER_ROOT</span>/bin/cache/flutter_tools.stamp"</span></span><br><span class="line">SCRIPT_PATH=<span class="string">"<span class="variable">$FLUTTER_TOOLS_DIR</span>/bin/flutter_tools.dart"</span></span><br><span class="line">DART_SDK_PATH=<span class="string">"<span class="variable">$FLUTTER_ROOT</span>/bin/cache/dart-sdk"</span></span><br><span class="line"></span><br><span class="line">DART=<span class="string">"<span class="variable">$DART_SDK_PATH</span>/bin/dart"</span></span><br><span class="line">PUB=<span class="string">"<span class="variable">$DART_SDK_PATH</span>/bin/pub"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"<span class="variable">$DART</span>"</span> <span class="variable">$FLUTTER_TOOL_ARGS</span> <span class="string">"<span class="variable">$SNAPSHOT_PATH</span>"</span> <span class="string">"<span class="variable">$@</span>"</span></span><br></pre></td></tr></table></figure>
+<p>flutter_toools.snapshot实际上就是$FLUTTER_ROOT/packages/flutter_tools这个项目编译生成的snapshot文件</p>
+<p>所以flutter build bundle 就是使用dart来执行flutter_tools项目的main方法</p>
+<h3 id="flutter-tools"><a href="#flutter-tools" class="headerlink" title="flutter_tools"></a>flutter_tools</h3><p>路径 <strong>$FLUTTER_ROOT/packages/flutter_tools</strong></p>
+<p>main方法定义 <strong>$FLUTTER_ROOT/packages/flutter_tools/bin/flutter_tools.dart</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">  executable.main(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看看 lib/executable.dart ,在这里会预先创建好每一种命令对应的对象command，通过解析args参数找到对应的command。在BuildCommand类中</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BuildCommand(&#123;<span class="built_in">bool</span> verboseHelp = <span class="keyword">false</span>&#125;) &#123;</span><br><span class="line">    addSubcommand(BuildApkCommand(verboseHelp: verboseHelp));</span><br><span class="line">    addSubcommand(BuildAppBundleCommand(verboseHelp: verboseHelp));</span><br><span class="line">    addSubcommand(BuildAotCommand());</span><br><span class="line">    addSubcommand(BuildIOSCommand());</span><br><span class="line">    addSubcommand(BuildFlxCommand());</span><br><span class="line">    addSubcommand(BuildBundleCommand(verboseHelp: verboseHelp));</span><br><span class="line">    addSubcommand(BuildWebCommand());</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>看到BuildIOSCommand 以及 BuildBundleCommand的创建。<br>BuildIOSCommand 就是前面提到的flutter build ios 会执行到的，这里我们重点看下BuildBundleCommand是如何编译dart代码的？编译后生成了哪些资源？这些资源都是些什么？</p>
+<h3 id="BuildBundleCommand"><a href="#BuildBundleCommand" class="headerlink" title="BuildBundleCommand"></a>BuildBundleCommand</h3><p><img src="/images/FF93ABB9061A133EDE7E7150C79BE7FA.jpg" alt="IMAGE"></p>
+<ul>
+<li>app.dill : 这就是dart代码编译后的二级制文件</li>
+<li>Frontend_server.d : 这里面放的是frontend_server.dart.snapshot的绝对路径，使用该snapshot来编译dart代码生成上面的app.dill</li>
+<li>snapshot_blob.bin.d : 这里面放的是所有参与编译的dart文件的绝对路径的集合，包括项目的代码和flutterSdk的代码以及pub库中的三方代码。</li>
+<li>snapshot_blob.bin.d.fingerprint : 这里面放的是snapshot_blob.bin.d中的所有文件的绝对路径以及每个文件所对应的md5值。使用这个md5来判断该文件是否有修改。在每次编译的时候会判断，如果没有文件修改，则直接跳过编译。</li>
+</ul>
+<h4 id="编译Dart资源"><a href="#编译Dart资源" class="headerlink" title="编译Dart资源"></a>编译Dart资源</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;<span class="keyword">void</span>&gt; build(&#123;</span><br><span class="line">  TargetPlatform platform,</span><br><span class="line">  BuildMode buildMode,</span><br><span class="line">  <span class="built_in">String</span> mainPath = defaultMainPath,</span><br><span class="line">  <span class="built_in">String</span> manifestPath = defaultManifestPath,</span><br><span class="line">  <span class="built_in">String</span> applicationKernelFilePath,</span><br><span class="line">  <span class="built_in">String</span> depfilePath,</span><br><span class="line">  <span class="built_in">String</span> privateKeyPath = defaultPrivateKeyPath,</span><br><span class="line">  <span class="built_in">String</span> assetDirPath,</span><br><span class="line">  <span class="built_in">String</span> packagesPath,</span><br><span class="line">  <span class="built_in">bool</span> precompiledSnapshot = <span class="keyword">false</span>,</span><br><span class="line">  <span class="built_in">bool</span> reportLicensedPackages = <span class="keyword">false</span>,</span><br><span class="line">  <span class="built_in">bool</span> trackWidgetCreation = <span class="keyword">false</span>,</span><br><span class="line">  <span class="built_in">String</span> compilationTraceFilePath,</span><br><span class="line">  <span class="built_in">bool</span> createPatch = <span class="keyword">false</span>,</span><br><span class="line">  <span class="built_in">String</span> buildNumber,</span><br><span class="line">  <span class="built_in">String</span> baselineDir,</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; extraFrontEndOptions = <span class="keyword">const</span> &lt;<span class="built_in">String</span>&gt;[],</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; extraGenSnapshotOptions = <span class="keyword">const</span> &lt;<span class="built_in">String</span>&gt;[],</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; fileSystemRoots,</span><br><span class="line">  <span class="built_in">String</span> fileSystemScheme,</span><br><span class="line">&#125;) <span class="keyword">async</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// xcode_backend.sh中通过--depfile传入进来的</span></span><br><span class="line">  <span class="comment">// 默认是build/snapshot_blob.bin.d文件</span></span><br><span class="line">  </span><br><span class="line">  depfilePath ??= defaultDepfilePath;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 通过--asset-dir传入</span></span><br><span class="line">  <span class="comment">// 该目录中文件就是flutter的产物，最终合并到app.framework中的flutter_assets目录</span></span><br><span class="line">  </span><br><span class="line">  assetDirPath ??= getAssetBuildDirectory();</span><br><span class="line">  packagesPath ??= fs.path.absolute(PackageMap.globalPackagesPath);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// app.dill dart代码编译后的二级制文件</span></span><br><span class="line">  applicationKernelFilePath ??= getDefaultApplicationKernelPath(trackWidgetCreation: trackWidgetCreation);</span><br><span class="line">  <span class="keyword">final</span> FlutterProject flutterProject = <span class="keyword">await</span> FlutterProject.current();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (compilationTraceFilePath != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (buildMode != BuildMode.dynamicProfile &amp;&amp; buildMode != BuildMode.dynamicRelease) &#123;</span><br><span class="line">      </span><br><span class="line">      compilationTraceFilePath = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (compilationTraceFilePath.isEmpty) &#123;</span><br><span class="line">      <span class="comment">// Disable JIT snapshotting if flag is empty.</span></span><br><span class="line">      printStatus(<span class="string">'Code snapshot will be disabled for this build.'</span>);</span><br><span class="line">      compilationTraceFilePath = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!fs.file(compilationTraceFilePath).existsSync()) &#123;</span><br><span class="line">      <span class="comment">// Be forgiving if compilation trace file is missing.</span></span><br><span class="line">      printStatus(<span class="string">'No compilation trace available. To optimize performance, consider using --train.'</span>);</span><br><span class="line">      <span class="keyword">final</span> File tmp = fs.systemTempDirectory.childFile(<span class="string">'flutterEmptyCompilationTrace.txt'</span>);</span><br><span class="line">      compilationTraceFilePath = (tmp..createSync(recursive: <span class="keyword">true</span>)).path;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      printStatus(<span class="string">'Code snapshot will use compilation training file <span class="subst">$compilationTraceFilePath</span>.'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  DevFSContent kernelContent;</span><br><span class="line">  <span class="keyword">if</span> (!precompiledSnapshot) &#123;</span><br><span class="line">    <span class="keyword">if</span> ((extraFrontEndOptions != <span class="keyword">null</span>) &amp;&amp; extraFrontEndOptions.isNotEmpty)</span><br><span class="line">      printTrace(<span class="string">'Extra front-end options: <span class="subst">$extraFrontEndOptions</span>'</span>);</span><br><span class="line">    ensureDirectoryExists(applicationKernelFilePath);</span><br><span class="line">    <span class="keyword">final</span> KernelCompiler kernelCompiler = <span class="keyword">await</span> kernelCompilerFactory.create(flutterProject);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 编译dart代码，生成app.dill 和 snapshot_blob.bin.d 以及 snapshot_blob.bin.d.fingerprint</span></span><br><span class="line">    <span class="keyword">final</span> CompilerOutput compilerOutput = <span class="keyword">await</span> kernelCompiler.compile(</span><br><span class="line">      sdkRoot: artifacts.getArtifactPath(Artifact.flutterPatchedSdkPath),</span><br><span class="line">      incrementalCompilerByteStorePath: compilationTraceFilePath != <span class="keyword">null</span> ? <span class="keyword">null</span> :</span><br><span class="line">          fs.path.absolute(getIncrementalCompilerByteStoreDirectory()),</span><br><span class="line">      mainPath: fs.file(mainPath).absolute.path,</span><br><span class="line">      outputFilePath: applicationKernelFilePath,</span><br><span class="line">      depFilePath: depfilePath,</span><br><span class="line">      trackWidgetCreation: trackWidgetCreation,</span><br><span class="line">      extraFrontEndOptions: extraFrontEndOptions,</span><br><span class="line">      fileSystemRoots: fileSystemRoots,</span><br><span class="line">      fileSystemScheme: fileSystemScheme,</span><br><span class="line">      packagesPath: packagesPath,</span><br><span class="line">      linkPlatformKernelIn: compilationTraceFilePath != <span class="keyword">null</span>,</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">if</span> (compilerOutput?.outputFilename == <span class="keyword">null</span>) &#123;</span><br><span class="line">      throwToolExit(<span class="string">'Compiler failed on <span class="subst">$mainPath</span>'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    kernelContent = DevFSFileContent(fs.file(compilerOutput.outputFilename));</span><br><span class="line">    <span class="comment">// 生成 frontend_server.d文件，向文件中写入frontendServerSnapshotForEngineDartSdk的路径</span></span><br><span class="line">    <span class="keyword">await</span> fs.directory(getBuildDirectory()).childFile(<span class="string">'frontend_server.d'</span>)</span><br><span class="line">        .writeAsString(<span class="string">'frontend_server.d: <span class="subst">$&#123;artifacts.getArtifactPath(Artifact.frontendServerSnapshotForEngineDartSdk)&#125;</span>\n'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (compilationTraceFilePath != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">final</span> JITSnapshotter snapshotter = JITSnapshotter();</span><br><span class="line">      <span class="keyword">final</span> <span class="built_in">int</span> snapshotExitCode = <span class="keyword">await</span> snapshotter.build(</span><br><span class="line">        platform: platform,</span><br><span class="line">        buildMode: buildMode,</span><br><span class="line">        mainPath: applicationKernelFilePath,</span><br><span class="line">        outputPath: getBuildDirectory(),</span><br><span class="line">        packagesPath: packagesPath,</span><br><span class="line">        compilationTraceFilePath: compilationTraceFilePath,</span><br><span class="line">        extraGenSnapshotOptions: extraGenSnapshotOptions,</span><br><span class="line">        createPatch: createPatch,</span><br><span class="line">        buildNumber: buildNumber,</span><br><span class="line">        baselineDir: baselineDir,</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">if</span> (snapshotExitCode != <span class="number">0</span>) &#123;</span><br><span class="line">        throwToolExit(<span class="string">'Snapshotting exited with non-zero exit code: <span class="subst">$snapshotExitCode</span>'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 生成 flutter_assets</span></span><br><span class="line">  <span class="keyword">final</span> AssetBundle assets = <span class="keyword">await</span> buildAssets(</span><br><span class="line">    manifestPath: manifestPath,</span><br><span class="line">    assetDirPath: assetDirPath,</span><br><span class="line">    packagesPath: packagesPath,</span><br><span class="line">    reportLicensedPackages: reportLicensedPackages,</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">if</span> (assets == <span class="keyword">null</span>)</span><br><span class="line">    throwToolExit(<span class="string">'Error building assets'</span>, exitCode: <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> assemble(</span><br><span class="line">    buildMode: buildMode,</span><br><span class="line">    assetBundle: assets,</span><br><span class="line">    kernelContent: kernelContent,</span><br><span class="line">    privateKeyPath: privateKeyPath,</span><br><span class="line">    assetDirPath: assetDirPath,</span><br><span class="line">    compilationTraceFilePath: compilationTraceFilePath,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="编译dart代码"><a href="#编译dart代码" class="headerlink" title="编译dart代码"></a>编译dart代码</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">KernelCompiler</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> KernelCompiler();</span><br><span class="line"></span><br><span class="line">  Future&lt;CompilerOutput&gt; compile(&#123;</span><br><span class="line">    <span class="built_in">String</span> sdkRoot,</span><br><span class="line">    <span class="built_in">String</span> mainPath,</span><br><span class="line">    <span class="built_in">String</span> outputFilePath,</span><br><span class="line">    <span class="built_in">String</span> depFilePath,</span><br><span class="line">    TargetModel targetModel = TargetModel.flutter,</span><br><span class="line">    <span class="built_in">bool</span> linkPlatformKernelIn = <span class="keyword">false</span>,</span><br><span class="line">    <span class="built_in">bool</span> aot = <span class="keyword">false</span>,</span><br><span class="line">    <span class="meta">@required</span> <span class="built_in">bool</span> trackWidgetCreation,</span><br><span class="line">    <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; extraFrontEndOptions,</span><br><span class="line">    <span class="built_in">String</span> incrementalCompilerByteStorePath,</span><br><span class="line">    <span class="built_in">String</span> packagesPath,</span><br><span class="line">    <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; fileSystemRoots,</span><br><span class="line">    <span class="built_in">String</span> fileSystemScheme,</span><br><span class="line">    <span class="built_in">bool</span> targetProductVm = <span class="keyword">false</span>,</span><br><span class="line">    <span class="built_in">String</span> initializeFromDill,</span><br><span class="line">  &#125;) <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="built_in">String</span> frontendServer = artifacts.getArtifactPath(</span><br><span class="line">      Artifact.frontendServerSnapshotForEngineDartSdk</span><br><span class="line">    );</span><br><span class="line">    FlutterProject flutterProject;</span><br><span class="line">    <span class="keyword">if</span> (fs.file(<span class="string">'pubspec.yaml'</span>).existsSync()) &#123;</span><br><span class="line">      flutterProject = <span class="keyword">await</span> FlutterProject.current();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// TODO(cbracken): eliminate pathFilter.</span></span><br><span class="line">    <span class="comment">// Currently the compiler emits buildbot paths for the core libs in the</span></span><br><span class="line">    <span class="comment">// depfile. None of these are available on the local host.</span></span><br><span class="line">    Fingerprinter fingerprinter;</span><br><span class="line">    <span class="comment">// 如果snapshot_blob.bin.d文件不为空，则说明有编译缓存</span></span><br><span class="line">    <span class="keyword">if</span> (depFilePath != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 判断与上次编译对比，是否有文件的md5改变</span></span><br><span class="line">      fingerprinter = Fingerprinter(</span><br><span class="line">        <span class="comment">// snapshot_blob.bin.d.fingerprint文件</span></span><br><span class="line">        fingerprintPath: <span class="string">'<span class="subst">$depFilePath</span>.fingerprint'</span>,</span><br><span class="line">        paths: &lt;<span class="built_in">String</span>&gt;[mainPath],</span><br><span class="line">        properties: &lt;<span class="built_in">String</span>, <span class="built_in">String</span>&gt;&#123;</span><br><span class="line">          <span class="string">'entryPoint'</span>: mainPath,</span><br><span class="line">          <span class="string">'trackWidgetCreation'</span>: trackWidgetCreation.toString(),</span><br><span class="line">          <span class="string">'linkPlatformKernelIn'</span>: linkPlatformKernelIn.toString(),</span><br><span class="line">          <span class="string">'engineHash'</span>: Cache.instance.engineRevision,</span><br><span class="line">          <span class="string">'buildersUsed'</span>: <span class="string">'<span class="subst">$&#123;flutterProject != <span class="keyword">null</span> ? flutterProject.hasBuilders : <span class="keyword">false</span>&#125;</span>'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        depfilePaths: &lt;<span class="built_in">String</span>&gt;[depFilePath],</span><br><span class="line">        pathFilter: (<span class="built_in">String</span> path) =&gt; !path.startsWith(<span class="string">'/b/build/slave/'</span>),</span><br><span class="line">      );</span><br><span class="line">      <span class="comment">// 判断是否有文件改动，如果没有，则直接返回。</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">await</span> fingerprinter.doesFingerprintMatch()) &#123;</span><br><span class="line">        printTrace(<span class="string">'Skipping kernel compilation. Fingerprint match.'</span>);</span><br><span class="line">        <span class="keyword">return</span> CompilerOutput(outputFilePath, <span class="number">0</span>, <span class="comment">/* sources */</span> <span class="keyword">null</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果没有上次编译缓存，或者文件有改变，Fingerprinter不匹配，则使用dart重新编译</span></span><br><span class="line">    <span class="keyword">final</span> <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; command = &lt;<span class="built_in">String</span>&gt;[</span><br><span class="line">      engineDartPath,</span><br><span class="line">      frontendServer,</span><br><span class="line">      <span class="string">'--sdk-root'</span>,</span><br><span class="line">      sdkRoot,</span><br><span class="line">      <span class="string">'--strong'</span>,</span><br><span class="line">      <span class="string">'--target=<span class="subst">$targetModel</span>'</span>,</span><br><span class="line">    ];</span><br><span class="line">    </span><br><span class="line">    ... </span><br><span class="line">   </span><br><span class="line">    <span class="comment">//参数拼接</span></span><br><span class="line">    <span class="keyword">final</span> Process server = <span class="keyword">await</span> processManager</span><br><span class="line">      .start(command)</span><br><span class="line">      .catchError((<span class="keyword">dynamic</span> error, StackTrace stack) &#123;</span><br><span class="line">        printError(<span class="string">'Failed to start frontend server <span class="subst">$error</span>, <span class="subst">$stack</span>'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> StdoutHandler _stdoutHandler = StdoutHandler();</span><br><span class="line"></span><br><span class="line">    server.stderr</span><br><span class="line">      .transform&lt;<span class="built_in">String</span>&gt;(utf8.decoder)</span><br><span class="line">      .listen(printError);</span><br><span class="line">    server.stdout</span><br><span class="line">      .transform&lt;<span class="built_in">String</span>&gt;(utf8.decoder)</span><br><span class="line">      .transform&lt;<span class="built_in">String</span>&gt;(<span class="keyword">const</span> LineSplitter())</span><br><span class="line">      .listen(_stdoutHandler.handler);</span><br><span class="line">    <span class="keyword">final</span> <span class="built_in">int</span> exitCode = <span class="keyword">await</span> server.exitCode;</span><br><span class="line">    <span class="keyword">if</span> (exitCode == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (fingerprinter != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">await</span> fingerprinter.writeFingerprint();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> _stdoutHandler.compilerOutput.future;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Fingerprint对比"><a href="#Fingerprint对比" class="headerlink" title="Fingerprint对比"></a>Fingerprint对比</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;<span class="built_in">bool</span>&gt; doesFingerprintMatch() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 获取到当前的 snapshot_blob.bin.d.fingerprint文件</span></span><br><span class="line">      <span class="keyword">final</span> File fingerprintFile = fs.file(fingerprintPath);</span><br><span class="line">      <span class="keyword">if</span> (!fingerprintFile.existsSync())</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!_depfilePaths.every(fs.isFileSync))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">final</span> <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; paths = <span class="keyword">await</span> _getPaths();</span><br><span class="line">      <span class="keyword">if</span> (!paths.every(fs.isFileSync))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      <span class="comment">// 读取缓存的的snapshot_blob.bin.d.fingerprint文件，构建一个老的Fingerprint对象</span></span><br><span class="line">      <span class="keyword">final</span> Fingerprint oldFingerprint = Fingerprint.fromJson(<span class="keyword">await</span> fingerprintFile.readAsString());</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 构建一个新的Fingerprint对象</span></span><br><span class="line">      <span class="keyword">final</span> Fingerprint newFingerprint = <span class="keyword">await</span> buildFingerprint();</span><br><span class="line">      <span class="comment">// 对比两次的文件集合中的每个文件的md5是否一样</span></span><br><span class="line">      <span class="keyword">return</span> oldFingerprint == newFingerprint;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="comment">// Log exception and continue, fingerprinting is only a performance improvement.</span></span><br><span class="line">      printTrace(<span class="string">'Fingerprint check error: <span class="subst">$e</span>'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>重点 看看 newFingerprint</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;Fingerprint&gt; buildFingerprint() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; paths = <span class="keyword">await</span> _getPaths();</span><br><span class="line">  <span class="keyword">return</span> Fingerprint.fromBuildInputs(_properties, paths);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt;&gt; _getPaths() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">Set</span>&lt;<span class="built_in">String</span>&gt; paths = _paths.toSet();</span><br><span class="line">  <span class="comment">// 使用缓存的snapshot_blob.bin.d文件中的文件集合</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="built_in">String</span> depfilePath <span class="keyword">in</span> _depfilePaths)</span><br><span class="line">    paths.addAll(<span class="keyword">await</span> readDepfile(depfilePath));</span><br><span class="line">  <span class="keyword">final</span> FingerprintPathFilter filter = _pathFilter ?? (<span class="built_in">String</span> path) =&gt; <span class="keyword">true</span>;</span><br><span class="line">  <span class="keyword">return</span> paths.where(filter).toList()..sort();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到newFingerprint 路径依旧是使用缓存的路径，依次计算路径对应文件的md5，所以问题就在这里了</p>
+<p>执行flutter packages upgrade更新pub依赖的时候，build目录下的缓存产物并不会有任何变动，路径依然是老的路径。有一种情况就是module工程 lib 目录下的dat文件有改动，newFingerprint就会跟old不一样，这会重新编译dart，这里又有一个问题，就是如果lib目录下是新增dart文件 则不会被编译进去。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>综上，执行flutter clean命令，清空build目录缓存文件，build ios 就会重新编译整个dart文件，包括dart依赖中的。</p>
+<p><img src="/images/EE64BE371786FCFEC704F8E82C5D26BF.jpg" alt="IMAGE"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://witgao.com/categories/flutter/" target="_blank" rel="noopener">Flutter深入之flutter-build-bundle命令如何编译Dart?</a></p>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>创作不易 鼓励一下</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="BLACK_OX 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+          
+            <a href="/tags/dart/" rel="tag"><i class="fa fa-tag"></i> dart</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/10/hello-hexo/" rel="next" title="hello_hexo">
+                <i class="fa fa-chevron-left"></i> hello_hexo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="BLACK_OX">
+            
+              <p class="site-author-name" itemprop="name">BLACK_OX</p>
+              <div class="site-description motion-element" itemprop="description">攻城狮 程序猿...</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/blackox626" title="GitHub &rarr; https://github.com/blackox626" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:blackox626@gmail.com" title="E-Mail &rarr; mailto:blackox626@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译"><span class="nav-number">2.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#xcode-backend-sh"><span class="nav-number">2.1.</span> <span class="nav-text">xcode_backend.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flutter命令"><span class="nav-number">2.2.</span> <span class="nav-text">flutter命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flutter-tools"><span class="nav-number">2.3.</span> <span class="nav-text">flutter_tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BuildBundleCommand"><span class="nav-number">2.4.</span> <span class="nav-text">BuildBundleCommand</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编译Dart资源"><span class="nav-number">2.4.1.</span> <span class="nav-text">编译Dart资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译dart代码"><span class="nav-number">2.4.2.</span> <span class="nav-text">编译dart代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fingerprint对比"><span class="nav-number">2.4.3.</span> <span class="nav-text">Fingerprint对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">3.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BLACK_OX</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">15k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">14 分钟</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div>
+
+
+
+
+<div class="visit-by">
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    <span id="busuanzi_value_site_pv"></span>
+  </span>
+
+  <span class="post-meta-divider">|</span>
+
+  <i class="fa fa-user"></i>
+    <span id="busuanzi_container_site_uv">
+      <span id="busuanzi_value_site_uv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'w08RcqU6xdgWNax2rf2DadYg-gzGzoHsz',
+    appKey: 'RTvfUI1YqH1A8gBIxOMhCXNJ',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'w08RcqU6xdgWNax2rf2DadYg-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'w08RcqU6xdgWNax2rf2DadYg-gzGzoHsz',
+                'X-LC-Key': 'RTvfUI1YqH1A8gBIxOMhCXNJ',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

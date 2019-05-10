@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>BLACK_OX</title>
+  
+  <subtitle>好记性不如烂笔头...</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://blackox626.github.io/"/>
+  <updated>2019-05-10T18:41:03.913Z</updated>
+  <id>https://blackox626.github.io/</id>
+  
+  <author>
+    <name>BLACK_OX</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Flutter之Dart编译</title>
+    <link href="https://blackox626.github.io/2019/05/10/Flutter%E4%B9%8BDart%E7%BC%96%E8%AF%91/"/>
+    <id>https://blackox626.github.io/2019/05/10/Flutter之Dart编译/</id>
+    <published>2019-05-10T12:46:25.000Z</published>
+    <updated>2019-05-10T18:41:03.913Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，&lt;strong&gt;xcode clean&lt;/strong&gt; 以及删除&lt;strong&gt;DerivedData&lt;/strong&gt;目录重新build依然不行，flutter module工程中执行flutter clean然后xcode build是正常的，所以应该是dart编译产物有缓存导致的。接下来看下dart编译过程。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hello_hexo</title>
+    <link href="https://blackox626.github.io/2019/05/10/hello-hexo/"/>
+    <id>https://blackox626.github.io/2019/05/10/hello-hexo/</id>
+    <published>2019-05-10T03:22:21.000Z</published>
+    <updated>2019-05-10T03:22:21.686Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://blackox626.github.io/2019/05/10/hello-world/"/>
+    <id>https://blackox626.github.io/2019/05/10/hello-world/</id>
+    <published>2019-05-10T03:09:52.116Z</published>
+    <updated>2019-05-10T03:09:52.117Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
+        
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
