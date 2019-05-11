@@ -107,7 +107,7 @@
 <meta property="og:image" content="https://blackox626.github.io/images/EE59B87DD73CEB189C46052BADD56287.jpg">
 <meta property="og:image" content="https://blackox626.github.io/images/FF93ABB9061A133EDE7E7150C79BE7FA.jpg">
 <meta property="og:image" content="https://blackox626.github.io/images/EE64BE371786FCFEC704F8E82C5D26BF.jpg">
-<meta property="og:updated_time" content="2019-05-10T18:41:03.913Z">
+<meta property="og:updated_time" content="2019-05-11T06:04:20.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flutter之Dart编译">
 <meta name="twitter:description" content="前言App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，xcode clean 以及删除DerivedData目录重新build依然不行，flutter module工程中执行flutter clean然后xcode bui">
@@ -515,7 +515,7 @@
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> path/to/flutter module</span><br><span class="line">flutter build ios --debug --simulator</span><br></pre></td></tr></table></figure>
 <p>进入到flutter module工程目录 执行flutter build ios命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Running Xcode build...                                                  </span><br><span class="line">                                                   </span><br><span class="line"> ├─Assembling Flutter resources...                           3.6s</span><br><span class="line"> └─Compiling, linking and signing...                        25.4s</span><br><span class="line">Xcode build done.                                           43.9s</span><br></pre></td></tr></table></figure>
-<p>可以看到会进行xcode build，进到.ios目录通过xcode开发runner工程</p>
+<p>可以看到会进行xcode build，进到.ios目录通过xcode打开Runner工程</p>
 <p><img src="/images/EE59B87DD73CEB189C46052BADD56287.jpg" alt="IMAGE"></p>
 <p>可以看到build phases中这样一段脚本，这里就是执行dart代码编译的入口。</p>
 <h3 id="xcode-backend-sh"><a href="#xcode-backend-sh" class="headerlink" title="xcode_backend.sh"></a>xcode_backend.sh</h3><p>进入到脚本所在目录，看下build对应的方法 <strong>BuildApp</strong> </p>
