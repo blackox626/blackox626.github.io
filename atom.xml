@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2019-05-13T02:06:32.803Z</updated>
+  <updated>2019-05-14T09:59:54.323Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -17,11 +17,55 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>sublime text 3</title>
+    <link href="https://blackox626.github.io/2019/05/14/sublime-text-3/"/>
+    <id>https://blackox626.github.io/2019/05/14/sublime-text-3/</id>
+    <published>2019-05-14T09:58:26.000Z</published>
+    <updated>2019-05-14T09:59:54.323Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;sublime-text3-install-package-control&quot;&gt;&lt;a href=&quot;#sublime-text3-install-package-control&quot; class=&quot;headerlink&quot; title=&quot;sublime text3
+        
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>vim shortcuts</title>
+    <link href="https://blackox626.github.io/2019/05/14/vim-shortcuts/"/>
+    <id>https://blackox626.github.io/2019/05/14/vim-shortcuts/</id>
+    <published>2019-05-14T07:27:19.000Z</published>
+    <updated>2019-05-14T10:00:19.986Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;/images/4105806-3b63cace5838531a.jpg&quot; alt=&quot;vim
+        
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Flutter之Dart编译</title>
     <link href="https://blackox626.github.io/2019/05/10/Flutter%E4%B9%8BDart%E7%BC%96%E8%AF%91/"/>
     <id>https://blackox626.github.io/2019/05/10/Flutter之Dart编译/</id>
     <published>2019-05-10T12:46:25.000Z</published>
-    <updated>2019-05-13T02:06:32.803Z</updated>
+    <updated>2019-05-14T07:52:05.571Z</updated>
     
     <summary type="html">
     
