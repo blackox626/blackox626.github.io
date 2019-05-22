@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2019-05-14T09:59:54.323Z</updated>
+  <updated>2019-05-22T06:01:24.637Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>vmstatus</title>
+    <link href="https://blackox626.github.io/2019/05/22/vmstatus/"/>
+    <id>https://blackox626.github.io/2019/05/22/vmstatus/</id>
+    <published>2019-05-22T03:00:39.000Z</published>
+    <updated>2019-05-22T06:01:24.637Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;vmstatus&quot;&gt;&lt;a href=&quot;#vmstatus&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="java" scheme="https://blackox626.github.io/tags/java/"/>
+    
+      <category term="linux" scheme="https://blackox626.github.io/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>sublime text 3</title>
     <link href="https://blackox626.github.io/2019/05/14/sublime-text-3/"/>
     <id>https://blackox626.github.io/2019/05/14/sublime-text-3/</id>
     <published>2019-05-14T09:58:26.000Z</published>
-    <updated>2019-05-14T09:59:54.323Z</updated>
+    <updated>2019-05-15T03:28:29.016Z</updated>
     
     <summary type="html">
     
@@ -43,7 +69,7 @@
     <link href="https://blackox626.github.io/2019/05/14/vim-shortcuts/"/>
     <id>https://blackox626.github.io/2019/05/14/vim-shortcuts/</id>
     <published>2019-05-14T07:27:19.000Z</published>
-    <updated>2019-05-14T10:00:19.986Z</updated>
+    <updated>2019-05-14T10:04:29.101Z</updated>
     
     <summary type="html">
     
@@ -65,7 +91,7 @@
     <link href="https://blackox626.github.io/2019/05/10/Flutter%E4%B9%8BDart%E7%BC%96%E8%AF%91/"/>
     <id>https://blackox626.github.io/2019/05/10/Flutter之Dart编译/</id>
     <published>2019-05-10T12:46:25.000Z</published>
-    <updated>2019-05-14T07:52:05.571Z</updated>
+    <updated>2019-05-18T05:49:34.544Z</updated>
     
     <summary type="html">
     
