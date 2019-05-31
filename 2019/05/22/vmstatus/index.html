@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="vmstatusvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- -">
+  <meta name="description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
 <meta name="keywords" content="java,linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vmstatus">
+<meta property="og:title" content="vmstatu">
 <meta property="og:url" content="https://blackox626.github.io/2019/05/22/vmstatus/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="vmstatusvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- -">
+<meta property="og:description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-22T06:01:24.637Z">
+<meta property="og:updated_time" content="2019-05-27T02:19:46.397Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vmstatus">
-<meta name="twitter:description" content="vmstatusvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- -">
+<meta name="twitter:title" content="vmstatu">
+<meta name="twitter:description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
 
 
 
@@ -127,7 +127,7 @@
   };
 </script>
 
-  <title>vmstatus | BLACK_OX</title>
+  <title>vmstatu | BLACK_OX</title>
   
 
 
@@ -393,7 +393,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vmstatus
+          <h1 class="post-title" itemprop="name headline">vmstatu
 
               
             
@@ -447,7 +447,7 @@
 
           
           
-            <span id="/2019/05/22/vmstatus/" class="leancloud_visitors" data-flag-title="vmstatus">
+            <span id="/2019/05/22/vmstatus/" class="leancloud_visitors" data-flag-title="vmstatu">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -506,7 +506,7 @@
       
 
       
-        <h2 id="vmstatus"><a href="#vmstatus" class="headerlink" title="vmstatus"></a>vmstatus</h2><p>vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。<br>相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。</p>
+        <h2 id="vmstatu"><a href="#vmstatu" class="headerlink" title="vmstatu"></a>vmstatu</h2><p>vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。<br>相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$vmstat</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0      0 215220      0 771404    0    0     2    15    0    1  0  0 100  0  0</span><br></pre></td></tr></table></figure>
 <p>一般vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$vmstat 2 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 0  0      0 202924      0 785780    0    0     2    15    0    1  0  0 100  0  0</span><br><span class="line"> 0  0      0 203032      0 785812    0    0     0   155  748 1382  0  0 100  0  0</span><br></pre></td></tr></table></figure>
@@ -633,6 +633,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/05/31/mustache之dart/" rel="prev" title="mustache之dart">
+                mustache之dart <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -706,7 +710,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -750,7 +754,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -821,7 +827,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstatus"><span class="nav-text">vmstatus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段"><span class="nav-text">字段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#procs"><span class="nav-text">procs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-（KB）"><span class="nav-text">memory （KB）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-text">swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#io"><span class="nav-text">io</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system"><span class="nav-text">system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu"><span class="nav-text">cpu</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstatu"><span class="nav-text">vmstatu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段"><span class="nav-text">字段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#procs"><span class="nav-text">procs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-（KB）"><span class="nav-text">memory （KB）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-text">swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#io"><span class="nav-text">io</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system"><span class="nav-text">system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu"><span class="nav-text">cpu</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -855,7 +861,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">18k</span>
+    <span title="站点总字数">23k</span>
   
 
   
@@ -864,7 +870,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">17 分钟</span>
+    <span title="站点阅读时长">21 分钟</span>
   
 </div>
 

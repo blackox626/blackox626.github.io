@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2019-05-22T06:01:24.637Z</updated>
+  <updated>2019-05-31T05:31:41.029Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>vmstatus</title>
+    <title>mustache之dart</title>
+    <link href="https://blackox626.github.io/2019/05/31/mustache%E4%B9%8Bdart/"/>
+    <id>https://blackox626.github.io/2019/05/31/mustache之dart/</id>
+    <published>2019-05-31T03:23:40.000Z</published>
+    <updated>2019-05-31T05:31:41.029Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;Mustache 是一个 logic-less （轻逻辑）模板解析引擎，可以应用在 js、PHP、Python、Perl 等多种编程语言中。这里主要是看dart中的应用。&lt;/p&gt;
+&lt;p&gt;模板语法很简单  &lt;a href=&quot;https://pub.dev/packages/mustache#-readme-tab-&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;看这里&lt;/a&gt;&lt;br&gt;&lt;figure class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;keyName&amp;#125;&amp;#125; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;#keyName&amp;#125;&amp;#125; &amp;#123;&amp;#123;/keyName&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;^keyName&amp;#125;&amp;#125; &amp;#123;&amp;#123;/keyName&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;.&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;&amp;gt;partials&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;&amp;#123;keyName&amp;#125;&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&amp;#123;!comments&amp;#125;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+      <category term="mustache" scheme="https://blackox626.github.io/tags/mustache/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vmstatu</title>
     <link href="https://blackox626.github.io/2019/05/22/vmstatus/"/>
     <id>https://blackox626.github.io/2019/05/22/vmstatus/</id>
     <published>2019-05-22T03:00:39.000Z</published>
-    <updated>2019-05-22T06:01:24.637Z</updated>
+    <updated>2019-05-27T02:19:46.397Z</updated>
     
     <summary type="html">
     
@@ -29,7 +54,7 @@
       
         
         
-          &lt;h2 id=&quot;vmstatus&quot;&gt;&lt;a href=&quot;#vmstatus&quot; class=&quot;headerlink&quot;
+          &lt;h2 id=&quot;vmstatu&quot;&gt;&lt;a href=&quot;#vmstatu&quot; class=&quot;headerlink&quot;
         
       
     
