@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2019-05-31T05:31:41.029Z</updated>
+  <updated>2019-10-14T03:56:30.120Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter ios 13 dark mode</title>
+    <link href="https://blackox626.github.io/2019/10/14/flutter-ios-13-dark-mode/"/>
+    <id>https://blackox626.github.io/2019/10/14/flutter-ios-13-dark-mode/</id>
+    <published>2019-10-14T03:46:08.000Z</published>
+    <updated>2019-10-14T03:56:30.120Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;ios 13 开启 dark model,flutter页面status bar文字一直是白色&lt;br&gt;&lt;figure
+        
+      
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+      <category term="ios" scheme="https://blackox626.github.io/tags/ios/"/>
+    
+  </entry>
   
   <entry>
     <title>mustache之dart</title>
