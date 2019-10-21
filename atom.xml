@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2019-10-16T03:25:07.364Z</updated>
+  <updated>2019-10-21T07:02:19.098Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter eventChannel crash on ios</title>
+    <link href="https://blackox626.github.io/2019/10/21/flutter-eventChannel-crash-on-ios/"/>
+    <id>https://blackox626.github.io/2019/10/21/flutter-eventChannel-crash-on-ios/</id>
+    <published>2019-10-21T06:36:21.000Z</published>
+    <updated>2019-10-21T07:02:19.098Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;flutter-issue&quot;&gt;&lt;a href=&quot;#flutter-issue&quot; class=&quot;headerlink&quot; title=&quot;flutter issue&quot;&gt;&lt;/a&gt;flutter issue&lt;/h2&gt;&lt;p&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+      <category term="ios" scheme="https://blackox626.github.io/tags/ios/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter ios 13 dark mode</title>
