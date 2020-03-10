@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
-<meta name="keywords" content="java,linux">
+  <meta name="description" content="jps输出JVM中运行的进程状态信息 1234-q 不输出类名、Jar名和传入main方法的参数-m 输出传入main方法的参数-l 输出main类或Jar的全限名-v 输出传入JVM的参数 jps -mlv找到java应用的pid jstack根据java应用pid ,查看进程中线程堆栈信息 jstack pid top找出该进程内最耗费CPU的线程 top -Hp pid 转为十六进制prin">
+<meta name="keywords" content="java,jvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vmstatu">
-<meta property="og:url" content="https://blackox626.github.io/2019/05/22/vmstatus/index.html">
+<meta property="og:title" content="jvm调优">
+<meta property="og:url" content="https://blackox626.github.io/2019/05/23/jvm调优/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
+<meta property="og:description" content="jps输出JVM中运行的进程状态信息 1234-q 不输出类名、Jar名和传入main方法的参数-m 输出传入main方法的参数-l 输出main类或Jar的全限名-v 输出传入JVM的参数 jps -mlv找到java应用的pid jstack根据java应用pid ,查看进程中线程堆栈信息 jstack pid top找出该进程内最耗费CPU的线程 top -Hp pid 转为十六进制prin">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-27T02:19:46.397Z">
+<meta property="og:updated_time" content="2020-03-10T15:30:18.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vmstatu">
-<meta name="twitter:description" content="vmstatuvmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。 1234$vmstatprocs -----------memory---------- --">
+<meta name="twitter:title" content="jvm调优">
+<meta name="twitter:description" content="jps输出JVM中运行的进程状态信息 1234-q 不输出类名、Jar名和传入main方法的参数-m 输出传入main方法的参数-l 输出main类或Jar的全限名-v 输出传入JVM的参数 jps -mlv找到java应用的pid jstack根据java应用pid ,查看进程中线程堆栈信息 jstack pid top找出该进程内最耗费CPU的线程 top -Hp pid 转为十六进制prin">
 
 
 
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2019/05/22/vmstatus/">
+  <link rel="canonical" href="https://blackox626.github.io/2019/05/23/jvm调优/">
 
 
 
@@ -127,7 +127,7 @@
   };
 </script>
 
-  <title>vmstatu | BLACK_OX</title>
+  <title>jvm调优 | BLACK_OX</title>
   
 
 
@@ -376,7 +376,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/22/vmstatus/">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/23/jvm调优/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -393,7 +393,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vmstatu
+          <h1 class="post-title" itemprop="name headline">jvm调优
 
               
             
@@ -419,7 +419,7 @@
                 
               
 
-              <time title="创建时间：2019-05-22 11:00:39" itemprop="dateCreated datePublished" datetime="2019-05-22T11:00:39+08:00">2019-05-22</time>
+              <time title="创建时间：2019-05-23 16:57:30" itemprop="dateCreated datePublished" datetime="2019-05-23T16:57:30+08:00">2019-05-23</time>
             
 
             
@@ -438,8 +438,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/05/22/vmstatus/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/22/vmstatus/" itemprop="commentCount"></span>
+                <a href="/2019/05/23/jvm调优/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/23/jvm调优/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -447,7 +447,7 @@
 
           
           
-            <span id="/2019/05/22/vmstatus/" class="leancloud_visitors" data-flag-title="vmstatu">
+            <span id="/2019/05/23/jvm调优/" class="leancloud_visitors" data-flag-title="jvm调优">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -472,7 +472,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">7.4k</span>
+                <span title="本文字数">1.4k</span>
               
 
               
@@ -486,7 +486,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">7 分钟</span>
+                <span title="阅读时长">1 分钟</span>
               
             </div>
           
@@ -506,57 +506,18 @@
       
 
       
-        <h2 id="vmstatu"><a href="#vmstatu" class="headerlink" title="vmstatu"></a>vmstatu</h2><p>vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。<br>相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$vmstat</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0      0 215220      0 771404    0    0     2    15    0    1  0  0 100  0  0</span><br></pre></td></tr></table></figure>
-<p>一般vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$vmstat 2 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 0  0      0 202924      0 785780    0    0     2    15    0    1  0  0 100  0  0</span><br><span class="line"> 0  0      0 203032      0 785812    0    0     0   155  748 1382  0  0 100  0  0</span><br></pre></td></tr></table></figure>
-<p>第二个参数如果没有，就会一直采集（ctrl+c 结束）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$vmstat 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0      0 194712      0 794728    0    0     2    15    0    1  0  0 100  0  0</span><br><span class="line"> 0  0      0 194696      0 794768    0    0     0    50  782 1368  0  0 100  0  0</span><br><span class="line"> 0  0      0 193828      0 794776    0    0     0   108  752 1156  0  0 100  0  0</span><br><span class="line"> 0  0      0 193952      0 794804    0    0     0     4  601  997  0  0 100  0  0</span><br><span class="line">^C</span><br></pre></td></tr></table></figure>
-<h2 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h2><h3 id="procs"><a href="#procs" class="headerlink" title="procs"></a>procs</h3><ul>
-<li>r 等待运行的进程数</li>
-<li>b 处在非中断睡眠状态的进程数</li>
-</ul>
-<h3 id="memory-（KB）"><a href="#memory-（KB）" class="headerlink" title="memory （KB）"></a>memory （KB）</h3><ul>
-<li>swpd 虚拟内存使用大小</li>
-</ul>
-<p><strong>注意：如果swpd的值不为0，但是SI，SO的值长期为0，这种情况不会影响系统性能。</strong></p>
-<ul>
-<li>free 空闲的内存</li>
-<li>buff 用作缓冲的内存大小 </li>
-<li>cache 用作缓存的内存大小</li>
-</ul>
-<p><strong>注意：如果cache的值大的时候，说明cache处的文件数多，如果频繁访问到的文件都能被cache处，那么磁盘的读IO bi会非常小。</strong></p>
-<h3 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h3><ul>
-<li>si 从交换区写到内存的大小</li>
-<li>so 每秒写入交换区的内存大小</li>
-</ul>
-<p><strong>内存够用的时候，这2个值都是0，如果这2个值长期大于0时，系统性能会受到影响，磁盘IO和CPU资源都会被消耗。有些朋友看到空闲内存（free）很少的或接近于0时，就认为内存不够用了，不能光看这一点，还要结合si和so，如果free很少，但是si和so也很少（大多时候是0），那么不用担心，系统性能这时不会受到影响的。</strong></p>
-<h3 id="io"><a href="#io" class="headerlink" title="io"></a>io</h3><ul>
-<li>bi 每秒读取的块数</li>
-<li>bo 每秒写入的块数</li>
-</ul>
-<p><strong>注意：随机磁盘读写的时候，这2个值越大（如超出1024k)，能看到CPU在IO等待的值也会越大。</strong></p>
-<h3 id="system"><a href="#system" class="headerlink" title="system"></a>system</h3><ul>
-<li>in 每秒中断数，包括时钟中断。</li>
-<li>cs 每秒上下文切换数。</li>
-</ul>
-<p><strong>注意：上面2个值越大，会看到由内核消耗的CPU时间会越大。</strong></p>
-<h3 id="cpu"><a href="#cpu" class="headerlink" title="cpu"></a>cpu</h3><ul>
-<li>us 用户进程执行时间(user time)</li>
-</ul>
-<p><strong>注意： us的值比较高时，说明用户进程消耗的CPU时间多，但是如果长期超50%的使用，那么我们就该考虑优化程序算法或者进行加速。</strong></p>
-<ul>
-<li>sy 系统进程执行时间(system time)</li>
-</ul>
-<p><strong>注意：sy的值高时，说明系统内核消耗的CPU资源多，这并不是良性表现，我们应该检查原因。</strong></p>
-<ul>
-<li><p>id 空闲时间(包括IO等待时间),中央处理器的空闲时间 。以百分比表示。</p>
-</li>
-<li><p>wa 等待IO时间百分比</p>
-</li>
-</ul>
-<p><strong>注意：wa的值高时，说明IO等待比较严重，这可能由于磁盘大量作随机访问造成，也有可能磁盘出现瓶颈（块操作）。</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Procs</span><br><span class="line">r: The number of processes waiting for run time.</span><br><span class="line">b: The number of processes in uninterruptible sleep.</span><br><span class="line">Memory</span><br><span class="line">swpd: the amount of virtual memory used.</span><br><span class="line">free: the amount of idle memory.</span><br><span class="line">buff: the amount of memory used as buffers.</span><br><span class="line">cache: the amount of memory used as cache.</span><br><span class="line">inact: the amount of inactive memory. (-a option)</span><br><span class="line">active: the amount of active memory. (-a option)</span><br><span class="line">Swap</span><br><span class="line">si: Amount of memory swapped in from disk (/s).</span><br><span class="line">so: Amount of memory swapped to disk (/s).</span><br><span class="line">IO</span><br><span class="line">bi: Blocks received from a block device (blocks/s).</span><br><span class="line">bo: Blocks sent to a block device (blocks/s).</span><br><span class="line">System</span><br><span class="line">in: The number of interrupts per second, including the clock.</span><br><span class="line">cs: The number of context switches per second.</span><br><span class="line">CPU</span><br><span class="line">These are percentages of total CPU time.</span><br><span class="line">us: Time spent running non-kernel code. (user time, including nice time)</span><br><span class="line">sy: Time spent running kernel code. (system time)</span><br><span class="line">id: Time spent idle. Prior to Linux 2.5.41, this includes IO-wait time.</span><br><span class="line">wa: Time spent waiting for IO. Prior to Linux 2.5.41, included in idle.</span><br><span class="line">st: Time stolen from a virtual machine. Prior to Linux 2.6.11, unknown.</span><br></pre></td></tr></table></figure>
+        <h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>输出JVM中运行的进程状态信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-q 不输出类名、Jar名和传入main方法的参数</span><br><span class="line">-m 输出传入main方法的参数</span><br><span class="line">-l 输出main类或Jar的全限名</span><br><span class="line">-v 输出传入JVM的参数</span><br></pre></td></tr></table></figure>
+<p><code>jps -mlv</code><br>找到java应用的pid</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>根据java应用pid ,查看进程中线程堆栈信息</p>
+<p><code>jstack pid</code></p>
+<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><p>找出该进程内最耗费CPU的线程</p>
+<p><code>top -Hp pid</code></p>
+<p>转为十六进制<br><code>printf &quot;%x\n&quot; 线程id</code> </p>
+<p>输出进程的堆栈信息，然后根据线程ID的十六进制值grep<br><code>jstack pid | grep 十六进制线程id</code></p>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>查看堆内存使用状况<br><code>jmap -heap pid</code></p>
+<p>进程内存使用情况dump到文件中 结合MAT工具分析<br><code>jmap -dump:format=b,file=dumpFileName pid</code></p>
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p><code>jhat -port 9998 /tmp/dump.dat</code><br>localhost:9998 查看内存对象情况 （不如MAT直观）</p>
 
       
     </div>
@@ -570,7 +531,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/05/23/jvm调优/" rel="bookmark">jvm调优</a></div>
+      <div class="popular-posts-title"><a href="/2019/05/22/vmstatus/" rel="bookmark">vmstatu</a></div>
       
     </li>
   
@@ -622,7 +583,7 @@
           
             <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
           
-            <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+            <a href="/tags/jvm/" rel="tag"><i class="fa fa-tag"></i> jvm</a>
           
         </div>
       
@@ -635,8 +596,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/17/flutter-plugin-registry/" rel="next" title="flutter plugin registry">
-                <i class="fa fa-chevron-left"></i> flutter plugin registry
+              <a href="/2019/05/22/vmstatus/" rel="next" title="vmstatu">
+                <i class="fa fa-chevron-left"></i> vmstatu
               </a>
             
           </div>
@@ -645,8 +606,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/23/jvm调优/" rel="prev" title="jvm调优">
-                jvm调优 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/31/mustache之dart/" rel="prev" title="mustache之dart">
+                mustache之dart <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -845,7 +806,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstatu"><span class="nav-text">vmstatu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段"><span class="nav-text">字段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#procs"><span class="nav-text">procs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-（KB）"><span class="nav-text">memory （KB）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-text">swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#io"><span class="nav-text">io</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system"><span class="nav-text">system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu"><span class="nav-text">cpu</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top"><span class="nav-text">top</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmap"><span class="nav-text">jmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jhat"><span class="nav-text">jhat</span></a></li></ol></div>
             
 
           </div>

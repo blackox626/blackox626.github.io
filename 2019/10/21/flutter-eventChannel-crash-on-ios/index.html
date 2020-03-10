@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="flutter issuecrash 记录一次困扰了很久的 flutter event channel crash  EventChannel dart1234567891011121314151617181920212223242526272829303132333435363738394041Stream&amp;lt;dynamic&amp;gt; receiveBroadcastStream([ dyna">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-21T07:02:19.098Z">
+<meta property="og:updated_time" content="2019-10-22T03:25:15.605Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter eventChannel crash on ios">
 <meta name="twitter:description" content="flutter issuecrash 记录一次困扰了很久的 flutter event channel crash  EventChannel dart1234567891011121314151617181920212223242526272829303132333435363738394041Stream&amp;lt;dynamic&amp;gt; receiveBroadcastStream([ dyna">
@@ -472,7 +472,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">12k</span>
+                <span title="本文字数">13k</span>
               
 
               
@@ -511,7 +511,7 @@
 <h2 id="EventChannel-dart"><a href="#EventChannel-dart" class="headerlink" title="EventChannel dart"></a>EventChannel dart</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;dynamic&gt; <span class="title">receiveBroadcastStream</span><span class="params">([ dynamic arguments ])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> MethodChannel methodChannel = MethodChannel(name, codec);</span><br><span class="line">    StreamController&lt;dynamic&gt; controller;</span><br><span class="line">    controller = StreamController&lt;dynamic&gt;.broadcast(onListen: () async &#123;</span><br><span class="line">      defaultBinaryMessenger.setMessageHandler(name, (ByteData reply) async &#123;</span><br><span class="line">        <span class="keyword">if</span> (reply == <span class="keyword">null</span>) &#123;</span><br><span class="line">          controller.close();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            controller.add(codec.decodeEnvelope(reply));</span><br><span class="line">          &#125; <span class="function">on PlatformException <span class="title">catch</span> <span class="params">(e)</span> </span>&#123;</span><br><span class="line">            controller.addError(e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        await methodChannel.invokeMethod&lt;<span class="keyword">void</span>&gt;(<span class="string">'listen'</span>, arguments);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (exception, stack) &#123;</span><br><span class="line">        FlutterError.reportError(FlutterErrorDetails(</span><br><span class="line">          exception: exception,</span><br><span class="line">          stack: stack,</span><br><span class="line">          library: <span class="string">'services library'</span>,</span><br><span class="line">          context: ErrorDescription(<span class="string">'while activating platform stream on channel $name'</span>),</span><br><span class="line">        ));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, onCancel: () async &#123;</span><br><span class="line">      defaultBinaryMessenger.setMessageHandler(name, <span class="keyword">null</span>);</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        await methodChannel.invokeMethod&lt;<span class="keyword">void</span>&gt;(<span class="string">'cancel'</span>, arguments);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (exception, stack) &#123;</span><br><span class="line">        FlutterError.reportError(FlutterErrorDetails(</span><br><span class="line">          exception: exception,</span><br><span class="line">          stack: stack,</span><br><span class="line">          library: <span class="string">'services library'</span>,</span><br><span class="line">          context: ErrorDescription(<span class="string">'while de-activating platform stream on channel $name'</span>),</span><br><span class="line">        ));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> controller.stream;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <h2 id="FlutterChannel-mm"><a href="#FlutterChannel-mm" class="headerlink" title="FlutterChannel.mm"></a>FlutterChannel.mm</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> SetStreamHandlerMessageHandlerOnChannel(<span class="built_in">NSObject</span>&lt;FlutterStreamHandler&gt;* handler,</span><br><span class="line">                                                    <span class="built_in">NSString</span>* name,</span><br><span class="line">                                                    <span class="built_in">NSObject</span>&lt;FlutterBinaryMessenger&gt;* messenger,</span><br><span class="line">                                                    <span class="built_in">NSObject</span>&lt;FlutterMethodCodec&gt;* codec) &#123;</span><br><span class="line">  __block FlutterEventSink currentSink = <span class="literal">nil</span>;</span><br><span class="line">  FlutterBinaryMessageHandler messageHandler = ^(<span class="built_in">NSData</span>* message, FlutterBinaryReply callback) &#123;</span><br><span class="line">    FlutterMethodCall* call = [codec decodeMethodCall:message];</span><br><span class="line">    <span class="keyword">if</span> ([call.method isEqual:<span class="string">@"listen"</span>]) &#123;</span><br><span class="line">      <span class="keyword">if</span> (currentSink) &#123;</span><br><span class="line">        FlutterError* error = [handler onCancelWithArguments:<span class="literal">nil</span>];</span><br><span class="line">        <span class="keyword">if</span> (error)</span><br><span class="line">          <span class="built_in">NSLog</span>(<span class="string">@"Failed to cancel existing stream: %@. %@ (%@)"</span>, error.code, error.message,</span><br><span class="line">                error.details);</span><br><span class="line">      &#125;</span><br><span class="line">      currentSink = ^(<span class="keyword">id</span> event) &#123;</span><br><span class="line">        <span class="keyword">if</span> (event == FlutterEndOfEventStream)</span><br><span class="line">          [messenger sendOnChannel:name message:<span class="literal">nil</span>];</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ([event isKindOfClass:[FlutterError <span class="keyword">class</span>]])</span><br><span class="line">          [messenger sendOnChannel:name message:[codec encodeErrorEnvelope:(FlutterError*)event]];</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          [messenger sendOnChannel:name message:[codec encodeSuccessEnvelope:event]];</span><br><span class="line">      &#125;;</span><br><span class="line">      FlutterError* error = [handler onListenWithArguments:call.arguments eventSink:currentSink];</span><br><span class="line">      <span class="keyword">if</span> (error)</span><br><span class="line">        callback([codec encodeErrorEnvelope:error]);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        callback([codec encodeSuccessEnvelope:<span class="literal">nil</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([call.method isEqual:<span class="string">@"cancel"</span>]) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!currentSink) &#123;</span><br><span class="line">        callback(</span><br><span class="line">            [codec encodeErrorEnvelope:[FlutterError errorWithCode:<span class="string">@"error"</span></span><br><span class="line">                                                           message:<span class="string">@"No active stream to cancel"</span></span><br><span class="line">                                                           details:<span class="literal">nil</span>]]);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      currentSink = <span class="literal">nil</span>;</span><br><span class="line">      FlutterError* error = [handler onCancelWithArguments:call.arguments];</span><br><span class="line">      <span class="keyword">if</span> (error)</span><br><span class="line">        callback([codec encodeErrorEnvelope:error]);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        callback([codec encodeSuccessEnvelope:<span class="literal">nil</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      callback(<span class="literal">nil</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  [messenger setMessageHandlerOnChannel:name binaryMessageHandler:messageHandler];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="EventSink"><a href="#EventSink" class="headerlink" title="EventSink"></a>EventSink</h2><p>正常结束stream流 eventSink(FlutterEndOfEventStream) ，异常结束stream流 eventSink(FlutterError)  都会回调执行 onCancel</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://juejin.im/post/5c88be3cf265da2d9809403d" target="_blank" rel="noopener">Flutter 与 Native(iOS) 通信原理</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://juejin.im/post/5c88be3cf265da2d9809403d" target="_blank" rel="noopener">Flutter 与 Native(iOS) 通信原理</a><br><a href="http://lionoggo.com/2019/02/09/%E6%B7%B1%E5%85%A5Flutter%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95_Platform%20Channel%E5%8E%9F%E7%90%86/?from=timeline&amp;isappinstalled=0" target="_blank" rel="noopener">深入Flutter技术内幕:Platform Channel设计与实现</a></p>
 
       
     </div>
@@ -532,7 +532,21 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2020/03/10/flutter共享engine/" rel="bookmark">flutter共享engine</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2020/03/05/flutter-engine-定制/" rel="bookmark">flutter engine 定制</a></div>
       
     </li>
   
@@ -616,6 +630,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/03/05/flutter-engine-定制/" rel="prev" title="flutter engine 定制">
+                flutter engine 定制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -689,7 +707,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -708,7 +726,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -737,7 +757,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -830,7 +852,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-heart"></i>
   </span>
@@ -842,7 +864,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">39k</span>
   
 
   
@@ -851,7 +873,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">27 分钟</span>
+    <span title="站点阅读时长">35 分钟</span>
   
 </div>
 
