@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2020-03-10T15:17:11.062Z</updated>
+  <updated>2020-03-13T09:15:00.317Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -17,21 +17,39 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>flutter tool debug</title>
+    <link href="https://blackox626.github.io/2020/03/13/flutter-tool-debug/"/>
+    <id>https://blackox626.github.io/2020/03/13/flutter-tool-debug/</id>
+    <published>2020-03-13T05:02:04.000Z</published>
+    <updated>2020-03-13T09:15:00.317Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Flutter&quot;&gt;&lt;a href=&quot;#Flutter&quot; class=&quot;headerlink&quot; title=&quot;Flutter&quot;&gt;&lt;/a&gt;Flutter&lt;/h2&gt;&lt;p&gt;flutter 开发过程中，少不了会运行一些 flutter 命令 ，比如 flutter build xxx 、 flutter run  等等&lt;br&gt;看下 bin/flutter 脚本，背后都是 flutter_tool 在执行各种操作。&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;FLUTTER_TOOLS_DIR=&quot;$FLUTTER_ROOT/packages/flutter_tools&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SNAPSHOT_PATH=&quot;$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;STAMP_PATH=&quot;$FLUTTER_ROOT/bin/cache/flutter_tools.stamp&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SCRIPT_PATH=&quot;$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;DART_SDK_PATH=&quot;$FLUTTER_ROOT/bin/cache/dart-sdk&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&quot;$DART&quot; --packages=&quot;$FLUTTER_TOOLS_DIR/.packages&quot; $FLUTTER_TOOL_ARGS &quot;$SNAPSHOT_PATH&quot; &quot;$@&quot;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+  </entry>
+  
+  <entry>
     <title>flutter共享engine</title>
     <link href="https://blackox626.github.io/2020/03/10/flutter%E5%85%B1%E4%BA%ABengine/"/>
     <id>https://blackox626.github.io/2020/03/10/flutter共享engine/</id>
     <published>2020-03-10T15:00:08.000Z</published>
-    <updated>2020-03-10T15:17:11.062Z</updated>
+    <updated>2020-03-13T09:11:36.450Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;flutter-共享引擎-问题记录&quot;&gt;&lt;a href=&quot;#flutter-共享引擎-问题记录&quot; class=&quot;headerlink&quot; title=&quot;flutter 共享引擎 问题记录&quot;&gt;&lt;/a&gt;flutter 共享引擎
-        
-      
+      &lt;h2 id=&quot;flutter-共享引擎-问题记录&quot;&gt;&lt;a href=&quot;#flutter-共享引擎-问题记录&quot; class=&quot;headerlink&quot; title=&quot;flutter 共享引擎 问题记录&quot;&gt;&lt;/a&gt;flutter 共享引擎 问题记录&lt;/h2&gt;&lt;p&gt;共享引擎，就是只有一个 &lt;em&gt;flutter engine&lt;/em&gt;，每个页面一个 flutterviewcontroller。&lt;br&gt;flutter页面 切换，引擎会相应的 &lt;em&gt;detach&lt;/em&gt; &lt;em&gt;atach&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下 &lt;/p&gt;
     
     </summary>
     

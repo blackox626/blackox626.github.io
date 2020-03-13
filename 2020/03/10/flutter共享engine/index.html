@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下  present flutter 页面这个其实不是v1.12.13出现的问题  flutterPa">
+  <meta name="description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下">
 <meta name="keywords" content="flutter,dart,ios">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flutter共享engine">
 <meta property="og:url" content="https://blackox626.github.io/2020/03/10/flutter共享engine/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下  present flutter 页面这个其实不是v1.12.13出现的问题  flutterPa">
+<meta property="og:description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-10T15:17:11.062Z">
+<meta property="og:updated_time" content="2020-03-13T09:11:36.450Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter共享engine">
-<meta name="twitter:description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下  present flutter 页面这个其实不是v1.12.13出现的问题  flutterPa">
+<meta name="twitter:description" content="flutter 共享引擎 问题记录共享引擎，就是只有一个 flutter engine，每个页面一个 flutterviewcontroller。flutter页面 切换，引擎会相应的 detach atach 最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下">
 
 
 
@@ -508,6 +508,7 @@
       
         <h2 id="flutter-共享引擎-问题记录"><a href="#flutter-共享引擎-问题记录" class="headerlink" title="flutter 共享引擎 问题记录"></a>flutter 共享引擎 问题记录</h2><p>共享引擎，就是只有一个 <em>flutter engine</em>，每个页面一个 flutterviewcontroller。<br>flutter页面 切换，引擎会相应的 <em>detach</em> <em>atach</em></p>
 <p>最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下 </p>
+<a id="more"></a>
 <h3 id="present-flutter-页面"><a href="#present-flutter-页面" class="headerlink" title="present flutter 页面"></a>present flutter 页面</h3><p>这个其实不是v1.12.13出现的问题 </p>
 <p><strong>flutterPageA present flutterPageB</strong> 会 出现 pageA的 <em>viewDidDisappear</em> 比 pageB的 <em>viewDidAppear</em> 后执行</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidDisappear:(<span class="built_in">BOOL</span>)animated &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidDisappear:animated];</span><br><span class="line">    <span class="comment">//处理下present 页面卡死的情况</span></span><br><span class="line">    <span class="keyword">if</span> ([WD_FLUTTER_ENGINE flutterViewController] != <span class="keyword">self</span>) &#123;</span><br><span class="line">        [WD_FLUTTER_ENGINE resume];</span><br><span class="line">        [(WDFlutterViewContainer *)[WD_FLUTTER_ENGINE flutterViewController] surfaceUpdated:<span class="literal">YES</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      [WD_FLUTTER_ENGINE detach];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -556,7 +557,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/05/31/mustache之dart/" rel="bookmark">mustache之dart</a></div>
+      <div class="popular-posts-title"><a href="/2020/03/13/flutter-tool-debug/" rel="bookmark">flutter tool debug</a></div>
       
     </li>
   
@@ -633,6 +634,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/03/13/flutter-tool-debug/" rel="prev" title="flutter tool debug">
+                flutter tool debug <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -706,7 +711,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -863,7 +868,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">39k</span>
+    <span title="站点总字数">40k</span>
   
 
   
@@ -872,7 +877,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">35 分钟</span>
+    <span title="站点阅读时长">37 分钟</span>
   
 </div>
 
