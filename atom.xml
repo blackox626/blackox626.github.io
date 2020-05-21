@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2020-03-13T09:15:00.317Z</updated>
+  <updated>2020-05-21T11:48:01.372Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter 1.17升级</title>
+    <link href="https://blackox626.github.io/2020/05/21/flutter-1-17%E5%8D%87%E7%BA%A7/"/>
+    <id>https://blackox626.github.io/2020/05/21/flutter-1-17升级/</id>
+    <published>2020-05-21T04:04:56.000Z</published>
+    <updated>2020-05-21T11:48:01.372Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;升级&quot;&gt;&lt;a href=&quot;#升级&quot; class=&quot;headerlink&quot; title=&quot;升级&quot;&gt;&lt;/a&gt;升级&lt;/h2&gt;&lt;p&gt;最近官方发布了flutter 稳定版本1.17.0 ，记录下升级1.17 ios上碰到的的问题&lt;/p&gt;
+&lt;h2 id=&quot;App产物&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter tool debug</title>
