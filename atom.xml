@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2020-05-21T11:48:01.372Z</updated>
+  <updated>2020-06-02T17:19:11.924Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter 1.17共享engine</title>
+    <link href="https://blackox626.github.io/2020/06/03/flutter-1-17%E5%85%B1%E4%BA%ABengine/"/>
+    <id>https://blackox626.github.io/2020/06/03/flutter-1-17共享engine/</id>
+    <published>2020-06-02T16:02:04.000Z</published>
+    <updated>2020-06-02T17:19:11.924Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym
+        
+      
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter 1.17升级</title>
