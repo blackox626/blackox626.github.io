@@ -96,20 +96,21 @@
 
 
 
-  <meta name="description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。参考苹果的官方文档 Metal Shading Language for CoreImage Kernels  ,在xcode integration 部分提到在build setting">
+  <meta name="description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。 CIKL的方式，存在两个问题：  编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。 翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较">
 <meta name="keywords" content="metal,coreimage">
 <meta property="og:type" content="article">
 <meta property="og:title" content="coreimage with metal 笔记">
 <meta property="og:url" content="https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。参考苹果的官方文档 Metal Shading Language for CoreImage Kernels  ,在xcode integration 部分提到在build setting">
+<meta property="og:description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。 CIKL的方式，存在两个问题：  编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。 翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://blackox626.github.io/images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png">
 <meta property="og:image" content="https://blackox626.github.io/images/a5bafa84-4e66-4d75-bde8-de6cd7b4cdff.png">
-<meta property="og:updated_time" content="2022-08-08T09:49:21.041Z">
+<meta property="og:updated_time" content="2022-08-08T11:23:53.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="coreimage with metal 笔记">
-<meta name="twitter:description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。参考苹果的官方文档 Metal Shading Language for CoreImage Kernels  ,在xcode integration 部分提到在build setting">
-<meta name="twitter:image" content="https://blackox626.github.io/images/a5bafa84-4e66-4d75-bde8-de6cd7b4cdff.png">
+<meta name="twitter:description" content="xcode近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。 CIKL的方式，存在两个问题：  编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。 翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较">
+<meta name="twitter:image" content="https://blackox626.github.io/images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png">
 
 
 
@@ -508,7 +509,15 @@
       
 
       
-        <h2 id="xcode"><a href="#xcode" class="headerlink" title="xcode"></a>xcode</h2><p>近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。<br>参考苹果的官方文档 <code>Metal Shading Language for CoreImage Kernels</code>  ,在<code>xcode integration</code> 部分提到在<code>build setting</code> 设置 <code>Other Metal Compiler Flags</code>, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 <code>&quot;/air-lld:1:1: symbol(s) not found for target &#39;air64-apple-ios12.0.0&#39;&quot; and &quot;air-lld command failed with exit code 1 (use -v to see invocation)&quot;</code></p>
+        <h3 id="xcode"><a href="#xcode" class="headerlink" title="xcode"></a>xcode</h3><p>近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。</p>
+<p>CIKL的方式，存在两个问题：</p>
+<ul>
+<li>编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。</li>
+<li>翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较久。</li>
+</ul>
+<p>Metal: 在build阶段 就可以编译 链接 .metal文件</p>
+<p><img src="/images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png" alt="Compiling &amp; Linking"></p>
+<p>参考苹果的官方文档 <code>Metal Shading Language for CoreImage Kernels</code>  ,在<code>xcode integration</code> 部分提到在<code>build setting</code> 设置 <code>Other Metal Compiler Flags</code>, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 <code>&quot;/air-lld:1:1: symbol(s) not found for target &#39;air64-apple-ios12.0.0&#39;&quot; and &quot;air-lld command failed with exit code 1 (use -v to see invocation)&quot;</code></p>
 <h3 id="build-rules"><a href="#build-rules" class="headerlink" title="build rules"></a>build rules</h3><p>新版xcode中可以通过配置build rules解决上面的报错</p>
 <p><code>*.metal</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun metal -c $MTL_HEADER_SEARCH_PATHS -fcikernel &quot;$&#123;INPUT_FILE_PATH&#125;&quot; -o &quot;$&#123;SCRIPT_OUTPUT_FILE_0&#125;&quot;</span><br></pre></td></tr></table></figure></p>
 <p>output files : $(METAL_LIBRARY_OUTPUT_DIR)/$(INPUT_FILE_BASE).metallib</p>
@@ -523,7 +532,7 @@
 <p>podfile 文件里加载 MetalBuildRule.rb, 配置hook </p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">post_install <span class="keyword">do</span> <span class="params">|installer|</span></span><br><span class="line">    add_build_rule(<span class="string">"your-target-name"</span>, installer.pods_project)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p><code>DONE</code></p>
-<h3 id="refreences"><a href="#refreences" class="headerlink" title="refreences"></a>refreences</h3><p><a href="https://developer.apple.com/metal/MetalCIKLReference6.pdf" target="_blank" rel="noopener">MetalCIKLReference</a><br><a href="https://stackoverflow.com/questions/65101094/add-custom-build-rule-with-podfile-post-install-hook#new-answer" target="_blank" rel="noopener">Add custom build rule with Podfile post_install hook</a></p>
+<h3 id="references"><a href="#references" class="headerlink" title="references"></a>references</h3><p><a href="https://developer.apple.com/metal/MetalCIKLReference6.pdf" target="_blank" rel="noopener">MetalCIKLReference</a><br><a href="https://stackoverflow.com/questions/65101094/add-custom-build-rule-with-podfile-post-install-hook#new-answer" target="_blank" rel="noopener">Add custom build rule with Podfile post_install hook</a></p>
 
       
     </div>
@@ -802,7 +811,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#xcode"><span class="nav-text">xcode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-rules"><span class="nav-text">build rules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cocoapods"><span class="nav-text">cocoapods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refreences"><span class="nav-text">refreences</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#xcode"><span class="nav-text">xcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-rules"><span class="nav-text">build rules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cocoapods"><span class="nav-text">cocoapods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#references"><span class="nav-text">references</span></a></li></ol></div>
             
 
           </div>
