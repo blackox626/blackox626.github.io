@@ -376,6 +376,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="攻城狮 程序猿...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2022/08/08/coreimage-with-metal-笔记/" class="post-title-link" itemprop="url">coreimage with metal 笔记</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-08 16:07:28" itemprop="dateCreated datePublished" datetime="2022-08-08T16:07:28+08:00">2022-08-08</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/08/08/coreimage-with-metal-笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/08/08/coreimage-with-metal-笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2022/08/08/coreimage-with-metal-笔记/" class="leancloud_visitors" data-flag-title="coreimage with metal 笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">13k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">12 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="xcode"><a href="#xcode" class="headerlink" title="xcode"></a>xcode</h2><p>近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。<br>参考苹果的官方文档 <code>Metal Shading Language for CoreImage Kernels</code>  ,在<code>xcode integration</code> 部分提到在<code>build setting</code> 设置 <code>Other Metal Compiler Flags</code>, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 <code>&quot;/air-lld:1:1: symbol(s) not found for target &#39;air64-apple-ios12.0.0&#39;&quot; and &quot;air-lld command failed with exit code 1 (use -v to see invocation)&quot;</code></p>
+<h3 id="build-rules"><a href="#build-rules" class="headerlink" title="build rules"></a>build rules</h3><p>新版xcode中可以通过配置build rules解决上面的报错</p>
+<p><code>*.metal</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun metal -c $MTL_HEADER_SEARCH_PATHS -fcikernel &quot;$&#123;INPUT_FILE_PATH&#125;&quot; -o &quot;$&#123;SCRIPT_OUTPUT_FILE_0&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>output files : $(METAL_LIBRARY_OUTPUT_DIR)/$(INPUT_FILE_BASE).metallib</p>
+<p><code>*.air</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun metallib -cikernel &quot;$&#123;INPUT_FILE_PATH&#125;&quot; -o &quot;$&#123;SCRIPT_OUTPUT_FILE_0&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>output files : $(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).air</p>
+<p>如图：<br><img src="/images/a5bafa84-4e66-4d75-bde8-de6cd7b4cdff.png" alt="IMAGE"></p>
+<h3 id="cocoapods"><a href="#cocoapods" class="headerlink" title="cocoapods"></a>cocoapods</h3><p>build rules 的方式存在一个问题，如果metal shader文件在pod库中，在主工程从配置build rules无法针对pod中的resouce 生效，虽然可以手动针对pod target 配置build rules解决问题，但是这样配置是一次性的，无法提交保存，下一次pod update就清空了，所以到了这里就很自然的能想到通过pod 的post hook 来解决问题，接下来就是怎么用ruby 来写 pod hook 脚本了</p>
+<p>通过之前在主工程配置build rules, 可以看到project.pbxproj文件的变更情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/* Begin PBXBuildRule section */</span><br><span class="line">        BF25E98B28A0A91A00188AE3 /* PBXBuildRule */ = &#123;</span><br><span class="line">            isa = PBXBuildRule;</span><br><span class="line">            compilerSpec = com.apple.compilers.proxy.script;</span><br><span class="line">            filePatterns = &quot;*.metal&quot;;</span><br><span class="line">            fileType = pattern.proxy;</span><br><span class="line">            inputFiles = (</span><br><span class="line">            );</span><br><span class="line">            isEditable = 1;</span><br><span class="line">            outputFiles = (</span><br><span class="line">                &quot;$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).air&quot;,</span><br><span class="line">            );</span><br><span class="line">            runOncePerArchitecture = 0;</span><br><span class="line">            script = &quot;# Type a script or drag a script file from your workspace to insert its path.\nxcrun metal -c $MTL_HEADER_SEARCH_PATHS -fcikernel \&quot;$&#123;INPUT_FILE_PATH&#125;\&quot; -o \&quot;$&#123;SCRIPT_OUTPUT_FILE_0&#125;\&quot;\n&quot;;</span><br><span class="line">        &#125;;</span><br><span class="line">        BF25E98C28A0A92200188AE3 /* PBXBuildRule */ = &#123;</span><br><span class="line">            isa = PBXBuildRule;</span><br><span class="line">            compilerSpec = com.apple.compilers.proxy.script;</span><br><span class="line">            filePatterns = &quot;*.air&quot;;</span><br><span class="line">            fileType = pattern.proxy;</span><br><span class="line">            inputFiles = (</span><br><span class="line">            );</span><br><span class="line">            isEditable = 1;</span><br><span class="line">            outputFiles = (</span><br><span class="line">                &quot;$(METAL_LIBRARY_OUTPUT_DIR)/$(INPUT_FILE_BASE).metallib&quot;,</span><br><span class="line">            );</span><br><span class="line">            runOncePerArchitecture = 0;</span><br><span class="line">            script = &quot;# Type a script or drag a script file from your workspace to insert its path.\nxcrun metallib -cikernel \&quot;$&#123;INPUT_FILE_PATH&#125;\&quot; -o \&quot;$&#123;SCRIPT_OUTPUT_FILE_0&#125;\&quot;\n&quot;;</span><br><span class="line">        &#125;;</span><br><span class="line">/* End PBXBuildRule section */</span><br></pre></td></tr></table></figure>
+<p>哈哈 ，这正是我们需要的build rule的字段</p>
+<p>最终的 MetalBuildRule.rb 文件如下 ：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/ruby</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_build_rule</span><span class="params">(target_name, project)</span></span></span><br><span class="line"></span><br><span class="line">  project.targets.each <span class="keyword">do</span> <span class="params">|target|</span></span><br><span class="line">    <span class="keyword">if</span> target.name == target_name</span><br><span class="line"><span class="comment">#       puts "#&#123;target.name&#125; has #&#123;target.build_rules.count&#125; build rule."</span></span><br><span class="line">      <span class="keyword">if</span> target.build_rules.count &gt;= <span class="number">2</span></span><br><span class="line">        puts <span class="string">"<span class="subst">#&#123;target.name&#125;</span> already has 2 build rule."</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      puts <span class="string">"Updating <span class="subst">#&#123;target.name&#125;</span> build rules"</span></span><br><span class="line"></span><br><span class="line">      metal_rule = project.new(Xcodeproj::Project::Object::PBXBuildRule)</span><br><span class="line"></span><br><span class="line">      metal_rule.name = <span class="string">'Metal Build Rule'</span></span><br><span class="line">      metal_rule.compiler_spec = <span class="string">'com.apple.compilers.proxy.script'</span></span><br><span class="line">      metal_rule.file_patterns = <span class="string">'*.metal'</span></span><br><span class="line">      metal_rule.file_type = <span class="string">'pattern.proxy'</span></span><br><span class="line">      metal_rule.is_editable = <span class="string">'1'</span></span><br><span class="line">      metal_rule.run_once_per_architecture = <span class="string">'0'</span></span><br><span class="line">      metal_rule.output_files = [<span class="string">"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).air"</span>]</span><br><span class="line">      metal_rule.input_files = []</span><br><span class="line">      metal_rule.output_files_compiler_flags = []</span><br><span class="line">      metal_rule.script = <span class="string">"xcrun metal -c $MTL_HEADER_SEARCH_PATHS -fcikernel \"$&#123;INPUT_FILE_PATH&#125;\" -o \"$&#123;SCRIPT_OUTPUT_FILE_0&#125;\""</span></span><br><span class="line">      target.build_rules.append(metal_rule)</span><br><span class="line"></span><br><span class="line">      air_rule = project.new(Xcodeproj::Project::Object::PBXBuildRule)</span><br><span class="line"></span><br><span class="line">      air_rule.name = <span class="string">'Air Build Rule'</span></span><br><span class="line">      air_rule.compiler_spec = <span class="string">'com.apple.compilers.proxy.script'</span></span><br><span class="line">      air_rule.file_patterns = <span class="string">'*.air'</span></span><br><span class="line">      air_rule.file_type = <span class="string">'pattern.proxy'</span></span><br><span class="line">      air_rule.is_editable = <span class="string">'1'</span></span><br><span class="line">      air_rule.run_once_per_architecture = <span class="string">'0'</span></span><br><span class="line">      air_rule.output_files = [<span class="string">"$(METAL_LIBRARY_OUTPUT_DIR)/$(INPUT_FILE_BASE).metallib"</span>]</span><br><span class="line">      air_rule.input_files = []</span><br><span class="line">      air_rule.output_files_compiler_flags = []</span><br><span class="line">      air_rule.script = <span class="string">"xcrun metallib -cikernel \"$&#123;INPUT_FILE_PATH&#125;\" -o \"$&#123;SCRIPT_OUTPUT_FILE_0&#125;\""</span></span><br><span class="line">      target.build_rules.append(air_rule)</span><br><span class="line"></span><br><span class="line">      project.objects_by_uuid[metal_rule.uuid] = metal_rule</span><br><span class="line">      project.objects_by_uuid[air_rule.uuid] = air_rule</span><br><span class="line"></span><br><span class="line">      project.save()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>podfile 文件里加载 MetalBuildRule.rb, 配置hook </p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">post_install <span class="keyword">do</span> <span class="params">|installer|</span></span><br><span class="line">    add_build_rule(<span class="string">"your-target-name"</span>, installer.pods_project)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><code>DONE</code></p>
+<h3 id="refreences"><a href="#refreences" class="headerlink" title="refreences"></a>refreences</h3><p><a href="https://developer.apple.com/metal/MetalCIKLReference6.pdf" target="_blank" rel="noopener">MetalCIKLReference</a><br><a href="https://stackoverflow.com/questions/65101094/add-custom-build-rule-with-podfile-post-install-hook#new-answer" target="_blank" rel="noopener">Add custom build rule with Podfile post_install hook</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2020/06/03/flutter-1-17共享engine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2160,247 +2366,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/22/vmstatus/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="攻城狮 程序猿...">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BLACK_OX">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/22/vmstatus/" class="post-title-link" itemprop="url">vmstatu</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-22 11:00:39" itemprop="dateCreated datePublished" datetime="2019-05-22T11:00:39+08:00">2019-05-22</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/05/22/vmstatus/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/22/vmstatus/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/05/22/vmstatus/" class="leancloud_visitors" data-flag-title="vmstatu">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">7.4k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">7 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="vmstatu"><a href="#vmstatu" class="headerlink" title="vmstatu"></a>vmstatu</h2><p>vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。<br>相比top，可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$vmstat</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0      0 215220      0 771404    0    0     2    15    0    1  0  0 100  0  0</span><br></pre></td></tr></table></figure>
-<p>一般vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$vmstat 2 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 0  0      0 202924      0 785780    0    0     2    15    0    1  0  0 100  0  0</span><br><span class="line"> 0  0      0 203032      0 785812    0    0     0   155  748 1382  0  0 100  0  0</span><br></pre></td></tr></table></figure>
-<p>第二个参数如果没有，就会一直采集（ctrl+c 结束）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$vmstat 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 1  0      0 194712      0 794728    0    0     2    15    0    1  0  0 100  0  0</span><br><span class="line"> 0  0      0 194696      0 794768    0    0     0    50  782 1368  0  0 100  0  0</span><br><span class="line"> 0  0      0 193828      0 794776    0    0     0   108  752 1156  0  0 100  0  0</span><br><span class="line"> 0  0      0 193952      0 794804    0    0     0     4  601  997  0  0 100  0  0</span><br><span class="line">^C</span><br></pre></td></tr></table></figure>
-<h2 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h2><h3 id="procs"><a href="#procs" class="headerlink" title="procs"></a>procs</h3><ul>
-<li>r 等待运行的进程数</li>
-<li>b 处在非中断睡眠状态的进程数</li>
-</ul>
-<h3 id="memory-（KB）"><a href="#memory-（KB）" class="headerlink" title="memory （KB）"></a>memory （KB）</h3><ul>
-<li>swpd 虚拟内存使用大小</li>
-</ul>
-<p><strong>注意：如果swpd的值不为0，但是SI，SO的值长期为0，这种情况不会影响系统性能。</strong></p>
-<ul>
-<li>free 空闲的内存</li>
-<li>buff 用作缓冲的内存大小 </li>
-<li>cache 用作缓存的内存大小</li>
-</ul>
-<p><strong>注意：如果cache的值大的时候，说明cache处的文件数多，如果频繁访问到的文件都能被cache处，那么磁盘的读IO bi会非常小。</strong></p>
-<h3 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h3><ul>
-<li>si 从交换区写到内存的大小</li>
-<li>so 每秒写入交换区的内存大小</li>
-</ul>
-<p><strong>内存够用的时候，这2个值都是0，如果这2个值长期大于0时，系统性能会受到影响，磁盘IO和CPU资源都会被消耗。有些朋友看到空闲内存（free）很少的或接近于0时，就认为内存不够用了，不能光看这一点，还要结合si和so，如果free很少，但是si和so也很少（大多时候是0），那么不用担心，系统性能这时不会受到影响的。</strong></p>
-<h3 id="io"><a href="#io" class="headerlink" title="io"></a>io</h3><ul>
-<li>bi 每秒读取的块数</li>
-<li>bo 每秒写入的块数</li>
-</ul>
-<p><strong>注意：随机磁盘读写的时候，这2个值越大（如超出1024k)，能看到CPU在IO等待的值也会越大。</strong></p>
-<h3 id="system"><a href="#system" class="headerlink" title="system"></a>system</h3><ul>
-<li>in 每秒中断数，包括时钟中断。</li>
-<li>cs 每秒上下文切换数。</li>
-</ul>
-<p><strong>注意：上面2个值越大，会看到由内核消耗的CPU时间会越大。</strong></p>
-<h3 id="cpu"><a href="#cpu" class="headerlink" title="cpu"></a>cpu</h3><ul>
-<li>us 用户进程执行时间(user time)</li>
-</ul>
-<p><strong>注意： us的值比较高时，说明用户进程消耗的CPU时间多，但是如果长期超50%的使用，那么我们就该考虑优化程序算法或者进行加速。</strong></p>
-<ul>
-<li>sy 系统进程执行时间(system time)</li>
-</ul>
-<p><strong>注意：sy的值高时，说明系统内核消耗的CPU资源多，这并不是良性表现，我们应该检查原因。</strong></p>
-<ul>
-<li><p>id 空闲时间(包括IO等待时间),中央处理器的空闲时间 。以百分比表示。</p>
-</li>
-<li><p>wa 等待IO时间百分比</p>
-</li>
-</ul>
-<p><strong>注意：wa的值高时，说明IO等待比较严重，这可能由于磁盘大量作随机访问造成，也有可能磁盘出现瓶颈（块操作）。</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Procs</span><br><span class="line">r: The number of processes waiting for run time.</span><br><span class="line">b: The number of processes in uninterruptible sleep.</span><br><span class="line">Memory</span><br><span class="line">swpd: the amount of virtual memory used.</span><br><span class="line">free: the amount of idle memory.</span><br><span class="line">buff: the amount of memory used as buffers.</span><br><span class="line">cache: the amount of memory used as cache.</span><br><span class="line">inact: the amount of inactive memory. (-a option)</span><br><span class="line">active: the amount of active memory. (-a option)</span><br><span class="line">Swap</span><br><span class="line">si: Amount of memory swapped in from disk (/s).</span><br><span class="line">so: Amount of memory swapped to disk (/s).</span><br><span class="line">IO</span><br><span class="line">bi: Blocks received from a block device (blocks/s).</span><br><span class="line">bo: Blocks sent to a block device (blocks/s).</span><br><span class="line">System</span><br><span class="line">in: The number of interrupts per second, including the clock.</span><br><span class="line">cs: The number of context switches per second.</span><br><span class="line">CPU</span><br><span class="line">These are percentages of total CPU time.</span><br><span class="line">us: Time spent running non-kernel code. (user time, including nice time)</span><br><span class="line">sy: Time spent running kernel code. (system time)</span><br><span class="line">id: Time spent idle. Prior to Linux 2.5.41, this includes IO-wait time.</span><br><span class="line">wa: Time spent waiting for IO. Prior to Linux 2.5.41, included in idle.</span><br><span class="line">st: Time stolen from a virtual machine. Prior to Linux 2.6.11, unknown.</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2449,7 +2414,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2470,7 +2435,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2501,7 +2468,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2577,7 +2548,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love" id="animate">
     <i class="fa fa-heart"></i>
   </span>
@@ -2589,7 +2560,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">56k</span>
+    <span title="站点总字数">61k</span>
   
 
   
@@ -2598,7 +2569,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">51 分钟</span>
+    <span title="站点阅读时长">55 分钟</span>
   
 </div>
 

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2020-06-02T18:01:11.873Z</updated>
+  <updated>2022-08-08T09:49:21.041Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>coreimage with metal 笔记</title>
+    <link href="https://blackox626.github.io/2022/08/08/coreimage-with-metal-%E7%AC%94%E8%AE%B0/"/>
+    <id>https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/</id>
+    <published>2022-08-08T08:07:28.000Z</published>
+    <updated>2022-08-08T09:49:21.041Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;xcode&quot;&gt;&lt;a href=&quot;#xcode&quot; class=&quot;headerlink&quot; title=&quot;xcode&quot;&gt;&lt;/a&gt;xcode&lt;/h2&gt;&lt;p&gt;近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义
+        
+      
+    
+    </summary>
+    
+      <category term="metal" scheme="https://blackox626.github.io/categories/metal/"/>
+    
+    
+      <category term="metal" scheme="https://blackox626.github.io/tags/metal/"/>
+    
+      <category term="coreimage" scheme="https://blackox626.github.io/tags/coreimage/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter 1.17共享engine</title>
