@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-16T03:12:33.512Z</updated>
+  <updated>2022-08-18T10:11:34.032Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HDR笔记</title>
+    <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
+    <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
+    <published>2022-08-18T09:43:46.000Z</published>
+    <updated>2022-08-18T10:11:34.032Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;matrix&quot;&gt;&lt;a href=&quot;#matrix&quot; class=&quot;headerlink&quot; title=&quot;matrix&quot;&gt;&lt;/a&gt;matrix&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;YCbCr-&amp;gt;RGB&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Video
+        
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>coreimage with metal 笔记</title>
