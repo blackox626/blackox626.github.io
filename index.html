@@ -481,7 +481,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">47k</span>
+                <span title="本文字数">58k</span>
               
 
               
@@ -495,7 +495,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">43 分钟</span>
+                <span title="阅读时长">52 分钟</span>
               
             </div>
           
@@ -517,13 +517,281 @@
       
         
           
-            <h3 id="noun"><a href="#noun" class="headerlink" title="noun"></a>noun</h3><p><strong>ITU</strong>：国际电信联盟 <strong><code>International Telecommunication Union</code></strong></p>
+            <h3 id="Noun-explanation"><a href="#Noun-explanation" class="headerlink" title="Noun explanation"></a>Noun explanation</h3><p><strong>ITU</strong>：国际电信联盟 <strong><code>International Telecommunication Union</code></strong><br><strong>ITU-R</strong>：国际电信联盟无线电通信部门 <strong>ITU Radiocommunication Sector</strong></p>
 <p><strong>CIE</strong> :国际照明协会 （<a href="https://zh.m.wikipedia.org/wiki/%E8%8B%B1%E6%96%87" title="英文" target="_blank" rel="noopener">英文</a>：<strong><code>International Commission on Illumination</code></strong> ，<a href="https://zh.m.wikipedia.org/wiki/%E6%B3%95%E6%96%87" title="法文" target="_blank" rel="noopener">法文</a>：<strong><code>Commission internationale de l&#39;éclairage</code></strong> ，采用法文<a href="https://zh.m.wikipedia.org/wiki/%E7%B8%AE%E5%AF%AB" title="缩写" target="_blank" rel="noopener">缩写</a>：<strong>CIE</strong> ）</p>
+<p><strong>SMPTE</strong>：电影电视工程师协会 <strong>Society of Motion Picture and Television Engineers</strong></p>
 <p><strong>Hue</strong>：色调 色彩 色相<br><strong>Chroma</strong>：色调饱和度 浓度<br><strong>Luminance</strong>：亮度 明度</p>
 <hr>
-<h3 id="hdr"><a href="#hdr" class="headerlink" title="hdr"></a>hdr</h3><p>HDR:<code>high dynamic range</code> 字面上是动态范围，一般指亮度上可以表达更大的亮度范围，呈现更大的亮度对比度。但是实际实际上HDR的技术和标准涉及色彩相关的一组属性的改善，可以带来更多的颜色、更大的亮度对比度、更高精度的量化。</p>
+<h3 id="HDR-Concept"><a href="#HDR-Concept" class="headerlink" title="HDR Concept"></a>HDR Concept</h3><p><strong>HDR</strong>:<code>High Dynamic Range</code></p>
+<blockquote>
+<p>字面上是动态范围，一般指亮度上可以表达更大的亮度范围，呈现更大的亮度对比度。但是实际实际上HDR的技术和标准涉及色彩相关的一组属性的改善，可以带来更多的颜色、更大的亮度对比度、更高精度的量化。</p>
+</blockquote>
+<p><strong>OOTF</strong>:<code>OETF/EOTF</code> Optical-Electro/Electro-Optical Transfer Function 光电/电光转换函数</p>
+<blockquote>
+<p>人对亮度的感知是非线性的，对暗部细节敏感，对亮部细节不敏感，利用这个特点设计了非线性的光电转换和电光转换的函数。这样的处理不仅可以节省带宽，也可以基本满足用户体验需求。<br>光电转换的时候做了特殊的非线性编码，为暗部细节分配更多的码率，亮部细节进行了压缩或者截断减少码率的分配。电光转换进行显示还原的时候，通过应用一个逆的非线性变化，还原出线性光。</p>
+</blockquote>
 <hr>
-<h3 id="matrix"><a href="#matrix" class="headerlink" title="matrix"></a>matrix</h3><p><strong>YCbCr-&gt;RGB</strong></p>
+<h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>通过mediainfo 查看一个HDR视频信息</p>
+<table>
+<thead>
+<tr>
+<th>Video</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>ID</em></td>
+<td>1</td>
+</tr>
+<tr>
+<td><em>Format</em></td>
+<td>HEVC</td>
+</tr>
+<tr>
+<td><em>Format/Info</em></td>
+<td>High Efficiency Video Coding</td>
+</tr>
+<tr>
+<td><em>Format profile</em></td>
+<td>Main 10@L5@High</td>
+</tr>
+<tr>
+<td><em>Codec ID</em></td>
+<td>hvc1</td>
+</tr>
+<tr>
+<td><em>Codec ID/Info</em></td>
+<td>High Efficiency Video Coding</td>
+</tr>
+<tr>
+<td><em>Duration</em></td>
+<td>14 s 0 ms</td>
+</tr>
+<tr>
+<td><em>Bit rate</em></td>
+<td>123 kb/s</td>
+</tr>
+<tr>
+<td><em>Width</em></td>
+<td>3 840 pixels</td>
+</tr>
+<tr>
+<td><em>Height</em></td>
+<td>2 160 pixels</td>
+</tr>
+<tr>
+<td><em>Display aspect ratio</em></td>
+<td>16:9</td>
+</tr>
+<tr>
+<td><em>Frame rate mode</em></td>
+<td>Constant</td>
+</tr>
+<tr>
+<td><em>Frame rate</em></td>
+<td>30.000 FPS</td>
+</tr>
+<tr>
+<td><em>Color space</em></td>
+<td>YUV</td>
+</tr>
+<tr>
+<td><em>Chroma subsampling</em></td>
+<td>4:2:0</td>
+</tr>
+<tr>
+<td><em>Bit depth</em></td>
+<td>10 bits</td>
+</tr>
+<tr>
+<td><em>Scan type</em></td>
+<td>Progressive</td>
+</tr>
+<tr>
+<td><em>Bits/(Pixel</em>Frame)*</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td><em>Stream size</em></td>
+<td>211 KiB (98%)</td>
+</tr>
+<tr>
+<td><em>Title</em></td>
+<td>Core Media Video</td>
+</tr>
+<tr>
+<td><em>Encoded date</em></td>
+<td>UTC 2020-06-14 21:45:40</td>
+</tr>
+<tr>
+<td><em>Tagged date</em></td>
+<td>UTC 2020-06-14 21:47:33</td>
+</tr>
+<tr>
+<td><em>Color range</em></td>
+<td>Limited</td>
+</tr>
+<tr>
+<td><em>Color primaries</em></td>
+<td>BT.2020</td>
+</tr>
+<tr>
+<td><em>Transfer characteristics</em></td>
+<td>HLG</td>
+</tr>
+<tr>
+<td><em>Matrix coefficients</em></td>
+<td>BT.2020 non-constant</td>
+</tr>
+<tr>
+<td><em>Codec configuration box</em></td>
+<td>hvcC</td>
+</tr>
+</tbody>
+</table>
+<p>下面几个参数属于元数据 ，可能没有 后文会讲到</p>
+<table>
+<thead>
+<tr>
+<th>Video</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Mastering display color primaries</em></td>
+<td>Display P3 / R: x=0.677980 y=0.321980, G: x=0.245000 y=0.703000, B: x=0.137980 y=0.052000, White point: x=0.312680 y=0.328980</td>
+</tr>
+<tr>
+<td><em>Mastering display luminance</em></td>
+<td>min: 0.0001 cd/m2, max: 1000 cd/m2</td>
+</tr>
+<tr>
+<td><em>Maximum Content Light Level </em></td>
+<td>1000 cd/m2</td>
+</tr>
+<tr>
+<td><em>Maximum Frame-Average Light Level</em></td>
+<td>400 cd/m2</td>
+</tr>
+</tbody>
+</table>
+<p>重点关注 ：</p>
+<ul>
+<li><em>Color range</em>  ：色彩范围</li>
+<li><em>Color primaries</em> ：色彩原色</li>
+<li><em>Transfer characteristics</em> ：传输特性</li>
+<li><em>Matrix coefficients</em> ：矩阵系数</li>
+</ul>
+<p>元数据字段</p>
+<ul>
+<li>Mastering display color primaries</li>
+<li>Mastering display luminance</li>
+<li>Maximum Content Light Level</li>
+<li>Maximum Frame-Average Light Level</li>
+</ul>
+<p>部分参数可以通过ffprobe查看对应的选项 <code>ffprobe -h &gt;&gt; ffprobe.txt</code></p>
+<hr>
+<h3 id="Color-range"><a href="#Color-range" class="headerlink" title="Color range"></a>Color range</h3><p>色彩范围主要是两个：</p>
+<ul>
+<li>Full range （PC range ）</li>
+<li>Video range（limited range，tv range）</li>
+</ul>
+<p>Full Range 就是我们所熟悉的 [0, 255]，而在 Limited Range 中，Y’ 的值被限制在 [16, 235]，Cb 和 Cr 的值被限制在 [16, 240] （针对8bit的）。</p>
+<p>HDR一个重要属性就是量化精度。</p>
+<blockquote>
+<p>SDR技术使用8bit进行颜色的表达，而HDR使用10bit/12bit进行颜色的表示，从而减少了8bit容易出现的人为条带效应。</p>
+</blockquote>
+<p>ios 中的精度 &amp; 色彩范围 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange = &apos;420v&apos;, /* Bi-Planar Component Y&apos;CbCr 8-bit 4:2:0, video-range (luma=[16,235] chroma=[16,240]).  baseAddr points to a big-endian CVPlanarPixelBufferInfo_YCbCrBiPlanar struct */</span><br><span class="line"></span><br><span class="line">kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange = &apos;x420&apos;, /* 2 plane YCbCr10 4:2:0, each 10 bits in the MSBs of 16bits, video-range (luma=[64,940] chroma=[64,960]) */</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kCVPixelFormatType_420YpCbCr8BiPlanarFullRange  = &apos;420f&apos;, /* Bi-Planar Component Y&apos;CbCr 8-bit 4:2:0, full-range (luma=[0,255] chroma=[1,255]).  baseAddr points to a big-endian CVPlanarPixelBufferInfo_YCbCrBiPlanar struct */ </span><br><span class="line"></span><br><span class="line">kCVPixelFormatType_420YpCbCr10BiPlanarFullRange  = &apos;xf20&apos;, /* 2 plane YCbCr10 4:2:0, each 10 bits in the MSBs of 16bits, full-range (Y range 0-1023) */</span><br></pre></td></tr></table></figure>
+<p><strong>关于为什么要将YUV量化为tv range 16-235 ？</strong></p>
+<p>　　以下是维基百科摘抄的一段， 意思是<strong>tv range是为了解决滤波（模数转换）后的过冲现象，</strong></p>
+<blockquote>
+<p>Y′ values are conventionally shifted and scaled to the range [16, 235] (referred to as studio swing or “TV levels”) rather than using the full range of [0, 255] (referred to as full swing or “PC levels”). This practice was standardized in SMPTE-125M in order to accommodate signal overshoots (“ringing”) due to filtering. The value 235 accommodates a maximal black-to-white overshoot of 255 − 235 = 20, or 20 / (235 − 16) = 9.1%, which is slightly larger than the theoretical maximal overshoot (<a href="https://en.wikipedia.org/wiki/Gibbs_phenomenon" title="Gibbs phenomenon" target="_blank" rel="noopener">Gibbs phenomenon</a>) of about 8.9% of the maximal step. The toe-room is smaller, allowing only 16 / 219 = 7.3% overshoot, which is less than the theoretical maximal overshoot of 8.9%. This is why 16 is added to Y′ and why the Y′ coefficients in the basic transform sum to 220 instead of 255.^<a href="https://en.wikipedia.org/wiki/YUV#cite_note-9" target="_blank" rel="noopener">[9]</a>^ U and V values, which may be positive or negative, are summed with 128 to make them always positive, giving a studio range of 16–240 for U and V. (These ranges are important in video editing and production, since using the wrong range will result either in an image with “clipped” blacks and whites, or a low-contrast image.)</p>
+</blockquote>
+<hr>
+<h3 id="Color-primaries"><a href="#Color-primaries" class="headerlink" title="Color primaries"></a>Color primaries</h3><p>一般理解为色域，色域指可以显示的所有颜色的范围，常见的有Rec.709（全高清广播标准）、Rec.2020（4K/8K广播标准BT.2020）、Adobe RGB、P3等。</p>
+<ol>
+<li>bt709</li>
+<li>unknown</li>
+<li>reserved</li>
+<li>bt470m</li>
+<li>bt470bg</li>
+<li>smpte170m</li>
+<li>smpte240m</li>
+<li>film</li>
+<li>bt2020</li>
+<li>smpte428</li>
+<li>smpte431</li>
+<li>smpte432</li>
+</ol>
+<p>下图显示了人眼能够感知的所有RGB值的范围。三角形表示色域：三角形越大，可以显示的颜色越多。</p>
+<p>这张马蹄形的图上面可以看到HDR使用的色域是BT2020， SDR使用的是BT709，可以明显看到HDR的色域大于SDR。</p>
+<p><img src="https://www.freesion.com/images/230/c51dee9158609979bc7d33c3071c2e26.png" alt><br><img src="https://webcube-general.s3.amazonaws.com/eizo/media/contentassets/2017/11/20/5colorspace.png" alt="Color Management for 3DCG | EIZO"></p>
+<p><strong>理解颜色空间：</strong></p>
+<blockquote>
+<p>颜色空间 由 <strong>颜色模型</strong> 跟 <strong>色域</strong> 共同定义。<br>颜色模型的概念为：一种抽象数学模型，通过一组数字来描述颜色（例如RGB使用三元组、CMYK使用四元组）<br>例如Adobe RGB和sRGB都基于RGB颜色模型，但它们是两个不同的颜色空间，因为色域不一样</p>
+</blockquote>
+<hr>
+<h3 id="Color-Transfer"><a href="#Color-Transfer" class="headerlink" title="Color Transfer"></a>Color Transfer</h3><p>描述光电转换过程的视频属性也叫颜色传输函数<code>Color Transfer</code> 就是上面表格里面的 <em>Transfer characteristics</em></p>
+<p>常见的hdr转换曲线为HLG和PQ，其中，<code>smpte2084为PQ曲线（感知量化）</code>，<code>arib-std-b67为HLG曲线（混合对数伽玛）</code></p>
+<ol>
+<li>bt709</li>
+<li>unknown</li>
+<li>reserved</li>
+<li>bt470m</li>
+<li>bt470bg</li>
+<li>smpte170m</li>
+<li>smpte240m</li>
+<li>linear</li>
+<li>log100</li>
+<li>log316</li>
+<li>iec61966-2-4</li>
+<li>bt1361e</li>
+<li>iec61966-2-1</li>
+<li>bt2020-10</li>
+<li>bt2020-12</li>
+<li>smpte2084</li>
+<li>smpte428</li>
+<li>arib-std-b67</li>
+</ol>
+<p><img src="assets/20220819_185458_image.png" alt></p>
+<blockquote>
+<p>传统的SDR视频使用的BT709的光电转换函数，对高亮部分进行了截断，可以表达的亮度动态范围有限，最大亮度只有100nit。而HDR视频，增加了高亮部分细节的表达，很大的扩展亮度的动态范围。</p>
+</blockquote>
+<blockquote>
+<p>不同HDR的设计初衷不同，其中PQ的设计更接近人眼的特点，亮度表达更准确，可以表示高达10000nit的亮度。而HLG的设计考虑了老设备的兼容性，和传统bt709的传输函数有部分是重合的，天然的对老设备具有一定兼容性</p>
+</blockquote>
+<hr>
+<h3 id="Metadata"><a href="#Metadata" class="headerlink" title="Metadata"></a>Metadata</h3><p>HDR元数据分为两种，<strong>静态元数据</strong> 和<strong>动态元数据</strong> ；</p>
+<p><img src="https://www.freesion.com/images/681/4cb6682c4292d07865e44592d5d33a59.JPEG" alt></p>
+<p>使用PQ曲线的HDR10是采用静态元数据的，但是杜比公司提出来的杜比视界和三星的HDR10+，尽管使用了PQ曲线，但是他们使用的是动态元数据，HLG没有元数据。</p>
+<p>其中 DolbyVision 等价于SMPTE ST 2094-10, HDR10+ 等价于 SMPTE ST 2094-40</p>
+<blockquote>
+<p>静态元数据规定了整个片子像素级别最大亮度上限，在ST 2086中有标准化的定义。静态元数据的缺点是必须做全局的色调映射，没有足够的调节空间，兼容性不好。</p>
+</blockquote>
+<blockquote>
+<p>动态元数据可以很好地解决这个问题。动态元数据主要有两个方面的作用：与静态元数据相比，它可以在每一个场景或者每一帧画面，给调色师一个发挥的空间，以展现更丰富的细节；另一个方面，通过动态元数据，在目标显示亮度上做色调映射，可以最大程度在目标显示器上呈现作者的创作意图。</p>
+</blockquote>
+<ul>
+<li>最大内容亮度（MaxCLL）：整个视频流中最亮像素的亮度。</li>
+<li>最大帧平均亮度（MaxFALL）：整个视频流中最亮帧的平均亮度</li>
+</ul>
+<p>另外解释一下多出现的几个参数:progressive,SAR,DAR.</p>
+<p>progressive,其实就是扫描方式,逐行扫描.另外的一种方式就是隔行扫描:interlaced.我们平时所谓的1080p,这个p就是progressive,表示的是1080尺寸的逐行扫描视频.<br>DAR - display aspect ratio就是视频播放时，我们看到的图像宽高的比例，缩放视频也要按这个比例来，否则会使图像看起来被压扁或者拉长了似的。</p>
+<p>SAR - storage aspect ratio就是对图像采集时，横向采集与纵向采集构成的点阵，横向点数与纵向点数的比值。比如VGA图像640/480 = 4:3，D-1 PAL图像720/576 = 5:4</p>
+<p>PAR - pixel aspect ratio大多数情况为1:1,就是一个正方形像素，否则为长方形像素这三者的关系PAR x SAR = DAR或者PAR = DAR/SAR</p>
+<hr>
+<h3 id="Tone-Mapping"><a href="#Tone-Mapping" class="headerlink" title="Tone Mapping"></a>Tone Mapping</h3><p><strong>色调映射的目的是使高动态范围HDR图像能够适应低动态范围LDR显示器。</strong></p>
+<blockquote>
+<p>色调映射算法的目的在于将HDR图像的亮度进行压缩，进而映射到LDR显示设备的显示范围之内，同时，在映射的过程中要尽量保持原HDR图像的细节与颜色等重要信息。</p>
+<p>所以色调映射算法需要具有两方面的性质：</p>
+<ol>
+<li>能够将图像亮度进行压缩。</li>
+<li>能够保持图像细节与颜色。</li>
+</ol>
+</blockquote>
+<h3 id="Matrix-coefficients"><a href="#Matrix-coefficients" class="headerlink" title="Matrix coefficients"></a>Matrix coefficients</h3><p><strong>YCbCr-&gt;RGB</strong></p>
 <ul>
 <li>Video Range</li>
 </ul>
@@ -2681,7 +2949,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">77k</span>
+    <span title="站点总字数">83k</span>
   
 
   
@@ -2690,7 +2958,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:10</span>
+    <span title="站点阅读时长">1:16</span>
   
 </div>
 
