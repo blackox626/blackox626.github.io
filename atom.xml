@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-18T11:49:47.245Z</updated>
+  <updated>2022-08-19T06:01:23.734Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-08-18T11:49:47.245Z</updated>
+    <updated>2022-08-19T06:01:23.734Z</updated>
     
     <summary type="html">
     
@@ -29,9 +29,7 @@
       
         
         
-          &lt;h3 id=&quot;matrix&quot;&gt;&lt;a href=&quot;#matrix&quot; class=&quot;headerlink&quot; title=&quot;matrix&quot;&gt;&lt;/a&gt;matrix&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;YCbCr-&amp;gt;RGB&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Video
+          &lt;h3 id=&quot;noun&quot;&gt;&lt;a href=&quot;#noun&quot; class=&quot;headerlink&quot; title=&quot;noun&quot;&gt;&lt;/a&gt;noun&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;ITU&lt;/strong&gt;：国际电信联盟 &lt;strong&gt;&lt;code&gt;International
         
       
     
@@ -43,6 +41,8 @@
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
+    
+      <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
   </entry>
   
