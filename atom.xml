@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-23T12:30:00.175Z</updated>
+  <updated>2022-08-23T12:31:29.611Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,17 +21,24 @@
     <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-08-23T12:30:00.175Z</updated>
+    <updated>2022-08-23T12:31:29.611Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;Noun-explanation&quot;&gt;&lt;a href=&quot;#Noun-explanation&quot; class=&quot;headerlink&quot; title=&quot;Noun explanation&quot;&gt;&lt;/a&gt;Noun
-        
-      
+      &lt;h3 id=&quot;Noun-explanation&quot;&gt;&lt;a href=&quot;#Noun-explanation&quot; class=&quot;headerlink&quot; title=&quot;Noun explanation&quot;&gt;&lt;/a&gt;Noun explanation&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;ITU&lt;/strong&gt;：国际电信联盟 &lt;strong&gt;&lt;code&gt;International Telecommunication Union&lt;/code&gt;&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;ITU-R&lt;/strong&gt;：国际电信联盟无线电通信部门 &lt;strong&gt;ITU Radiocommunication Sector&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CIE&lt;/strong&gt; :国际照明协会 （&lt;a href=&quot;https://zh.m.wikipedia.org/wiki/%E8%8B%B1%E6%96%87&quot; title=&quot;英文&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;英文&lt;/a&gt;：&lt;strong&gt;&lt;code&gt;International Commission on Illumination&lt;/code&gt;&lt;/strong&gt; ，&lt;a href=&quot;https://zh.m.wikipedia.org/wiki/%E6%B3%95%E6%96%87&quot; title=&quot;法文&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;法文&lt;/a&gt;：&lt;strong&gt;&lt;code&gt;Commission internationale de l&amp;#39;éclairage&lt;/code&gt;&lt;/strong&gt; ，采用法文&lt;a href=&quot;https://zh.m.wikipedia.org/wiki/%E7%B8%AE%E5%AF%AB&quot; title=&quot;缩写&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;缩写&lt;/a&gt;：&lt;strong&gt;CIE&lt;/strong&gt; ）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SMPTE&lt;/strong&gt;：电影电视工程师协会 &lt;strong&gt;Society of Motion Picture and Television Engineers&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Hue&lt;/strong&gt;：色调 色彩 色相&lt;br&gt;&lt;strong&gt;Chroma&lt;/strong&gt;：色调饱和度 浓度&lt;br&gt;&lt;strong&gt;Luminance&lt;/strong&gt;：亮度 明度&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;HDR-Concept&quot;&gt;&lt;a href=&quot;#HDR-Concept&quot; class=&quot;headerlink&quot; title=&quot;HDR Concept&quot;&gt;&lt;/a&gt;HDR Concept&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;HDR&lt;/strong&gt;:&lt;code&gt;High Dynamic Range&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;字面上是动态范围，一般指亮度上可以表达更大的亮度范围，呈现更大的亮度对比度。但是实际实际上HDR的技术和标准涉及色彩相关的一组属性的改善，可以带来更多的颜色、更大的亮度对比度、更高精度的量化。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;OOTF&lt;/strong&gt;:&lt;code&gt;OETF/EOTF&lt;/code&gt; Optical-Electro/Electro-Optical Transfer Function 光电/电光转换函数&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;人对亮度的感知是非线性的，对暗部细节敏感，对亮部细节不敏感，利用这个特点设计了非线性的光电转换和电光转换的函数。这样的处理不仅可以节省带宽，也可以基本满足用户体验需求。&lt;br&gt;光电转换的时候做了特殊的非线性编码，为暗部细节分配更多的码率，亮部细节进行了压缩或者截断减少码率的分配。电光转换进行显示还原的时候，通过应用一个逆的非线性变化，还原出线性光。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
     
     </summary>
     
@@ -51,17 +58,19 @@
     <link href="https://blackox626.github.io/2022/08/08/coreimage-with-metal-%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/</id>
     <published>2022-08-08T08:07:28.000Z</published>
-    <updated>2022-08-18T10:12:41.735Z</updated>
+    <updated>2022-08-23T12:34:11.941Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;xcode&quot;&gt;&lt;a href=&quot;#xcode&quot; class=&quot;headerlink&quot; title=&quot;xcode&quot;&gt;&lt;/a&gt;xcode&lt;/h3&gt;&lt;p&gt;近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义
-        
-      
+      &lt;h3 id=&quot;xcode&quot;&gt;&lt;a href=&quot;#xcode&quot; class=&quot;headerlink&quot; title=&quot;xcode&quot;&gt;&lt;/a&gt;xcode&lt;/h3&gt;&lt;p&gt;近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。&lt;/p&gt;
+&lt;p&gt;CIKL的方式，存在两个问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。&lt;/li&gt;
+&lt;li&gt;翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较久。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Metal: 在build阶段 就可以编译 链接 .metal文件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png&quot; alt=&quot;Compiling &amp;amp; Linking&quot;&gt;&lt;/p&gt;
+&lt;p&gt;参考苹果的官方文档 &lt;code&gt;Metal Shading Language for CoreImage Kernels&lt;/code&gt;  ,在&lt;code&gt;xcode integration&lt;/code&gt; 部分提到在&lt;code&gt;build setting&lt;/code&gt; 设置 &lt;code&gt;Other Metal Compiler Flags&lt;/code&gt;, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 &lt;code&gt;&amp;quot;/air-lld:1:1: symbol(s) not found for target &amp;#39;air64-apple-ios12.0.0&amp;#39;&amp;quot; and &amp;quot;air-lld command failed with exit code 1 (use -v to see invocation)&amp;quot;&lt;/code&gt;&lt;/p&gt;
     
     </summary>
     
@@ -79,17 +88,13 @@
     <link href="https://blackox626.github.io/2020/06/03/flutter-1-17%E5%85%B1%E4%BA%ABengine/"/>
     <id>https://blackox626.github.io/2020/06/03/flutter-1-17共享engine/</id>
     <published>2020-06-02T16:02:04.000Z</published>
-    <updated>2020-06-02T18:01:11.873Z</updated>
+    <updated>2022-08-23T12:34:54.500Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym
-        
-      
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym 还原出堆栈如下&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt; auto fml::internal::CopyableLambda&amp;lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&amp;lt;flutter::Surface, std::__1::default_delete&amp;lt;flutter::Surface&amp;gt; &amp;gt;)::$_8&amp;gt;::operator()&amp;lt;&amp;gt;() &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; (in Flutter) (make_copyable.h:&lt;span class=&quot;number&quot;&gt;24&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; auto fml::internal::CopyableLambda&amp;lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&amp;lt;flutter::Surface, std::__1::default_delete&amp;lt;flutter::Surface&amp;gt; &amp;gt;)::$_8&amp;gt;::operator()&amp;lt;&amp;gt;() &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; (in Flutter) (make_copyable.h:&lt;span class=&quot;number&quot;&gt;24&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt; fml::MessageLoopImpl::FlushTasks(fml::FlushType) (in Flutter) (message_loop_impl.cc:&lt;span class=&quot;number&quot;&gt;129&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt; fml::MessageLoopDarwin::OnTimerFire(__CFRunLoopTimer*, fml::MessageLoopDarwin*) (in Flutter) (message_loop_darwin.mm:&lt;span class=&quot;number&quot;&gt;76&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;9&lt;/span&gt; fml::MessageLoopDarwin::Run() (in Flutter) (message_loop_darwin.mm:&lt;span class=&quot;number&quot;&gt;47&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt;* std::__1::__thread_proxy&amp;lt;std::__1::tuple&amp;lt;std::__1::unique_ptr&amp;lt;std::__1::__thread_struct, std::__1::default_delete&amp;lt;std::__1::__thread_struct&amp;gt; &amp;gt;, fml::Thread::Thread(std::__1::basic_string&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;, std::__1::char_traits&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;&amp;gt;, std::__1::allocator&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;&amp;gt; &amp;gt; &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt;&amp;amp;)::$_0&amp;gt; &amp;gt;(&lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt;*) (in Flutter) (thread:&lt;span class=&quot;number&quot;&gt;352&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这里还只能看到crash在engine的c++代码中，具体原因未知&lt;/p&gt;
     
     </summary>
     

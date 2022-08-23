@@ -106,7 +106,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://blackox626.github.io/images/eb1b0189-a378-4042-886f-a0a2a7dcd29e.png">
 <meta property="og:image" content="https://blackox626.github.io/images/8dbea766-3a2a-4fd6-b90e-b28c5e1f5819.png">
-<meta property="og:updated_time" content="2020-06-02T18:01:11.873Z">
+<meta property="og:updated_time" content="2022-08-23T12:34:54.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter 1.17共享engine">
 <meta name="twitter:description" content="前言flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym 还原出堆栈如下 1234560 auto fml::internal::CopyableLambda&amp;lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&amp;lt;flutter::Surface,">
@@ -519,6 +519,7 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym 还原出堆栈如下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> auto fml::internal::CopyableLambda&lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&lt;flutter::Surface, std::__1::default_delete&lt;flutter::Surface&gt; &gt;)::$_8&gt;::operator()&lt;&gt;() <span class="keyword">const</span> (in Flutter) (make_copyable.h:<span class="number">24</span>)</span><br><span class="line"><span class="number">1</span> auto fml::internal::CopyableLambda&lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&lt;flutter::Surface, std::__1::default_delete&lt;flutter::Surface&gt; &gt;)::$_8&gt;::operator()&lt;&gt;() <span class="keyword">const</span> (in Flutter) (make_copyable.h:<span class="number">24</span>)</span><br><span class="line"><span class="number">2</span> fml::MessageLoopImpl::FlushTasks(fml::FlushType) (in Flutter) (message_loop_impl.cc:<span class="number">129</span>)</span><br><span class="line"><span class="number">3</span> fml::MessageLoopDarwin::OnTimerFire(__CFRunLoopTimer*, fml::MessageLoopDarwin*) (in Flutter) (message_loop_darwin.mm:<span class="number">76</span>)</span><br><span class="line"><span class="number">9</span> fml::MessageLoopDarwin::Run() (in Flutter) (message_loop_darwin.mm:<span class="number">47</span>)</span><br><span class="line"><span class="number">10</span> <span class="keyword">void</span>* std::__1::__thread_proxy&lt;std::__1::tuple&lt;std::__1::unique_ptr&lt;std::__1::__thread_struct, std::__1::default_delete&lt;std::__1::__thread_struct&gt; &gt;, fml::Thread::Thread(std::__1::basic_string&lt;<span class="keyword">char</span>, std::__1::char_traits&lt;<span class="keyword">char</span>&gt;, std::__1::allocator&lt;<span class="keyword">char</span>&gt; &gt; <span class="keyword">const</span>&amp;)::$_0&gt; &gt;(<span class="keyword">void</span>*) (in Flutter) (thread:<span class="number">352</span>)</span><br></pre></td></tr></table></figure>
 <p>这里还只能看到crash在engine的c++代码中，具体原因未知</p>
+<a id="more"></a>
 <h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p>我们根据crash 用户的 埋点日志 分析crash前的 使用路径，基本都是打开push 落地到一个flutter页面<br>app 的 第一个tab 也是个 flutter 页面，所以是push 唤起app，连续打开两个flutter页面。<br>手动打开app，点击进到flutter页面是不会crash的（这么简单的路径，如果crash，那就该死了）<br>很快我们就可以通过这个 路径 复现 crash ，能复现就好说。</p>
 <p><img src="/images/eb1b0189-a378-4042-886f-a0a2a7dcd29e.png" alt="Image"></p>
 <p>debug engine源码，可以定位到更具体的地方</p>
@@ -547,13 +548,6 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="/2020/05/21/flutter-1-17升级/" rel="bookmark">flutter 1.17升级</a></div>
       
     </li>
@@ -576,6 +570,13 @@
       
       
       <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
       
     </li>
   
