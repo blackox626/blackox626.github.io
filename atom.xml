@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-23T12:47:37.179Z</updated>
+  <updated>2022-08-23T12:49:10.791Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-08-23T12:47:37.179Z</updated>
+    <updated>2022-08-23T12:49:10.791Z</updated>
     
     <summary type="html">
     
@@ -34,7 +34,7 @@
 &lt;blockquote&gt;
 &lt;p&gt;字面上是动态范围，一般指亮度上可以表达更大的亮度范围，呈现更大的亮度对比度。但是实际实际上HDR的技术和标准涉及色彩相关的一组属性的改善，可以带来更多的颜色、更大的亮度对比度、更高精度的量化。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;OOTF&lt;/strong&gt;:&lt;code&gt;OETF/EOTF&lt;/code&gt; Optical-Electro/Electro-Optical Transfer Function 光电/电光转换函数&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;OETF/EOTF&lt;/strong&gt;: Optical-Electro/Electro-Optical Transfer Function 光电/电光转换函数&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;人对亮度的感知是非线性的，对暗部细节敏感，对亮部细节不敏感，利用这个特点设计了非线性的光电转换和电光转换的函数。这样的处理不仅可以节省带宽，也可以基本满足用户体验需求。&lt;br&gt;光电转换的时候做了特殊的非线性编码，为暗部细节分配更多的码率，亮部细节进行了压缩或者截断减少码率的分配。电光转换进行显示还原的时候，通过应用一个逆的非线性变化，还原出线性光。&lt;/p&gt;
 &lt;/blockquote&gt;
