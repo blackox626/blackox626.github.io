@@ -108,7 +108,7 @@
 <meta property="og:image" content="https://webcube-general.s3.amazonaws.com/eizo/media/contentassets/2017/11/20/5colorspace.png">
 <meta property="og:image" content="https://blackox626.github.io/2022/08/18/images/20220819_185458_image.png">
 <meta property="og:image" content="https://www.freesion.com/images/681/4cb6682c4292d07865e44592d5d33a59.JPEG">
-<meta property="og:updated_time" content="2022-08-19T11:26:40.448Z">
+<meta property="og:updated_time" content="2022-08-23T12:30:00.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HDR笔记">
 <meta name="twitter:description" content="Noun explanationITU：国际电信联盟 International Telecommunication UnionITU-R：国际电信联盟无线电通信部门 ITU Radiocommunication Sector CIE :国际照明协会 （英文：International Commission on Illumination ，法文：Commission internationale">
@@ -484,7 +484,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">58k</span>
+                <span title="本文字数">65k</span>
               
 
               
@@ -498,7 +498,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">52 分钟</span>
+                <span title="阅读时长">59 分钟</span>
               
             </div>
           
@@ -667,7 +667,7 @@
 <td>min: 0.0001 cd/m2, max: 1000 cd/m2</td>
 </tr>
 <tr>
-<td><em>Maximum Content Light Level </em></td>
+<td><em>Maximum Content Light Level</em></td>
 <td>1000 cd/m2</td>
 </tr>
 <tr>
@@ -792,6 +792,13 @@
 <li>能够保持图像细节与颜色。</li>
 </ol>
 </blockquote>
+<p><strong>EOTF/OETF</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">float</span> <span class="title">HLG_EOTF</span><span class="params">(<span class="keyword">float</span> e)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">//a = 0.17883277, b =1− 4a= 0.28466892, c = 0.5 − a ln(4a)== 0.55991073.</span></span><br><span class="line">        <span class="keyword">float</span> a = <span class="number">0.17883277</span>, b = <span class="number">0.28466892</span>,c = <span class="number">0.55991073</span>;</span><br><span class="line">        <span class="keyword">if</span>( e &gt; <span class="number">0.5</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="built_in">exp</span>((e-c)/a) + b) / <span class="number">12.</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> powf(e, <span class="number">2.</span>) / <span class="number">3.</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">float</span> <span class="title">HLG_OETF</span><span class="params">(<span class="keyword">float</span> e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> a = <span class="number">0.17883277</span>, b = <span class="number">0.28466892</span>,c =<span class="number">0.55991073</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// float r = 0.5;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// ARIB STD-B67</span></span><br><span class="line">        <span class="comment">// return (E &gt; 1.) ? (a * log(E - b) + c) : (r * sqrt(E));</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Rec.2100</span></span><br><span class="line">        <span class="keyword">float</span> threshold = <span class="number">1</span> / <span class="number">12.</span>;</span><br><span class="line">        <span class="keyword">return</span> (e &gt; threshold) ? (a * <span class="built_in">log</span>(<span class="number">12.</span> * e - b) + c) : <span class="built_in">sqrt</span>(<span class="number">3.</span> * e);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">float</span> <span class="title">PQ_EOTF</span><span class="params">(<span class="keyword">float</span> e)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">float</span> m1 = <span class="number">0.1593017578125</span>;</span><br><span class="line">        <span class="keyword">float</span> m2 = <span class="number">78.84375</span>;</span><br><span class="line">        <span class="keyword">float</span> C1 = <span class="number">0.8359375</span>;</span><br><span class="line">        <span class="keyword">float</span> C2 = <span class="number">18.8515625</span>;</span><br><span class="line">        <span class="keyword">float</span> C3 = <span class="number">18.6875</span>;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> powf((fmax(powf(e,<span class="number">1</span>/m2)-C1,<span class="number">0</span>)/C2-C3*powf(e,<span class="number">1</span>/m2)), <span class="number">1</span>/m1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">float</span> <span class="title">PQ_OETF</span><span class="params">(<span class="keyword">float</span> e)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//todo</span></span><br><span class="line">        <span class="keyword">return</span> e;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>bt2020 -&gt; bt709</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.6605, -0.5876, -0.0728</span><br><span class="line">-0.1246,  1.1329, -0.0083</span><br><span class="line">-0.0182, -0.1006,  1.1187</span><br></pre></td></tr></table></figure>
+<p><strong>bt709 -&gt; bt2020</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0.6274, 0.3293, 0.0433</span><br><span class="line">0.0691, 0.9195, 0.0114</span><br><span class="line">0.0164, 0.0880, 0.8956</span><br></pre></td></tr></table></figure>
+<hr>
 <h3 id="Matrix-coefficients"><a href="#Matrix-coefficients" class="headerlink" title="Matrix coefficients"></a>Matrix coefficients</h3><p><strong>YCbCr-&gt;RGB</strong></p>
 <ul>
 <li>Video Range</li>
@@ -869,7 +876,12 @@
 <h3 id="Range-Deduce"><a href="#Range-Deduce" class="headerlink" title="Range Deduce"></a>Range Deduce</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[16/255,    16/255,    16/255, 1.0]</span><br><span class="line">[235/255,   240/255,  240/255, 1.0]</span><br><span class="line"></span><br><span class="line">x</span><br><span class="line"></span><br><span class="line">[255/219,    0,          0,          0]</span><br><span class="line">[0,          255/224,    0,          0]</span><br><span class="line">[0,          0,          255/224,    0]</span><br><span class="line">[-16/219,    -128/224,   -128/224,   1]</span><br><span class="line"></span><br><span class="line">=</span><br><span class="line"></span><br><span class="line">[0,    -0.5,    -0.5, 1.0]</span><br><span class="line">[1,     0.5,     0.5, 1.0]</span><br></pre></td></tr></table></figure>
 <p>将 <strong>videorange</strong> 通过 <code>齐次矩阵</code> 转换为 <strong>fullrange</strong></p>
 <hr>
-<h3 id="references"><a href="#references" class="headerlink" title="references"></a>references</h3><p><a href="https://blog.csdn.net/sunty2016/article/details/106589379" target="_blank" rel="noopener">搞清楚编程中YUV和RGB间的相互转换</a><br><a href="https://web.archive.org/web/20100122105857/http://www.equasys.de/colorconversion.html" target="_blank" rel="noopener">YUV - RGB colorconversion</a><br><a href="https://zhuanlan.zhihu.com/p/493035194" target="_blank" rel="noopener">推导视频YUV转RGB矩阵</a><br><a href="https://zhuanlan.zhihu.com/p/110503121" target="_blank" rel="noopener">齐次坐标</a></p>
+<h3 id="other"><a href="#other" class="headerlink" title="other"></a>other</h3><p>rgb-&gt;yuv 下采样 rgb &lt;-yuv 上采样</p>
+<p>大部分图像捕捉设备在保存图像时会自动加上伽马校正，也就是说图像中存储的是非线性空间中的颜色</p>
+<p>非线性的RGB转换为YUV也是非线性</p>
+<p>tone mapping 需要在线性RGB空间进行</p>
+<hr>
+<h3 id="references"><a href="#references" class="headerlink" title="references"></a>references</h3><p><a href="https://blog.csdn.net/sunty2016/article/details/106589379" target="_blank" rel="noopener">搞清楚编程中YUV和RGB间的相互转换</a><br><a href="https://web.archive.org/web/20100122105857/http://www.equasys.de/colorconversion.html" target="_blank" rel="noopener">YUV - RGB colorconversion</a><br><a href="https://zhuanlan.zhihu.com/p/493035194" target="_blank" rel="noopener">推导视频YUV转RGB矩阵</a><br><a href="https://zhuanlan.zhihu.com/p/110503121" target="_blank" rel="noopener">齐次坐标</a><br><a href="https://icode.best/i/79487543846749" target="_blank" rel="noopener"># Gamma校正</a><br><a href="https://blog.csdn.net/candycat1992/article/details/46228771" target="_blank" rel="noopener"># 我理解的伽马校正</a><br><a href="https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-BT.2407-2017-PDF-E.pdf" target="_blank" rel="noopener">Colour gamut conversion from Recommendation ITU-R BT.2020 to Recommendation ITU-R BT.709</a><br><a href="https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.2087-0-201510-I!!PDF-E.pdf" target="_blank" rel="noopener">Colour conversion from Recommendation ITU-R BT.709 to Recommendation ITU-R BT.2020</a></p>
 
       
     </div>
@@ -1158,7 +1170,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Noun-explanation"><span class="nav-text">Noun explanation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HDR-Concept"><span class="nav-text">HDR Concept</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Info"><span class="nav-text">Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-range"><span class="nav-text">Color range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-primaries"><span class="nav-text">Color primaries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-Transfer"><span class="nav-text">Color Transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metadata"><span class="nav-text">Metadata</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tone-Mapping"><span class="nav-text">Tone Mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Matrix-coefficients"><span class="nav-text">Matrix coefficients</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opengl"><span class="nav-text">opengl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RGB-YUV"><span class="nav-text">RGB-YUV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#formula"><span class="nav-text">formula</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-Deduce"><span class="nav-text">Range Deduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#references"><span class="nav-text">references</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Noun-explanation"><span class="nav-text">Noun explanation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HDR-Concept"><span class="nav-text">HDR Concept</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Info"><span class="nav-text">Info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-range"><span class="nav-text">Color range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-primaries"><span class="nav-text">Color primaries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Color-Transfer"><span class="nav-text">Color Transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metadata"><span class="nav-text">Metadata</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tone-Mapping"><span class="nav-text">Tone Mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Matrix-coefficients"><span class="nav-text">Matrix coefficients</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opengl"><span class="nav-text">opengl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RGB-YUV"><span class="nav-text">RGB-YUV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#formula"><span class="nav-text">formula</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-Deduce"><span class="nav-text">Range Deduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other"><span class="nav-text">other</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#references"><span class="nav-text">references</span></a></li></ol></div>
             
 
           </div>
@@ -1192,7 +1204,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">83k</span>
+    <span title="站点总字数">85k</span>
   
 
   
@@ -1201,7 +1213,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:16</span>
+    <span title="站点阅读时长">1:17</span>
   
 </div>
 
