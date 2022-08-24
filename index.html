@@ -383,6 +383,202 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/24/flutter-hdr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="攻城狮 程序猿...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2022/08/24/flutter-hdr/" class="post-title-link" itemprop="url">flutter-hdr</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-08-24 18:54:50" itemprop="dateCreated datePublished" datetime="2022-08-24T18:54:50+08:00">2022-08-24</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/08/24/flutter-hdr/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/08/24/flutter-hdr/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2022/08/24/flutter-hdr/" class="leancloud_visitors" data-flag-title="flutter-hdr">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="flutter"><a href="#flutter" class="headerlink" title="flutter"></a>flutter</h3><p>flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue <a href="https://github.com/flutter/flutter/issues/91241" target="_blank" rel="noopener"><strong>Video Player HDR Problem</strong></a> 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕</p>
+<p><img src="https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png" alt></p>
+<p>关于 <strong>HDR</strong> 格式，可以看下前面的文章 <a href="https://" target="_blank" rel="noopener"><strong>HDR笔记</strong></a></p>
+<p>这里记录下Flutter video player plugin 中处理视频色彩的方法，亮度提升需要通过硬件激活，Flutter中好像没法处理。</p>
+<p>颜色的处理核心就是做了一个<strong>HDR-&gt;SDR</strong>的<strong>tonemap</strong>,恰好<strong>CIImage</strong>中提供了这样的<strong>Filter</strong>，处理就方便多了，<br>看过<a href="https://" target="_blank" rel="noopener"><strong>HDR笔记</strong></a> 这篇文章的话，应该也可以自己通过 <strong>EOTF + 色域映射 </strong>来处理。暂时不知道 <strong>CIImage</strong>中是怎么处理的，猜测是差不多的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">- (CVPixelBufferRef)pixelBufferFormCIImage:(CIImage *)image &#123;</span><br><span class="line">    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line">                                    @&#123;&#125;, kCVPixelBufferIOSurfacePropertiesKey,</span><br><span class="line">                                    @YES, kCVPixelBufferCGImageCompatibilityKey,</span><br><span class="line">                                    @YES, kCVPixelBufferCGBitmapContextCompatibilityKey, nil];</span><br><span class="line">    </span><br><span class="line">    CVPixelBufferRef pixelBufferCopy = <span class="literal">NULL</span>;</span><br><span class="line">    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,</span><br><span class="line">                                          image.extent.size.width,</span><br><span class="line">                                          image.extent.size.height,</span><br><span class="line">                                          kCVPixelFormatType_32BGRA,</span><br><span class="line">                                          (__bridge CFDictionaryRef) options,</span><br><span class="line">                                          &amp;pixelBufferCopy);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (status == kCVReturnSuccess) &#123;</span><br><span class="line">        CIRenderDestination *destination = [[CIRenderDestination alloc] initWithPixelBuffer:pixelBufferCopy];</span><br><span class="line">        [self.mContext startTaskToRender:image toDestination:destination error:nil];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pixelBufferCopy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (CVPixelBufferRef)copyPixelBuffer &#123;</span><br><span class="line">    CMTime outputItemTime = [_videoOutput itemTimeForHostTime:CACurrentMediaTime()];</span><br><span class="line">    <span class="keyword">if</span> ([_videoOutput hasNewPixelBufferForItemTime:outputItemTime]) &#123;</span><br><span class="line">        </span><br><span class="line">        CVPixelBufferRef p = [_videoOutput copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:<span class="literal">NULL</span>];</span><br><span class="line">        CFTypeRef colorPrimaries = CVBufferGetAttachment(p, kCVImageBufferTransferFunctionKey, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span> (colorPrimaries &amp;&amp; CFEqual(colorPrimaries, kCVImageBufferTransferFunction_ITU_R_2100_HLG)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (@available(iOS <span class="number">14.1</span>, *)) &#123;</span><br><span class="line">                CIImage *image = [CIImage imageWithCVPixelBuffer:p options:@&#123;kCIImageToneMapHDRtoSDR : @(YES)&#125;];</span><br><span class="line">                CVPixelBufferRef newP = [self pixelBufferFormCIImage:image];</span><br><span class="line">                CVPixelBufferRelease(p);</span><br><span class="line">                <span class="keyword">return</span> newP;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/18/HDR笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2173,204 +2369,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/31/mustache之dart/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="攻城狮 程序猿...">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BLACK_OX">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/31/mustache之dart/" class="post-title-link" itemprop="url">mustache之dart</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-31 11:23:40" itemprop="dateCreated datePublished" datetime="2019-05-31T11:23:40+08:00">2019-05-31</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/05/31/mustache之dart/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/31/mustache之dart/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2019/05/31/mustache之dart/" class="leancloud_visitors" data-flag-title="mustache之dart">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">17k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">16 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Mustache 是一个 logic-less （轻逻辑）模板解析引擎，可以应用在 js、PHP、Python、Perl 等多种编程语言中。这里主要是看dart中的应用。</p>
-<p>模板语法很简单  <a href="https://pub.dev/packages/mustache#-readme-tab-" target="_blank" rel="noopener">看这里</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;keyName&#125;&#125; </span><br><span class="line">&#123;&#123;#keyName&#125;&#125; &#123;&#123;/keyName&#125;&#125;</span><br><span class="line">&#123;&#123;^keyName&#125;&#125; &#123;&#123;/keyName&#125;&#125;</span><br><span class="line">&#123;&#123;.&#125;&#125;</span><br><span class="line">&#123;&#123;&gt;partials&#125;&#125;</span><br><span class="line">&#123;&#123;&#123;keyName&#125;&#125;&#125;</span><br><span class="line">&#123;&#123;!comments&#125;&#125;</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/31/mustache之dart/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2419,7 +2417,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2444,7 +2442,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2573,7 +2573,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">85k</span>
+    <span title="站点总字数">88k</span>
   
 
   
@@ -2582,7 +2582,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:17</span>
+    <span title="站点阅读时长">1:20</span>
   
 </div>
 

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-23T13:13:07.582Z</updated>
+  <updated>2022-08-24T11:34:31.463Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter-hdr</title>
+    <link href="https://blackox626.github.io/2022/08/24/flutter-hdr/"/>
+    <id>https://blackox626.github.io/2022/08/24/flutter-hdr/</id>
+    <published>2022-08-24T10:54:50.000Z</published>
+    <updated>2022-08-24T11:34:31.463Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;flutter&quot;&gt;&lt;a href=&quot;#flutter&quot; class=&quot;headerlink&quot; title=&quot;flutter&quot;&gt;&lt;/a&gt;flutter&lt;/h3&gt;&lt;p&gt;flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue
+        
+      
+    
+    </summary>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+  </entry>
   
   <entry>
     <title>HDR笔记</title>
