@@ -96,19 +96,19 @@
 
 
 
-  <meta name="description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕  关于 HDR 格式，可以看下前面的文章 HDR笔记 这里记录下Flutter video player plugin 中处理视频色彩的方法，亮度提升需要通过硬件激活，F">
+  <meta name="description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕">
 <meta name="keywords" content="flutter,HDR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flutter-hdr">
 <meta property="og:url" content="https://blackox626.github.io/2022/08/24/flutter-hdr/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕  关于 HDR 格式，可以看下前面的文章 HDR笔记 这里记录下Flutter video player plugin 中处理视频色彩的方法，亮度提升需要通过硬件激活，F">
+<meta property="og:description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png">
-<meta property="og:updated_time" content="2022-08-24T11:34:31.463Z">
+<meta property="og:updated_time" content="2022-08-24T11:37:21.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter-hdr">
-<meta name="twitter:description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕  关于 HDR 格式，可以看下前面的文章 HDR笔记 这里记录下Flutter video player plugin 中处理视频色彩的方法，亮度提升需要通过硬件激活，F">
+<meta name="twitter:description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕">
 <meta name="twitter:image" content="https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png">
 
 
@@ -517,6 +517,7 @@
       
         <h3 id="flutter"><a href="#flutter" class="headerlink" title="flutter"></a>flutter</h3><p>flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue <a href="https://github.com/flutter/flutter/issues/91241" target="_blank" rel="noopener"><strong>Video Player HDR Problem</strong></a> 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕</p>
 <p><img src="https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png" alt></p>
+<a id="more"></a>
 <p>关于 <strong>HDR</strong> 格式，可以看下前面的文章 <a href="https://" target="_blank" rel="noopener"><strong>HDR笔记</strong></a></p>
 <p>这里记录下Flutter video player plugin 中处理视频色彩的方法，亮度提升需要通过硬件激活，Flutter中好像没法处理。</p>
 <p>颜色的处理核心就是做了一个<strong>HDR-&gt;SDR</strong>的<strong>tonemap</strong>,恰好<strong>CIImage</strong>中提供了这样的<strong>Filter</strong>，处理就方便多了，<br>看过<a href="https://" target="_blank" rel="noopener"><strong>HDR笔记</strong></a> 这篇文章的话，应该也可以自己通过 <strong>EOTF + 色域映射 </strong>来处理。暂时不知道 <strong>CIImage</strong>中是怎么处理的，猜测是差不多的。</p>
@@ -548,7 +549,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2020/03/05/flutter-engine-定制/" rel="bookmark">flutter engine 定制</a></div>
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
       
     </li>
   
@@ -562,7 +563,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      <div class="popular-posts-title"><a href="/2020/03/13/flutter-tool-debug/" rel="bookmark">flutter tool debug</a></div>
       
     </li>
   

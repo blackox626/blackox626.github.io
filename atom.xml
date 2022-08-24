@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-24T11:34:31.463Z</updated>
+  <updated>2022-08-24T11:37:21.506Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,17 +21,12 @@
     <link href="https://blackox626.github.io/2022/08/24/flutter-hdr/"/>
     <id>https://blackox626.github.io/2022/08/24/flutter-hdr/</id>
     <published>2022-08-24T10:54:50.000Z</published>
-    <updated>2022-08-24T11:34:31.463Z</updated>
+    <updated>2022-08-24T11:37:21.506Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;flutter&quot;&gt;&lt;a href=&quot;#flutter&quot; class=&quot;headerlink&quot; title=&quot;flutter&quot;&gt;&lt;/a&gt;flutter&lt;/h3&gt;&lt;p&gt;flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue
-        
-      
+      &lt;h3 id=&quot;flutter&quot;&gt;&lt;a href=&quot;#flutter&quot; class=&quot;headerlink&quot; title=&quot;flutter&quot;&gt;&lt;/a&gt;flutter&lt;/h3&gt;&lt;p&gt;flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue &lt;a href=&quot;https://github.com/flutter/flutter/issues/91241&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;&lt;strong&gt;Video Player HDR Problem&lt;/strong&gt;&lt;/a&gt; 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
