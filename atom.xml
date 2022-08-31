@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-24T11:37:21.506Z</updated>
+  <updated>2022-08-31T11:29:47.123Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>flutter Display P3</title>
+    <link href="https://blackox626.github.io/2022/08/31/flutter-Display-P3/"/>
+    <id>https://blackox626.github.io/2022/08/31/flutter-Display-P3/</id>
+    <published>2022-08-31T11:00:17.000Z</published>
+    <updated>2022-08-31T11:29:47.123Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Display-P3&quot;&gt;&lt;a href=&quot;#Display-P3&quot; class=&quot;headerlink&quot; title=&quot;Display P3&quot;&gt;&lt;/a&gt;Display P3&lt;/h3&gt;&lt;p&gt;Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/20220831_190154_image.png&quot; alt&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
+    
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter-hdr</title>
@@ -46,7 +67,7 @@
     <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-08-25T11:01:48.679Z</updated>
+    <updated>2022-08-31T10:59:15.534Z</updated>
     
     <summary type="html">
     
