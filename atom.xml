@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-08-31T11:29:47.123Z</updated>
+  <updated>2022-09-05T11:49:54.950Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RGB2YUV</title>
+    <link href="https://blackox626.github.io/2022/09/05/RGB2YUV/"/>
+    <id>https://blackox626.github.io/2022/09/05/RGB2YUV/</id>
+    <published>2022-09-05T11:21:17.000Z</published>
+    <updated>2022-09-05T11:49:54.950Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;RGB2YUV&quot;&gt;&lt;a href=&quot;#RGB2YUV&quot; class=&quot;headerlink&quot; title=&quot;RGB2YUV&quot;&gt;&lt;/a&gt;RGB2YUV&lt;/h3&gt;&lt;p&gt;处理音视频，对&lt;strong&gt;YUV
+        
+      
+    
+    </summary>
+    
+    
+      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
+    
+  </entry>
   
   <entry>
     <title>flutter Display P3</title>
@@ -91,9 +115,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
-    
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
@@ -448,7 +472,7 @@
     <link href="https://blackox626.github.io/2019/05/14/vim-shortcuts/"/>
     <id>https://blackox626.github.io/2019/05/14/vim-shortcuts/</id>
     <published>2019-05-14T07:27:19.000Z</published>
-    <updated>2019-05-14T10:04:29.101Z</updated>
+    <updated>2022-08-31T11:30:46.854Z</updated>
     
     <summary type="html">
     
@@ -456,7 +480,7 @@
       
         
         
-          &lt;p&gt;&lt;img src=&quot;/images/4105806-3b63cace5838531a.jpg&quot; alt=&quot;vim
+          &lt;p&gt;&lt;img src=&quot;../images/4105806-3b63cace5838531a.jpg&quot; alt=&quot;vim
         
       
     
