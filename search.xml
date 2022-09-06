@@ -43,8 +43,8 @@
         <category>flutter</category>
       </categories>
       <tags>
-        <tag>HDR</tag>
         <tag>flutter</tag>
+        <tag>HDR</tag>
       </tags>
   </entry>
   <entry>
@@ -55,8 +55,8 @@
         <category>HDR</category>
       </categories>
       <tags>
-        <tag>YUV</tag>
         <tag>HDR</tag>
+        <tag>YUV</tag>
         <tag>OPENGL</tag>
       </tags>
   </entry>
