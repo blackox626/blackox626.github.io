@@ -4,6 +4,12 @@
     <title><![CDATA[__has_include]]></title>
     <url>%2F2022%2F09%2F06%2Fhas-include%2F</url>
     <content type="text"><![CDATA[VS在搞音视频的过程中，早期为了快速实现功能，会用到一些开源库，比如FFMpeg、OpenCV、LibYUV 等，这些大名鼎鼎的开源库能够解决音视频领域的很多问题，编解码、边缘检测、RGB-YUV格式转换等等。 这几个开源库还都是C/C++的，完美解决跨平台的问题，所以早期可以快速上线，但也会带来增加包大小的问题，这是最明显的，另外开源方案也并非没有BUG。对开源库做裁剪减少大小/提issue等待官方处理、自己处理BUG等这些成本相对也不小。 另一个选择就是使用其他的替代方案：比如原生的技术实现、解决指定问题独立模块算法、DIY \ 编解码 边缘检测 格式转换 开源方案 FFmpeg OpenCV LibYUV 替代方案 VideoToolBox/MediaCodec 边界跟踪算法Suzuki85 DIY 说明 软解-&gt; 硬解 边界跟踪算法Suzuki85 就是 OpenCV 内部的一种边缘检测方案 自己处理像素数据 后期通过替代方案可以解决上面提到的问题，主要是包大小问题。另外也可以自己动手加深了解开源的技术方案 __has_include通过替代方案可以移除开源库，但是接入开源方案实现功能的相关代码就没必要移除了。所以可以通过条件编译做一个区分。正好__has_include这个宏可以满足要求 描述此宏传入一个你想引入文件的名称作为参数，如果该文件能够被引入则返回1，否则返回0。 用法 12345#if __has_include(&lt;XXX/XXX.h&gt;)#import &lt;XXX/XXX.h&gt;#else#import "YYY.h"#endif 项目中的实际用法： 123456789#if __cplusplus &amp;&amp; __has_include(&lt;Libyuv/libyuv.h&gt;)#include &lt;Libyuv/libyuv.h&gt;#endif#if __cplusplus &amp;&amp; __has_include(&lt;Libyuv/libyuv.h&gt;)...#else...#endif 12345#if __has_include(&lt;opencv2/imgcodecs/ios.h&gt;) contourArr = [OpenCVWrapper findContours:image];#else contourArr = [PContour findContours:image threshold:threshold];#endif 12345678910111213141516#if __cplusplus &amp;&amp; __has_include(&lt;ffmpeg/avformat.h&gt;)extern "C" &#123;#include "ffmpeg/timestamp.h"#include "ffmpeg/avformat.h"#include "ffmpeg/bsf.h"#include "ffmpeg/swscale.h"#include "ffmpeg/swresample.h"#include "ffmpeg/avformat.h"#include "ffmpeg/imgutils.h"#include "ffmpeg/samplefmt.h"&#125;#endif ...#endif]]></content>
+      <categories>
+        <category>media</category>
+      </categories>
+      <tags>
+        <tag>media</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[RGB2YUV]]></title>
@@ -34,8 +40,8 @@
         <category>flutter</category>
       </categories>
       <tags>
-        <tag>HDR</tag>
         <tag>flutter</tag>
+        <tag>HDR</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-09-06T06:33:46.983Z</updated>
+  <updated>2022-09-06T06:36:58.265Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blackox626.github.io/2022/09/06/has-include/"/>
     <id>https://blackox626.github.io/2022/09/06/has-include/</id>
     <published>2022-09-06T05:47:47.000Z</published>
-    <updated>2022-09-06T06:33:46.983Z</updated>
+    <updated>2022-09-06T06:36:58.265Z</updated>
     
     <summary type="html">
     
@@ -30,6 +30,10 @@
     
     </summary>
     
+      <category term="media" scheme="https://blackox626.github.io/categories/media/"/>
+    
+    
+      <category term="media" scheme="https://blackox626.github.io/tags/media/"/>
     
   </entry>
   
@@ -95,9 +99,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
     
     
-      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
-    
       <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
   </entry>
   
