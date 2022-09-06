@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-09-06T02:17:35.454Z</updated>
+  <updated>2022-09-06T06:33:46.983Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>__has_include</title>
+    <link href="https://blackox626.github.io/2022/09/06/has-include/"/>
+    <id>https://blackox626.github.io/2022/09/06/has-include/</id>
+    <published>2022-09-06T05:47:47.000Z</published>
+    <updated>2022-09-06T06:33:46.983Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;VS&quot;&gt;&lt;a href=&quot;#VS&quot; class=&quot;headerlink&quot; title=&quot;VS&quot;&gt;&lt;/a&gt;VS&lt;/h3&gt;&lt;p&gt;在搞音视频的过程中，早期为了快速实现功能，会用到一些开源库，比如&lt;code&gt;FFMpeg、OpenCV、LibYUV&lt;/code&gt; 等，这些大名鼎鼎的开源库能够解决音视频领域的很多问题，编解码、边缘检测、RGB-YUV格式转换等等。&lt;/p&gt;
+&lt;p&gt;这几个开源库还都是C/C++的，完美解决跨平台的问题，所以早期可以快速上线，但也会带来增加包大小的问题，这是最明显的，另外开源方案也并非没有BUG。对开源库做裁剪减少大小/提issue等待官方处理、自己处理BUG等这些成本相对也不小。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>RGB2YUV</title>
@@ -78,9 +95,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
     
     
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
     
   </entry>
   
@@ -113,9 +130,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
