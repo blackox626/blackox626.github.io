@@ -42,7 +42,7 @@
     <link href="https://blackox626.github.io/2022/09/05/RGB2YUV/"/>
     <id>https://blackox626.github.io/2022/09/05/RGB2YUV/</id>
     <published>2022-09-05T11:21:17.000Z</published>
-    <updated>2022-09-06T02:17:35.454Z</updated>
+    <updated>2022-09-06T06:38:02.374Z</updated>
     
     <summary type="html">
     
@@ -51,6 +51,8 @@
 &lt;p&gt;重点是注意内存对齐，YUV420采样存储方式就好了，其他没什么复杂的。&lt;/p&gt;
     
     </summary>
+    
+      <category term="Media" scheme="https://blackox626.github.io/categories/Media/"/>
     
     
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
@@ -99,9 +101,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
     
     
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
     
   </entry>
   
@@ -134,9 +136,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
-    
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
