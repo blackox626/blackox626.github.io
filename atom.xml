@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-09-06T06:36:58.265Z</updated>
+  <updated>2022-09-09T11:22:06.871Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>camera orientation</title>
+    <link href="https://blackox626.github.io/2022/09/09/camera-orientation/"/>
+    <id>https://blackox626.github.io/2022/09/09/camera-orientation/</id>
+    <published>2022-09-09T10:18:51.000Z</published>
+    <updated>2022-09-09T11:22:06.871Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;camera&quot;&gt;&lt;a href=&quot;#camera&quot; class=&quot;headerlink&quot; title=&quot;camera&quot;&gt;&lt;/a&gt;camera&lt;/h3&gt;&lt;p&gt;手机相机录视频或者拍照，需要考虑设备的方向，主要在两方面&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;采集过程中，无论手机什么方向采集，采集画面都是正着看，不用侧头&lt;/li&gt;
+&lt;li&gt;录制/或者拍照后，视频/图片在正常手持设备的情况下正常显示，不用横着手机&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;正常手持一般都是竖着拿手机，所以就算横着拍摄，竖着拿手机也需要正常显示，不理解可以参考下系统相机。&lt;/p&gt;
+&lt;p&gt;所以这里就存在一个方向修正的问题。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="media" scheme="https://blackox626.github.io/categories/media/"/>
+    
+    
+      <category term="camera" scheme="https://blackox626.github.io/tags/camera/"/>
+    
+  </entry>
   
   <entry>
     <title>__has_include</title>
@@ -507,28 +533,6 @@
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>Flutter之Dart编译</title>
-    <link href="https://blackox626.github.io/2019/05/10/Flutter%E4%B9%8BDart%E7%BC%96%E8%AF%91/"/>
-    <id>https://blackox626.github.io/2019/05/10/Flutter之Dart编译/</id>
-    <published>2019-05-10T12:46:25.000Z</published>
-    <updated>2019-05-18T05:49:34.544Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;App中使用flutter已经有段时间了，最近遇到一个bug记录一下。更新flutter module工程pubspec plugin依赖，App工程中pod update之后，从功能表现上看依然是老代码。第一感觉是缓存导致的，&lt;strong&gt;xcode clean&lt;/strong&gt; 以及删除&lt;strong&gt;DerivedData&lt;/strong&gt;目录重新build依然不行，flutter module工程中执行flutter clean然后xcode build是正常的，所以应该是dart编译产物有缓存导致的。接下来看下dart编译过程。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
-    
-    
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
-      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
     
   </entry>
   
