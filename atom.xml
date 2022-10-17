@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>BLACK_OX</title>
   
-  <subtitle>好记性不如烂笔头...</subtitle>
+  <subtitle>A bad pen is better than a good memory</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-09-09T11:22:06.871Z</updated>
+  <updated>2022-10-17T02:17:16.998Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>动态滤镜</title>
+    <link href="https://blackox626.github.io/2022/10/14/%E5%8A%A8%E6%80%81%E6%BB%A4%E9%95%9C/"/>
+    <id>https://blackox626.github.io/2022/10/14/动态滤镜/</id>
+    <published>2022-10-14T09:48:04.000Z</published>
+    <updated>2022-10-17T02:17:16.998Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;滤镜&quot;&gt;&lt;a href=&quot;#滤镜&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="media" scheme="https://blackox626.github.io/categories/media/"/>
+    
+    
+      <category term="media" scheme="https://blackox626.github.io/tags/media/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>图像描边</title>
+    <link href="https://blackox626.github.io/2022/09/10/%E5%9B%BE%E5%83%8F%E6%8F%8F%E8%BE%B9/"/>
+    <id>https://blackox626.github.io/2022/09/10/图像描边/</id>
+    <published>2022-09-10T13:53:42.000Z</published>
+    <updated>2022-09-13T02:35:07.815Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;image-border&quot;&gt;&lt;a href=&quot;#image-border&quot; class=&quot;headerlink&quot; title=&quot;image border&quot;&gt;&lt;/a&gt;image border&lt;/h3&gt;&lt;p&gt;最近项目中搞了个图像描边的需求，常见的美图工具App都有类似的功能，典型的如美图秀秀，一开始觉得应该不太复杂，正常评估时间，实际做的时候，发现问题比想象中的复杂多了，结果项目不得不延期 😭，所以有必要搞篇文章来总结下教训。&lt;/p&gt;
+&lt;p&gt;先说整体的流程： 1、原图 -&amp;gt; 2、抠图 -&amp;gt; 3、边缘检测 -&amp;gt; 4、绘制边缘 -&amp;gt; 5、结果导出&lt;/p&gt;
+&lt;p&gt;这个流程还是很容易想到，但是除了最后一步相对来说容易点，2、3、4都是一路坑 😞&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="media" scheme="https://blackox626.github.io/categories/media/"/>
+    
+    
+      <category term="media" scheme="https://blackox626.github.io/tags/media/"/>
+    
+  </entry>
   
   <entry>
     <title>camera orientation</title>
@@ -68,7 +116,7 @@
     <link href="https://blackox626.github.io/2022/09/05/RGB2YUV/"/>
     <id>https://blackox626.github.io/2022/09/05/RGB2YUV/</id>
     <published>2022-09-05T11:21:17.000Z</published>
-    <updated>2022-09-06T06:38:02.374Z</updated>
+    <updated>2022-09-13T02:35:07.814Z</updated>
     
     <summary type="html">
     
@@ -92,12 +140,12 @@
     <link href="https://blackox626.github.io/2022/08/31/flutter-Display-P3/"/>
     <id>https://blackox626.github.io/2022/08/31/flutter-Display-P3/</id>
     <published>2022-08-31T11:00:17.000Z</published>
-    <updated>2022-08-31T11:29:47.123Z</updated>
+    <updated>2022-09-13T02:35:07.815Z</updated>
     
     <summary type="html">
     
       &lt;h3 id=&quot;Display-P3&quot;&gt;&lt;a href=&quot;#Display-P3&quot; class=&quot;headerlink&quot; title=&quot;Display P3&quot;&gt;&lt;/a&gt;Display P3&lt;/h3&gt;&lt;p&gt;Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/20220831_190154_image.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/20220831_190154_image.png&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
@@ -127,9 +175,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
     
     
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
     
   </entry>
   
@@ -138,7 +186,7 @@
     <link href="https://blackox626.github.io/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-08-31T10:59:15.534Z</updated>
+    <updated>2022-09-13T02:35:07.814Z</updated>
     
     <summary type="html">
     
@@ -175,7 +223,7 @@
     <link href="https://blackox626.github.io/2022/08/08/coreimage-with-metal-%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/</id>
     <published>2022-08-08T08:07:28.000Z</published>
-    <updated>2022-08-23T12:34:11.941Z</updated>
+    <updated>2022-09-13T02:35:07.814Z</updated>
     
     <summary type="html">
     
@@ -186,7 +234,7 @@
 &lt;li&gt;翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较久。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Metal: 在build阶段 就可以编译 链接 .metal文件&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png&quot; alt=&quot;Compiling &amp;amp; Linking&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png&quot; alt=&quot;Compiling &amp;amp; Linking&quot;&gt;&lt;/p&gt;
 &lt;p&gt;参考苹果的官方文档 &lt;code&gt;Metal Shading Language for CoreImage Kernels&lt;/code&gt;  ,在&lt;code&gt;xcode integration&lt;/code&gt; 部分提到在&lt;code&gt;build setting&lt;/code&gt; 设置 &lt;code&gt;Other Metal Compiler Flags&lt;/code&gt;, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 &lt;code&gt;&amp;quot;/air-lld:1:1: symbol(s) not found for target &amp;#39;air64-apple-ios12.0.0&amp;#39;&amp;quot; and &amp;quot;air-lld command failed with exit code 1 (use -v to see invocation)&amp;quot;&lt;/code&gt;&lt;/p&gt;
     
     </summary>
@@ -484,50 +532,6 @@
         
         
           &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;首先这里有三个形似得英文单词registry, registrar and
-        
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>sublime text 3</title>
-    <link href="https://blackox626.github.io/2019/05/14/sublime-text-3/"/>
-    <id>https://blackox626.github.io/2019/05/14/sublime-text-3/</id>
-    <published>2019-05-14T09:58:26.000Z</published>
-    <updated>2019-05-15T03:28:29.016Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;sublime-text3-install-package-control&quot;&gt;&lt;a href=&quot;#sublime-text3-install-package-control&quot; class=&quot;headerlink&quot; title=&quot;sublime text3
-        
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>vim shortcuts</title>
-    <link href="https://blackox626.github.io/2019/05/14/vim-shortcuts/"/>
-    <id>https://blackox626.github.io/2019/05/14/vim-shortcuts/</id>
-    <published>2019-05-14T07:27:19.000Z</published>
-    <updated>2022-08-31T11:30:46.854Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;img src=&quot;../images/4105806-3b63cace5838531a.jpg&quot; alt=&quot;vim
         
       
     

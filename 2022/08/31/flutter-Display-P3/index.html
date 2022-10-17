@@ -104,14 +104,14 @@
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="Display P3Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blackox626.github.io/2022/08/31/images/20220831_190154_image.png">
-<meta property="og:image" content="https://blackox626.github.io/2022/08/31/images/20220831_190817_image.png">
-<meta property="og:image" content="https://blackox626.github.io/2022/08/31/images/20220831_190824_image.png">
-<meta property="og:updated_time" content="2022-08-31T11:29:47.123Z">
+<meta property="og:image" content="https://blackox626.github.io/images/20220831_190154_image.png">
+<meta property="og:image" content="https://blackox626.github.io/images/20220831_190817_image.png">
+<meta property="og:image" content="https://blackox626.github.io/images/20220831_190824_image.png">
+<meta property="og:updated_time" content="2022-09-13T02:35:07.815Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter Display P3">
 <meta name="twitter:description" content="Display P3Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章">
-<meta name="twitter:image" content="https://blackox626.github.io/2022/08/31/images/20220831_190154_image.png">
+<meta name="twitter:image" content="https://blackox626.github.io/images/20220831_190154_image.png">
 
 
 
@@ -196,7 +196,7 @@
     </div>
     
       
-        <p class="site-subtitle">好记性不如烂笔头...</p>
+        <p class="site-subtitle">A bad pen is better than a good memory</p>
       
     
     
@@ -391,7 +391,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="攻城狮 程序猿...">
+      <meta itemprop="description" content="Developer...">
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -518,12 +518,12 @@
 
       
         <h3 id="Display-P3"><a href="#Display-P3" class="headerlink" title="Display P3"></a>Display P3</h3><p>Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章</p>
-<p><img src="../images/20220831_190154_image.png" alt></p>
+<p><img src="/images/20220831_190154_image.png" alt></p>
 <a id="more"></a>
 <p>失真效果：</p>
-<p><img src="../images/20220831_190817_image.png" alt></p>
+<p><img src="/images/20220831_190817_image.png" alt></p>
 <p>修复效果：</p>
-<p><img src="../images/20220831_190824_image.png" alt></p>
+<p><img src="/images/20220831_190824_image.png" alt></p>
 <p>原因就是Flutter 直接把Display P3社区的当做sRGB色域的图像处理了，而没有做色域转换</p>
 <h3 id="Flutter"><a href="#Flutter" class="headerlink" title="Flutter"></a>Flutter</h3><p>Flutter 跟 Native 图片打通，常见有两种方式：bitmap传递 &amp;&amp; 外接纹理，这边文章针对的是前者，外接纹理也会有这种问题的，无非就是pixelBuffer 转纹理，pixelBuffer一样也是有色域问题的，解决方案可以参考 <a href="https://" target="_blank" rel="noopener">Flutter HDR</a>,原理是一样的。</p>
 <p>针对图片的bitmap做色域转换，方案有很多，这里列出常见的两种：</p>
@@ -545,7 +545,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
+      <div class="popular-posts-title"><a href="/2020/06/03/flutter-1-17共享engine/" rel="bookmark">flutter 1.17共享engine</a></div>
       
     </li>
   
@@ -566,14 +566,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
       
     </li>
   
@@ -713,7 +713,7 @@
               <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="BLACK_OX">
             
               <p class="site-author-name" itemprop="name">BLACK_OX</p>
-              <div class="site-description motion-element" itemprop="description">攻城狮 程序猿...</div>
+              <div class="site-description motion-element" itemprop="description">Developer...</div>
           </div>
 
           
@@ -723,7 +723,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -906,7 +906,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">134k</span>
   
 
   
@@ -915,7 +915,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:43</span>
+    <span title="站点阅读时长">2:02</span>
   
 </div>
 
