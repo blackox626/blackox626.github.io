@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-10-17T02:17:16.998Z</updated>
+  <updated>2022-10-17T02:43:34.625Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,17 +21,14 @@
     <link href="https://blackox626.github.io/2022/10/14/%E5%8A%A8%E6%80%81%E6%BB%A4%E9%95%9C/"/>
     <id>https://blackox626.github.io/2022/10/14/动态滤镜/</id>
     <published>2022-10-14T09:48:04.000Z</published>
-    <updated>2022-10-17T02:17:16.998Z</updated>
+    <updated>2022-10-17T02:43:34.625Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;滤镜&quot;&gt;&lt;a href=&quot;#滤镜&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h3 id=&quot;滤镜&quot;&gt;&lt;a href=&quot;#滤镜&quot; class=&quot;headerlink&quot; title=&quot;滤镜&quot;&gt;&lt;/a&gt;滤镜&lt;/h3&gt;&lt;p&gt;音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。&lt;/p&gt;
+&lt;p&gt;但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。&lt;/p&gt;
+&lt;h3 id=&quot;动态滤镜&quot;&gt;&lt;a href=&quot;#动态滤镜&quot; class=&quot;headerlink&quot; title=&quot;动态滤镜&quot;&gt;&lt;/a&gt;动态滤镜&lt;/h3&gt;&lt;p&gt;先上一个效果感受下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://v.geilicdn.com/gif/followw813654-1c8600000183dc548a7d0a21146b_1066_1280.mp4_480_576.gif&quot; alt=&quot;动态滤镜&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -175,9 +172,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/HDR/flutter/"/>
     
     
-      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
-    
       <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
   </entry>
   

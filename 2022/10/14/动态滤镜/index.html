@@ -96,19 +96,19 @@
 
 
 
-  <meta name="description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：  视频：         很明显动态滤镜跟普通滤镜根本上就不是一回事了，所">
+  <meta name="description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：">
 <meta name="keywords" content="media">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态滤镜">
 <meta property="og:url" content="https://blackox626.github.io/2022/10/14/动态滤镜/index.html">
 <meta property="og:site_name" content="BLACK_OX">
-<meta property="og:description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：  视频：         很明显动态滤镜跟普通滤镜根本上就不是一回事了，所">
+<meta property="og:description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://v.geilicdn.com/gif/followw813654-1c8600000183dc548a7d0a21146b_1066_1280.mp4_480_576.gif">
-<meta property="og:updated_time" content="2022-10-17T02:17:16.998Z">
+<meta property="og:updated_time" content="2022-10-17T02:43:34.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态滤镜">
-<meta name="twitter:description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：  视频：         很明显动态滤镜跟普通滤镜根本上就不是一回事了，所">
+<meta name="twitter:description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：">
 <meta name="twitter:image" content="https://v.geilicdn.com/gif/followw813654-1c8600000183dc548a7d0a21146b_1066_1280.mp4_480_576.gif">
 
 
@@ -519,13 +519,13 @@
 <p>但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪影 等等,感受一下就大概知道了。</p>
 <h3 id="动态滤镜"><a href="#动态滤镜" class="headerlink" title="动态滤镜"></a>动态滤镜</h3><p>先上一个效果感受下：</p>
 <p><img src="https://v.geilicdn.com/gif/followw813654-1c8600000183dc548a7d0a21146b_1066_1280.mp4_480_576.gif" alt="动态滤镜"></p>
+<a id="more"></a>
 <p>视频：</p>
 <p><video id="video" controls preload="none" poster="https://si.geilicdn.com/followw813654-189b00000183dc5490430a20e7c7_720_864.jpg"><br>      <source id="mp4" src="https://v.geilicdn.com/video/followw813654-1c8600000183dc548a7d0a21146b_1066_1280.mp4" type="video/mp4"><br></video></p>
 <hr>
 <p>很明显动态滤镜跟普通滤镜根本上就不是一回事了，所以更像是动效 特效了，这里不纠结叫什么，重点是关注下怎么做的呢？直观感受就是静态图片上覆盖了一帧帧的透明图片，确实就是这么一回事。</p>
 <p>用一帧帧的带alpha通道的图片集，通过opengl blend一帧帧融合也可以实现， 弊端很明显，虽然这种动态效果一般也只有几秒，按30fps，也需要百来张图，图片资源很大，gif格式也会存在同样的问题。如果用视频呢？ 但是视频没有alpha通道。。</p>
-<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>参考腾讯动画方案 <a href="https://github.com/Tencent/vap" target="_blank" rel="noopener">vap</a></p>
-<p>我们用一种特殊的视频，视频的一半表示rgb 另一半表示alpha通道。</p>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>参考腾讯动画方案 <a href="https://github.com/Tencent/vap" target="_blank" rel="noopener">vap</a> 我们用一种特殊的视频，视频的一半表示rgb 另一半表示alpha通道。</p>
 <p><video id="video" controls preload="none" poster><br>      <source id="mp4" src="https://v.geilicdn.com/video/materialap-0b8f00000180bd4500f30a20e273_1440_1280.mp4" type="video/mp4"><br></video></p>
 <p>表示alpha通道的 rgb 三个分量值一样，所以是灰度图效果，知道这种特殊的视频构成 接下来就好处理了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(</span><br><span class="line">        precision mediump float;</span><br><span class="line">        varying highp vec2 textureCoordinate;</span><br><span class="line">        uniform sampler2D inputImageTexture;</span><br><span class="line"></span><br><span class="line">        void main() &#123;</span><br><span class="line">            vec4 textureColor = texture2D(inputImageTexture,textureCoordinate);</span><br><span class="line">            vec4 leftColor = texture2D(inputImageTexture,vec2(textureCoordinate.x / 2.0,textureCoordinate.y));</span><br><span class="line">            vec4 rightColor = texture2D(inputImageTexture,vec2(textureCoordinate.x / 2.0 + 0.5,textureCoordinate.y));</span><br><span class="line">            gl_FragColor = vec4(leftColor.rgb * rightColor.b ,rightColor.b);</span><br><span class="line">        &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
