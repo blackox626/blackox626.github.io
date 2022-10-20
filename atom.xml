@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-10-20T04:34:50.956Z</updated>
+  <updated>2022-10-20T09:19:58.312Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,13 +21,13 @@
     <link href="https://blackox626.github.io/2022/10/14/%E5%BD%A2%E7%8A%B6%E7%89%B9%E6%95%88/"/>
     <id>https://blackox626.github.io/2022/10/14/形状特效/</id>
     <published>2022-10-14T09:56:35.000Z</published>
-    <updated>2022-10-20T04:34:50.956Z</updated>
+    <updated>2022-10-20T09:19:58.312Z</updated>
     
     <summary type="html">
     
       &lt;h3 id=&quot;形状特效&quot;&gt;&lt;a href=&quot;#形状特效&quot; class=&quot;headerlink&quot; title=&quot;形状特效&quot;&gt;&lt;/a&gt;形状特效&lt;/h3&gt;&lt;p&gt;初次接触到形状特效是在剪映，剪映中叫蒙版，就是列举了一些常见形状的蒙层效果，除了常规的旋转、缩放、位移等操作外，还有个虚化的效果。可以去剪映感受下。&lt;/p&gt;
 &lt;p&gt;接触到这东西，觉得效果挺不错，打算研究下，正好手头的编辑工具项目也可以用上。线性、圆形、矩形，这几个规范的，通过平方根公式 跟 三角形余弦定理基本都可以推算出来(可以参考github &lt;a href=&quot;https://github.com/blackox626/shader/blob/master/rect.glsl&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;shader&lt;/a&gt;)，重点来了，爱心 &amp;amp; 五角星 怎么搞？&lt;/p&gt;
-&lt;center class=&quot;half&quot;&gt;&lt;br&gt;&lt;img src=&quot;https://si.geilicdn.com/materialap-01040000018069dab5c00a20e2c5_450_450.jpg&quot;&gt;&lt;img src=&quot;https://si.geilicdn.com/materialap-7fa10000018069dad0420a22e1f2_450_450.jpg&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;/center&gt;
+&lt;center class=&quot;half&quot;&gt;&lt;br&gt;&lt;img src=&quot;https://si.geilicdn.com/materialap-01040000018069dab5c00a20e2c5_450_450.jpg&quot; width=&quot;300&quot;&gt;  &lt;img src=&quot;https://si.geilicdn.com/materialap-7fa10000018069dad0420a22e1f2_450_450.jpg&quot; width=&quot;300&quot;&gt;&lt;br&gt;&lt;/center&gt;
     
     </summary>
     
