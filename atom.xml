@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-10-20T09:19:58.312Z</updated>
+  <updated>2022-10-20T09:26:21.365Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blackox626.github.io/2022/10/14/%E5%BD%A2%E7%8A%B6%E7%89%B9%E6%95%88/"/>
     <id>https://blackox626.github.io/2022/10/14/形状特效/</id>
     <published>2022-10-14T09:56:35.000Z</published>
-    <updated>2022-10-20T09:19:58.312Z</updated>
+    <updated>2022-10-20T09:26:21.365Z</updated>
     
     <summary type="html">
     
@@ -135,7 +135,7 @@
     <link href="https://blackox626.github.io/2022/09/05/RGB2YUV/"/>
     <id>https://blackox626.github.io/2022/09/05/RGB2YUV/</id>
     <published>2022-09-05T11:21:17.000Z</published>
-    <updated>2022-09-13T02:35:07.814Z</updated>
+    <updated>2022-10-25T11:21:17.000Z</updated>
     
     <summary type="html">
     
@@ -145,12 +145,12 @@
     
     </summary>
     
-      <category term="Media" scheme="https://blackox626.github.io/categories/Media/"/>
+      <category term="media" scheme="https://blackox626.github.io/categories/media/"/>
     
     
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
     
-      <category term="Media" scheme="https://blackox626.github.io/tags/Media/"/>
+      <category term="media" scheme="https://blackox626.github.io/tags/media/"/>
     
   </entry>
   
@@ -229,9 +229,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
-    
       <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
+    
+      <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
