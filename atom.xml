@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-11-07T10:33:27.334Z</updated>
+  <updated>2022-11-07T11:15:04.526Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -21,17 +21,22 @@
     <link href="https://blackox626.github.io/2022/11/04/ios%E8%8E%B7%E5%8F%96udid/"/>
     <id>https://blackox626.github.io/2022/11/04/ios获取udid/</id>
     <published>2022-11-04T10:15:27.000Z</published>
-    <updated>2022-11-07T10:33:27.334Z</updated>
+    <updated>2022-11-07T11:15:04.526Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h3 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h3&gt;&lt;p&gt;苹果企业账号打包分发app，方便内部安装测试App。最近公司企业账号续费失败，申请新的企业账号没成功。（国内近2年基本没有企业申请成功）&lt;br&gt;这就蛋疼了，了解到其他app是通过多开发者账号，&lt;strong&gt;adhoc&lt;/strong&gt;证书白名单的方式来做分发，&lt;strong&gt;adhoc&lt;/strong&gt;证书无法解决设备数量的问题，最多100台设备，而且还要提前注册好，一年更新一次，注册设备就是要拿到设备的udid。&lt;/p&gt;
+&lt;h3 id=&quot;获取udid&quot;&gt;&lt;a href=&quot;#获取udid&quot; class=&quot;headerlink&quot; title=&quot;获取udid&quot;&gt;&lt;/a&gt;获取udid&lt;/h3&gt;&lt;p&gt;了解到苹果可以通过&lt;strong&gt;safari&lt;/strong&gt;以OTA(over the air)的方式拿到udid。&lt;/p&gt;
+&lt;p&gt;整体流程分三步&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;下发&lt;strong&gt;udid.mobileconfig&lt;/strong&gt;文件&lt;/li&gt;
+&lt;li&gt;授权安装配置文件&lt;/li&gt;
+&lt;li&gt;回调解析xml拿到udid&lt;/li&gt;
+&lt;/ol&gt;
+&lt;!-- ![](/images/20221107_182553_IMG_1075.jpg)
+
+![](/images/20221107_182553_IMG_1074.jpg) --&gt;
+&lt;center class=&quot;half&quot;&gt;&lt;br&gt;&lt;img src=&quot;/images/20221107_182553_IMG_1075.jpg&quot; width=&quot;300&quot;&gt;  &lt;img src=&quot;/images/20221107_182553_IMG_1074.jpg&quot; width=&quot;300&quot;&gt;&lt;br&gt;&lt;/center&gt;
     
     </summary>
     
@@ -326,9 +331,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
