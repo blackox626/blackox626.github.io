@@ -383,6 +383,648 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/11/04/ios获取udid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2022/11/04/ios获取udid/" class="post-title-link" itemprop="url">ios获取udid</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-11-04 18:15:27" itemprop="dateCreated datePublished" datetime="2022-11-04T18:15:27+08:00">2022-11-04</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/11/04/ios获取udid/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/11/04/ios获取udid/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2022/11/04/ios获取udid/" class="leancloud_visitors" data-flag-title="ios获取udid">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">24k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">21 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>苹果企业账号打包分发app，方便内部安装测试App。最近公司企业账号续费失败，申请新的企业账号没成功。（国内近2年基本没有企业申请成功）<br>这就蛋疼了，了解到其他app是通过多开发者账号，<strong>adhoc</strong>证书白名单的方式来做分发，<strong>adhoc</strong>证书无法解决设备数量的问题，最多100台设备，而且还要提前注册好，一年更新一次，注册设备就是要拿到设备的udid。</p>
+<h3 id="获取udid"><a href="#获取udid" class="headerlink" title="获取udid"></a>获取udid</h3><p>了解到苹果可以通过<strong>safari</strong>以OTA(over the air)的方式拿到udid。</p>
+<p>整体流程分三步</p>
+<ol>
+<li>下发<strong>udid.mobileconfig</strong>文件</li>
+<li>授权安装配置文件</li>
+<li>回调解析xml拿到udid</li>
+</ol>
+<!-- ![](/images/20221107_182553_IMG_1075.jpg)
+
+![](/images/20221107_182553_IMG_1074.jpg) -->
+<center class="half"><br><img src="/images/20221107_182553_IMG_1075.jpg" width="300">  <img src="/images/20221107_182553_IMG_1074.jpg" width="300"><br></center>
+
+<h3 id="udid-mobileconfig"><a href="#udid-mobileconfig" class="headerlink" title="udid.mobileconfig"></a>udid.mobileconfig</h3><p>一个xml文件，文件内容如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadContent<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">key</span>&gt;</span>URL<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">string</span>&gt;</span>https://xxx.net/udid/action<span class="tag">&lt;/<span class="name">string</span>&gt;</span> <span class="comment">&lt;!--接收数据的接口地址--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">key</span>&gt;</span>DeviceAttributes<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>SERIAL<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>MAC_ADDRESS_EN0<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>UDID<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>IMEI<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>ICCID<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>VERSION<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>PRODUCT<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadOrganization<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>dev.xxx.com<span class="tag">&lt;/<span class="name">string</span>&gt;</span>  <span class="comment">&lt;!--组织名称--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDisplayName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>查询设备UDID<span class="tag">&lt;/<span class="name">string</span>&gt;</span>  <span class="comment">&lt;!--安装时显示的标题--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadUUID<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>CD0BD3C5-7164-B9DA-FCBB-D81AA343C7A0<span class="tag">&lt;/<span class="name">string</span>&gt;</span>  <span class="comment">&lt;!--自己随机填写的唯一字符串--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadIdentifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>dev.xxx.profile-service<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadDescription<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>本文件仅用来获取设备ID<span class="tag">&lt;/<span class="name">string</span>&gt;</span>   <span class="comment">&lt;!--描述--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>PayloadType<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>Profile Service<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>需要注意就是回调接口 需要支持https，否者会报ATS错误 <code>the resource could not be loaded because the app transport security policy requires the use of a secure connection</code></p>
+<p>起service下发 xml 文件，我这里以java spring mvc来实现的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/udid.mobileconfig"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;<span class="keyword">byte</span>[]&gt; downloadsEntity(HttpServletRequest request) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String path = Objects.requireNonNull(<span class="keyword">this</span>.getClass().getClassLoader().getResource(<span class="string">"udid.mobileconfig"</span>)).toURI().getPath();</span><br><span class="line">        File file = <span class="keyword">new</span> File(path);</span><br><span class="line">        <span class="keyword">if</span> (!file.isFile()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span>[] bytes = FileUtils.readFileToByteArray(file);</span><br><span class="line"></span><br><span class="line">        HttpHeaders headers = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">        headers.add(<span class="string">"Content-type"</span>,<span class="string">"application/x-apple-aspen-config; charset=utf-8"</span>); <span class="comment">// 按苹果的规范</span></span><br><span class="line">        headers.add(<span class="string">"Content-Disposition"</span>, <span class="string">"attachment;filename="</span> + <span class="string">"udid.mobileconfig"</span>);</span><br><span class="line"></span><br><span class="line">        HttpStatus status = HttpStatus.OK;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(bytes, headers, status);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="授权安装"><a href="#授权安装" class="headerlink" title="授权安装"></a>授权安装</h3><p>下载<strong>udid.mobileconfig</strong>之后，系统会自动在设置里面登记该配置文件，需要自行去设置里面 授权安装。<br>安装成功之后 会回调 mobileconfig里面提供的回调地址，udid等信息会以参数的形式一并带上，格式也是xml格式。</p>
+<p>如果下载的过程提示无效文件，可能就是<strong>mobileconfig</strong>文件内容有问题，可以通过pc浏览器检查下文件内容，我这里就遇到了文件乱码的情况</p>
+<p>上面提到文件内容是以字节流的方式下发的，配置好<strong>ByteArrayHttpMessageConverter</strong>的顺序就ok了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--自动注册基于注解风格的处理器 (数据转换 格式化 数据)--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mvc:annotation-driven</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mvc:message-converters</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"stringHttpMessageConverter"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">&lt;!--配置ByteArrayHttpMessageConverter--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.http.converter.ByteArrayHttpMessageConverter"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"features"</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- List字段如果为null,输出为[],而非nul --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">value</span>&gt;</span>WriteNullListAsEmpty<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 字符类型字段如果为null,输出为”“,而非null --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">value</span>&gt;</span>WriteNullStringAsEmpty<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 进制循环引用 --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">value</span>&gt;</span>DisableCircularReferenceDetect<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!--Boolean字段如果为null,输出为false,而非null --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">value</span>&gt;</span>WriteNullBooleanAsFalse<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!--时间 yyyy.MM.dd hh:mm:ss --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">value</span> <span class="attr">type</span>=<span class="string">"com.alibaba.fastjson.serializer.SerializerFeature"</span>&gt;</span>WriteDateUseDateFormat<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">mvc:message-converters</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mvc:annotation-driven</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="解析udid"><a href="#解析udid" class="headerlink" title="解析udid"></a>解析udid</h3><p>还是以java实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/action"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">action</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取HTTP请求的输入流</span></span><br><span class="line">        InputStream is = request.getInputStream();</span><br><span class="line">        <span class="comment">//已HTTP请求输入流建立一个BufferedReader对象</span></span><br><span class="line">        BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is,<span class="string">"UTF-8"</span>));</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读取HTTP请求内容</span></span><br><span class="line">        String buffer = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span> ((buffer = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            sb.append(buffer);</span><br><span class="line">        &#125;</span><br><span class="line">        String content = sb.toString().substring(sb.toString().indexOf(<span class="string">"&lt;?xml"</span>), sb.toString().indexOf(<span class="string">"&lt;/plist&gt;"</span>)+<span class="number">8</span>);</span><br><span class="line">        System.out.println(content);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建xml解析对象</span></span><br><span class="line">        SAXReader reader = <span class="keyword">new</span> SAXReader();</span><br><span class="line">        <span class="comment">// 定义一个文档</span></span><br><span class="line">        Document document = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//将字符串转换为</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            document = reader.read(<span class="keyword">new</span> ByteArrayInputStream(content.getBytes(<span class="string">"GBK"</span>)));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (DocumentException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String udid = <span class="string">"ERROR"</span>;</span><br><span class="line">        <span class="keyword">if</span>(document != <span class="keyword">null</span>) &#123;</span><br><span class="line">            Element element = (Element) document.selectNodes(<span class="string">"/plist/dict"</span>).get(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">for</span>(Iterator iter = element.content().iterator(); iter.hasNext();) &#123;</span><br><span class="line">                DefaultElement next = (DefaultElement) iter.next();</span><br><span class="line">                String name = next.getName();</span><br><span class="line">                String text = next.getText();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span>(StringUtils.isEquals(name,<span class="string">"key"</span>) &amp;&amp; StringUtils.isEquals(text,<span class="string">"UDID"</span>) &amp;&amp; iter.hasNext()) &#123;</span><br><span class="line">                    next = (DefaultElement) iter.next();</span><br><span class="line">                    name = next.getName();</span><br><span class="line">                    text = next.getText();</span><br><span class="line"></span><br><span class="line">                    udid = text;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        HttpHeaders headers = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">        headers.add(<span class="string">"Content-type"</span>,<span class="string">"text/html; charset=utf-8"</span>);</span><br><span class="line">        headers.setLocation(URI.create(<span class="string">"https://xxx.com/udid/udid?udid="</span>+udid)); <span class="comment">/// 跳转到指定的页面 展示udid信息</span></span><br><span class="line"></span><br><span class="line">        HttpStatus status = HttpStatus.MOVED_PERMANENTLY;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">""</span>, headers, status);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>解析xml就可以拿到udid字段，注意的是 重定向一定要使用301重定向（MOVED_PERMANENTLY）,有些重定向默认是302重定向,这样就会导致安装失败,设备安装会提示”无效的描述文件</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/10/28/MP4笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2022/10/28/MP4笔记/" class="post-title-link" itemprop="url">MP4笔记</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-10-28 16:34:53" itemprop="dateCreated datePublished" datetime="2022-10-28T16:34:53+08:00">2022-10-28</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/10/28/MP4笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/10/28/MP4笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2022/10/28/MP4笔记/" class="leancloud_visitors" data-flag-title="MP4笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="MP4"><a href="#MP4" class="headerlink" title="MP4"></a>MP4</h3><p><img src="/images/20221031_170011_4zm0n1tcq2.png" alt></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2022/10/28/MP4笔记/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/10/26/H264笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2022/10/26/H264笔记/" class="post-title-link" itemprop="url">H264笔记</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2022-10-26 15:28:12" itemprop="dateCreated datePublished" datetime="2022-10-26T15:28:12+08:00">2022-10-26</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2022/10/26/H264笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/10/26/H264笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2022/10/26/H264笔记/" class="leancloud_visitors" data-flag-title="H264笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="H264"><a href="#H264" class="headerlink" title="H264"></a>H264</h3><p>H264是视频编码规范，在这个规范下H264码流有两种方式：<strong>AnnexB</strong>格式 &amp;&amp; <strong>AVCC</strong>格式</p>
+<p><strong>AnnexB</strong></p>
+<p>AnnexB 的原理是在每个 NALU 前面写上一个特殊的起始码，通过这个起始码来当做 NALU 的分隔符，从而分割每个 NALU</p>
+<table>
+<thead>
+<tr>
+<th>[start code] NALU</th>
+<th>[start code] NALU</th>
+<th>[start code] NALU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>AVCC</strong></p>
+<p>avcC 则采用了另外一种方式。那就是在 NALU 前面写上几个字节，这几个字节组成一个整数（大端字节序）这个整数表示了整个 NALU 的长度</p>
+<table>
+<thead>
+<tr>
+<th>[extra data]</th>
+<th>[length] NALU</th>
+<th>[length] NALU</th>
+<th>[length] NALU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2022/10/26/H264笔记/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/10/14/形状特效/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1764,619 +2406,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/24/flutter-hdr/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="Developer...">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BLACK_OX">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2022/08/24/flutter-hdr/" class="post-title-link" itemprop="url">flutter-hdr</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2022-08-24 18:54:50" itemprop="dateCreated datePublished" datetime="2022-08-24T18:54:50+08:00">2022-08-24</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2022/08/24/flutter-hdr/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2022/08/24/flutter-hdr/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2022/08/24/flutter-hdr/" class="leancloud_visitors" data-flag-title="flutter-hdr">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">6.1k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">6 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="flutter"><a href="#flutter" class="headerlink" title="flutter"></a>flutter</h3><p>flutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue <a href="https://github.com/flutter/flutter/issues/91241" target="_blank" rel="noopener"><strong>Video Player HDR Problem</strong></a> 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕</p>
-<p><img src="https://user-images.githubusercontent.com/2773578/135998217-329a735c-5db4-462b-966f-441d2ec154ce.png" alt></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2022/08/24/flutter-hdr/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/18/HDR笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="Developer...">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BLACK_OX">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2022/08/18/HDR笔记/" class="post-title-link" itemprop="url">HDR笔记</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2022-08-18 17:43:46" itemprop="dateCreated datePublished" datetime="2022-08-18T17:43:46+08:00">2022-08-18</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2022/08/18/HDR笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2022/08/18/HDR笔记/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2022/08/18/HDR笔记/" class="leancloud_visitors" data-flag-title="HDR笔记">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">68k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">1:02</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="Noun-explanation"><a href="#Noun-explanation" class="headerlink" title="Noun explanation"></a>Noun explanation</h3><p><strong>ITU</strong>：国际电信联盟 <strong><code>International Telecommunication Union</code></strong><br><strong>ITU-R</strong>：国际电信联盟无线电通信部门 <strong>ITU Radiocommunication Sector</strong></p>
-<p><strong>CIE</strong> :国际照明协会 （<a href="https://zh.m.wikipedia.org/wiki/%E8%8B%B1%E6%96%87" title="英文" target="_blank" rel="noopener">英文</a>：<strong><code>International Commission on Illumination</code></strong> ，<a href="https://zh.m.wikipedia.org/wiki/%E6%B3%95%E6%96%87" title="法文" target="_blank" rel="noopener">法文</a>：<strong><code>Commission internationale de l&#39;éclairage</code></strong> ，采用法文<a href="https://zh.m.wikipedia.org/wiki/%E7%B8%AE%E5%AF%AB" title="缩写" target="_blank" rel="noopener">缩写</a>：<strong>CIE</strong> ）</p>
-<p><strong>SMPTE</strong>：电影电视工程师协会 <strong>Society of Motion Picture and Television Engineers</strong></p>
-<p><strong>Hue</strong>：色调 色彩 色相<br><strong>Chroma</strong>：色调饱和度 浓度<br><strong>Luminance</strong>：亮度 明度</p>
-<hr>
-<h3 id="HDR-Concept"><a href="#HDR-Concept" class="headerlink" title="HDR Concept"></a>HDR Concept</h3><p><strong>HDR</strong>:<code>High Dynamic Range</code></p>
-<blockquote>
-<p>字面上是动态范围，一般指亮度上可以表达更大的亮度范围，呈现更大的亮度对比度。但是实际实际上HDR的技术和标准涉及色彩相关的一组属性的改善，可以带来更多的颜色、更大的亮度对比度、更高精度的量化。</p>
-</blockquote>
-<p><strong>OETF/EOTF</strong>: Optical-Electro/Electro-Optical Transfer Function 光电/电光转换函数</p>
-<blockquote>
-<p>人对亮度的感知是非线性的，对暗部细节敏感，对亮部细节不敏感，利用这个特点设计了非线性的光电转换和电光转换的函数。这样的处理不仅可以节省带宽，也可以基本满足用户体验需求。<br>光电转换的时候做了特殊的非线性编码，为暗部细节分配更多的码率，亮部细节进行了压缩或者截断减少码率的分配。电光转换进行显示还原的时候，通过应用一个逆的非线性变化，还原出线性光。</p>
-</blockquote>
-<hr>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2022/08/18/HDR笔记/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/08/coreimage-with-metal-笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="BLACK_OX">
-      <meta itemprop="description" content="Developer...">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BLACK_OX">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2022/08/08/coreimage-with-metal-笔记/" class="post-title-link" itemprop="url">coreimage with metal 笔记</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2022-08-08 16:07:28" itemprop="dateCreated datePublished" datetime="2022-08-08T16:07:28+08:00">2022-08-08</time>
-            
-
-            
-          </span>
-
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2022/08/08/coreimage-with-metal-笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2022/08/08/coreimage-with-metal-笔记/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2022/08/08/coreimage-with-metal-笔记/" class="leancloud_visitors" data-flag-title="coreimage with metal 笔记">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">28k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">26 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="xcode"><a href="#xcode" class="headerlink" title="xcode"></a>xcode</h3><p>近期有自定义CoreImage的CIFilter的需求，前期通过CIKL 定义 CIKernel完成了任务，后面了解到CoreImage新特性支持metal的方式直接自定义 CIKernel，提高效率。</p>
-<p>CIKL的方式，存在两个问题：</p>
-<ul>
-<li>编写 kernel 的时候，没有报错提示，哪怕是参数名错误都无法检查处理。效率极低。</li>
-<li>翻译转换，编译，都是发生到运行时，导致第一次使用滤镜的时候，耗时较久。</li>
-</ul>
-<p>Metal: 在build阶段 就可以编译 链接 .metal文件</p>
-<p><img src="/images/8322102d-d9c7-4066-b1f5-c0b26a36d186.png" alt="Compiling &amp; Linking"></p>
-<p>参考苹果的官方文档 <code>Metal Shading Language for CoreImage Kernels</code>  ,在<code>xcode integration</code> 部分提到在<code>build setting</code> 设置 <code>Other Metal Compiler Flags</code>, 文档已经很老了（2018年的），新版的xcode已经没有这个选项了，如果不做处理，会有报错 <code>&quot;/air-lld:1:1: symbol(s) not found for target &#39;air64-apple-ios12.0.0&#39;&quot; and &quot;air-lld command failed with exit code 1 (use -v to see invocation)&quot;</code></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2022/08/08/coreimage-with-metal-笔记/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2425,7 +2454,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2452,7 +2481,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2585,7 +2616,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">139k</span>
+    <span title="站点总字数">155k</span>
   
 
   
@@ -2594,7 +2625,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">2:07</span>
+    <span title="站点阅读时长">2:21</span>
   
 </div>
 
