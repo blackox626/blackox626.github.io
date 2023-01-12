@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox626.github.io/"/>
-  <updated>2022-11-07T11:15:04.526Z</updated>
+  <updated>2023-01-12T04:00:00.000Z</updated>
   <id>https://blackox626.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ffmepg源码之http学习笔记</title>
+    <link href="https://blackox626.github.io/2022/12/22/ffmepg%E6%BA%90%E7%A0%81%E4%B9%8Bhttp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://blackox626.github.io/2022/12/22/ffmepg源码之http学习笔记/</id>
+    <published>2022-12-22T07:45:37.000Z</published>
+    <updated>2023-01-12T04:00:00.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;start&quot;&gt;&lt;a href=&quot;#start&quot; class=&quot;headerlink&quot; title=&quot;start&quot;&gt;&lt;/a&gt;start&lt;/h3&gt;&lt;p&gt;从 AVFormatContext 入口开始吧 …&lt;/p&gt;
+&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;libavformat/options.c&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;AVFormatContext *&lt;span class=&quot;title&quot;&gt;avformat_alloc_context&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    FFFormatContext *&lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; si = av_mallocz(&lt;span class=&quot;keyword&quot;&gt;sizeof&lt;/span&gt;(*si));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    AVFormatContext *s;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!si)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;NULL&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    s = &amp;amp;si-&amp;gt;pub;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    s-&amp;gt;av_class = &amp;amp;av_format_context_class;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;comment&quot;&gt;/// io入口 &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    s-&amp;gt;io_open  = io_open_default;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    s-&amp;gt;io_close = ff_format_io_close_default;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    s-&amp;gt;io_close2= io_close2_default;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    av_opt_set_defaults(s);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    si-&amp;gt;pkt = av_packet_alloc();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    si-&amp;gt;parse_pkt = av_packet_alloc();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (!si-&amp;gt;pkt || !si-&amp;gt;parse_pkt) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        avformat_free_context(s);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;NULL&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    si-&amp;gt;shortest_end = AV_NOPTS_VALUE;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; s;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="ffmepg" scheme="https://blackox626.github.io/categories/ffmepg/"/>
+    
+    
+      <category term="ffmepg" scheme="https://blackox626.github.io/tags/ffmepg/"/>
+    
+  </entry>
   
   <entry>
     <title>ios获取udid</title>
@@ -296,9 +317,9 @@
       <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
     
     
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
     
   </entry>
   
@@ -331,9 +352,9 @@
       <category term="HDR" scheme="https://blackox626.github.io/categories/HDR/"/>
     
     
-      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
-    
       <category term="HDR" scheme="https://blackox626.github.io/tags/HDR/"/>
+    
+      <category term="YUV" scheme="https://blackox626.github.io/tags/YUV/"/>
     
       <category term="OPENGL" scheme="https://blackox626.github.io/tags/OPENGL/"/>
     
@@ -512,37 +533,6 @@
         
         
           &lt;h2 id=&quot;flutter-issue&quot;&gt;&lt;a href=&quot;#flutter-issue&quot; class=&quot;headerlink&quot; title=&quot;flutter issue&quot;&gt;&lt;/a&gt;flutter issue&lt;/h2&gt;&lt;p&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="flutter" scheme="https://blackox626.github.io/categories/flutter/"/>
-    
-    
-      <category term="flutter" scheme="https://blackox626.github.io/tags/flutter/"/>
-    
-      <category term="dart" scheme="https://blackox626.github.io/tags/dart/"/>
-    
-      <category term="ios" scheme="https://blackox626.github.io/tags/ios/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>flutter ios 13 dark mode</title>
-    <link href="https://blackox626.github.io/2019/10/14/flutter-ios-13-dark-mode/"/>
-    <id>https://blackox626.github.io/2019/10/14/flutter-ios-13-dark-mode/</id>
-    <published>2019-10-14T03:46:08.000Z</published>
-    <updated>2019-10-16T03:25:07.364Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;ios 13 开启 dark model,flutter页面status bar文字一直是白色&lt;/p&gt;
-&lt;p&gt;&lt;a
         
       
     
