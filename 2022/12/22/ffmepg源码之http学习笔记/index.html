@@ -100,16 +100,16 @@
 <meta name="keywords" content="ffmepg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ffmepg源码之http学习笔记">
-<meta property="og:url" content="https://blackox626.github.io/2022/12/22/ffmepg源码之http学习笔记/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/12/22/ffmepg源码之http学习笔记/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="start从 AVFormatContext 入口开始吧 … 123456789101112131415161718192021222324252627282930libavformat/options.cAVFormatContext *avformat_alloc_context(void)&amp;#123;    FFFormatContext *const si = av_mallocz(siz">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blackox626.github.io/images/20230112_115542_image.png">
+<meta property="og:image" content="https://blackox.cn/images/20230112_115542_image.png">
 <meta property="og:updated_time" content="2023-01-12T04:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ffmepg源码之http学习笔记">
 <meta name="twitter:description" content="start从 AVFormatContext 入口开始吧 … 123456789101112131415161718192021222324252627282930libavformat/options.cAVFormatContext *avformat_alloc_context(void)&amp;#123;    FFFormatContext *const si = av_mallocz(siz">
-<meta name="twitter:image" content="https://blackox626.github.io/images/20230112_115542_image.png">
+<meta name="twitter:image" content="https://blackox.cn/images/20230112_115542_image.png">
 
 
 
@@ -119,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/12/22/ffmepg源码之http学习笔记/">
+  <link rel="canonical" href="https://blackox.cn/2022/12/22/ffmepg源码之http学习笔记/">
 
 
 
@@ -385,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/12/22/ffmepg源码之http学习笔记/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/12/22/ffmepg源码之http学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -434,6 +434,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ffmepg/" itemprop="url" rel="index"><span itemprop="name">ffmepg</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1410,6 +1428,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

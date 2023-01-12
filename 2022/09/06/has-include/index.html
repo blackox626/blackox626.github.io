@@ -100,7 +100,7 @@
 <meta name="keywords" content="media">
 <meta property="og:type" content="article">
 <meta property="og:title" content="__has_include">
-<meta property="og:url" content="https://blackox626.github.io/2022/09/06/has-include/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/09/06/has-include/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="VS在搞音视频的过程中，早期为了快速实现功能，会用到一些开源库，比如FFMpeg、OpenCV、LibYUV 等，这些大名鼎鼎的开源库能够解决音视频领域的很多问题，编解码、边缘检测、RGB-YUV格式转换等等。 这几个开源库还都是C/C++的，完美解决跨平台的问题，所以早期可以快速上线，但也会带来增加包大小的问题，这是最明显的，另外开源方案也并非没有BUG。对开源库做裁剪减少大小/提issue等待">
 <meta property="og:locale" content="zh-CN">
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/09/06/has-include/">
+  <link rel="canonical" href="https://blackox.cn/2022/09/06/has-include/">
 
 
 
@@ -383,7 +383,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/09/06/has-include/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/09/06/has-include/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -432,6 +432,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -571,13 +589,6 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2022/10/26/H264笔记/" rel="bookmark">H264笔记</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="/2022/10/28/MP4笔记/" rel="bookmark">MP4笔记</a></div>
       
     </li>
@@ -592,7 +603,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2022/09/10/图像描边/" rel="bookmark">图像描边</a></div>
+      <div class="popular-posts-title"><a href="/2022/10/26/H264笔记/" rel="bookmark">H264笔记</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2022/10/14/动态滤镜/" rel="bookmark">动态滤镜</a></div>
       
     </li>
   
@@ -1470,6 +1488,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

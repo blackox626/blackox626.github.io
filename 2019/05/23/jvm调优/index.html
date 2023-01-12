@@ -100,7 +100,7 @@
 <meta name="keywords" content="java,jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm调优">
-<meta property="og:url" content="https://blackox626.github.io/2019/05/23/jvm调优/index.html">
+<meta property="og:url" content="https://blackox.cn/2019/05/23/jvm调优/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="jps输出JVM中运行的进程状态信息 1234-q 不输出类名、Jar名和传入main方法的参数-m 输出传入main方法的参数-l 输出main类或Jar的全限名-v 输出传入JVM的参数 jps -mlv找到java应用的pid jstack根据java应用pid ,查看进程中线程堆栈信息 jstack pid top找出该进程内最耗费CPU的线程 top -Hp pid 转为十六进制prin">
 <meta property="og:locale" content="zh-CN">
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2019/05/23/jvm调优/">
+  <link rel="canonical" href="https://blackox.cn/2019/05/23/jvm调优/">
 
 
 
@@ -383,7 +383,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2019/05/23/jvm调优/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2019/05/23/jvm调优/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -432,6 +432,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1411,6 +1429,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

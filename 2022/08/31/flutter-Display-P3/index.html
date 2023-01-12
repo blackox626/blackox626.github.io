@@ -100,18 +100,18 @@
 <meta name="keywords" content="flutter">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flutter Display P3">
-<meta property="og:url" content="https://blackox626.github.io/2022/08/31/flutter-Display-P3/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/08/31/flutter-Display-P3/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="Display P3Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blackox626.github.io/images/20220831_190154_image.png">
-<meta property="og:image" content="https://blackox626.github.io/images/20220831_190817_image.png">
-<meta property="og:image" content="https://blackox626.github.io/images/20220831_190824_image.png">
+<meta property="og:image" content="https://blackox.cn/images/20220831_190154_image.png">
+<meta property="og:image" content="https://blackox.cn/images/20220831_190817_image.png">
+<meta property="og:image" content="https://blackox.cn/images/20220831_190824_image.png">
 <meta property="og:updated_time" content="2022-09-13T02:35:07.815Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="flutter Display P3">
 <meta name="twitter:description" content="Display P3Display P3 是苹果手机相机使用的一种色域，查看图片信息可以看到， 然而在flutter中 渲染 Display P3格式的图片 bitmap颜色失真,不了解色域的参考下前面HDR相关的文章">
-<meta name="twitter:image" content="https://blackox626.github.io/images/20220831_190154_image.png">
+<meta name="twitter:image" content="https://blackox.cn/images/20220831_190154_image.png">
 
 
 
@@ -121,7 +121,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/08/31/flutter-Display-P3/">
+  <link rel="canonical" href="https://blackox.cn/2022/08/31/flutter-Display-P3/">
 
 
 
@@ -387,7 +387,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/31/flutter-Display-P3/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/08/31/flutter-Display-P3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -436,6 +436,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -545,20 +563,6 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2020/05/21/flutter-1-17升级/" rel="bookmark">flutter 1.17升级</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/2020/03/05/flutter-engine-定制/" rel="bookmark">flutter engine 定制</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
       
     </li>
@@ -566,7 +570,21 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2020/05/21/flutter-1-17升级/" rel="bookmark">flutter 1.17升级</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2020/06/03/flutter-1-17共享engine/" rel="bookmark">flutter 1.17共享engine</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2020/03/05/flutter-engine-定制/" rel="bookmark">flutter engine 定制</a></div>
       
     </li>
   
@@ -1444,6 +1462,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

@@ -97,10 +97,10 @@
 
 
   <meta name="description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕">
-<meta name="keywords" content="HDR,flutter">
+<meta name="keywords" content="flutter,HDR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flutter-hdr">
-<meta property="og:url" content="https://blackox626.github.io/2022/08/24/flutter-hdr/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/08/24/flutter-hdr/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="flutterflutter 播放 HDR 视频，色彩跟亮度都有问题 ，github 也有反馈这个issue Video Player HDR Problem 跟原生的对比可以很明显看到差距，官方看起来好像也不重视这个问题 😕">
 <meta property="og:locale" content="zh-CN">
@@ -119,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/08/24/flutter-hdr/">
+  <link rel="canonical" href="https://blackox.cn/2022/08/24/flutter-hdr/">
 
 
 
@@ -385,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/08/24/flutter-hdr/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/08/24/flutter-hdr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -434,6 +434,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -535,14 +553,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2022/08/18/HDR笔记/" rel="bookmark">HDR笔记</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/2022/08/31/flutter-Display-P3/" rel="bookmark">flutter Display P3</a></div>
+      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
       
     </li>
   
@@ -556,6 +567,13 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2020/06/03/flutter-1-17共享engine/" rel="bookmark">flutter 1.17共享engine</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2020/03/05/flutter-engine-定制/" rel="bookmark">flutter engine 定制</a></div>
       
     </li>
@@ -563,7 +581,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/05/10/Flutter之Dart编译/" rel="bookmark">Flutter之Dart编译</a></div>
+      <div class="popular-posts-title"><a href="/2022/08/31/flutter-Display-P3/" rel="bookmark">flutter Display P3</a></div>
       
     </li>
   
@@ -613,9 +631,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/HDR/" rel="tag"><i class="fa fa-tag"></i> HDR</a>
-          
             <a href="/tags/flutter/" rel="tag"><i class="fa fa-tag"></i> flutter</a>
+          
+            <a href="/tags/HDR/" rel="tag"><i class="fa fa-tag"></i> HDR</a>
           
         </div>
       
@@ -1436,6 +1454,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

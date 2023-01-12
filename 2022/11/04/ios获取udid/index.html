@@ -100,17 +100,17 @@
 <meta name="keywords" content="ios">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ios获取udid">
-<meta property="og:url" content="https://blackox626.github.io/2022/11/04/ios获取udid/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/11/04/ios获取udid/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="背景苹果企业账号打包分发app，方便内部安装测试App。最近公司企业账号续费失败，申请新的企业账号没成功。（国内近2年基本没有企业申请成功）这就蛋疼了，了解到其他app是通过多开发者账号，adhoc证书白名单的方式来做分发，adhoc证书无法解决设备数量的问题，最多100台设备，而且还要提前注册好，一年更新一次，注册设备就是要拿到设备的udid。 获取udid了解到苹果可以通过safari以OTA">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blackox626.github.io/images/20221107_182553_IMG_1075.jpg">
-<meta property="og:image" content="https://blackox626.github.io/images/20221107_182553_IMG_1074.jpg">
+<meta property="og:image" content="https://blackox.cn/images/20221107_182553_IMG_1075.jpg">
+<meta property="og:image" content="https://blackox.cn/images/20221107_182553_IMG_1074.jpg">
 <meta property="og:updated_time" content="2022-11-07T11:15:04.526Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ios获取udid">
 <meta name="twitter:description" content="背景苹果企业账号打包分发app，方便内部安装测试App。最近公司企业账号续费失败，申请新的企业账号没成功。（国内近2年基本没有企业申请成功）这就蛋疼了，了解到其他app是通过多开发者账号，adhoc证书白名单的方式来做分发，adhoc证书无法解决设备数量的问题，最多100台设备，而且还要提前注册好，一年更新一次，注册设备就是要拿到设备的udid。 获取udid了解到苹果可以通过safari以OTA">
-<meta name="twitter:image" content="https://blackox626.github.io/images/20221107_182553_IMG_1075.jpg">
+<meta name="twitter:image" content="https://blackox.cn/images/20221107_182553_IMG_1075.jpg">
 
 
 
@@ -120,7 +120,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/11/04/ios获取udid/">
+  <link rel="canonical" href="https://blackox.cn/2022/11/04/ios获取udid/">
 
 
 
@@ -386,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/11/04/ios获取udid/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/11/04/ios获取udid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -435,6 +435,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ios/" itemprop="url" rel="index"><span itemprop="name">ios</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1440,6 +1458,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 

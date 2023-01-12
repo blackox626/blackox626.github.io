@@ -100,7 +100,7 @@
 <meta name="keywords" content="media">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态滤镜">
-<meta property="og:url" content="https://blackox626.github.io/2022/10/14/动态滤镜/index.html">
+<meta property="og:url" content="https://blackox.cn/2022/10/14/动态滤镜/index.html">
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="滤镜音视频编辑工具中，对图像或者视频加滤镜是一种常见的做法，普通滤镜很好理解，一张LUT图就搞定了，LUT图一般设计师会提供好，开发拿过来转成纹理，opengl做下颜色转换就好了，这里就不多说了。 但是今天想讲的是动态滤镜，也有叫特效的，动效等等。比如小红书/剪映 等等,感受一下就大概知道了。 动态滤镜先上一个效果感受下：">
 <meta property="og:locale" content="zh-CN">
@@ -119,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="https://blackox626.github.io/2022/10/14/动态滤镜/">
+  <link rel="canonical" href="https://blackox.cn/2022/10/14/动态滤镜/">
 
 
 
@@ -385,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blackox626.github.io/2022/10/14/动态滤镜/">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2022/10/14/动态滤镜/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="BLACK_OX">
@@ -434,6 +434,24 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -545,13 +563,6 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2022/10/26/H264笔记/" rel="bookmark">H264笔记</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="/2022/10/28/MP4笔记/" rel="bookmark">MP4笔记</a></div>
       
     </li>
@@ -566,6 +577,13 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2022/10/26/H264笔记/" rel="bookmark">H264笔记</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2022/09/06/has-include/" rel="bookmark">__has_include</a></div>
       
     </li>
@@ -573,7 +591,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2022/09/10/图像描边/" rel="bookmark">图像描边</a></div>
+      <div class="popular-posts-title"><a href="/2022/10/14/形状特效/" rel="bookmark">形状特效</a></div>
       
     </li>
   
@@ -1444,6 +1462,41 @@
   
 
   
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+        if (result) $(this).text('复制成功');
+        else $(this).text('复制失败');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('复制');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
 
   
 
