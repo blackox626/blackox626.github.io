@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="AVClass12345678910111213AVFormatContext *s;s-&amp;gt;av_class = &amp;amp;av_format_context_class;static const AVClass av_format_context_class = &amp;#123;    .class_name     = &quot;AVFormatContext&quot;,    .item_name">
+<meta name="keywords" content="ffmepg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffmpeg源码之xx学习笔记">
+<meta property="og:url" content="https://blackox.cn/2023/01/16/ffmpeg源码之xx学习笔记/index.html">
+<meta property="og:site_name" content="BLACK_OX">
+<meta property="og:description" content="AVClass12345678910111213AVFormatContext *s;s-&amp;gt;av_class = &amp;amp;av_format_context_class;static const AVClass av_format_context_class = &amp;#123;    .class_name     = &quot;AVFormatContext&quot;,    .item_name">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2023-01-16T06:48:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ffmpeg源码之xx学习笔记">
+<meta name="twitter:description" content="AVClass12345678910111213AVFormatContext *s;s-&amp;gt;av_class = &amp;amp;av_format_context_class;static const AVClass av_format_context_class = &amp;#123;    .class_name     = &quot;AVFormatContext&quot;,    .item_name">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BLACK_OX" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://blackox.cn/2023/01/16/ffmpeg源码之xx学习笔记/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ffmpeg源码之xx学习笔记 | BLACK_OX</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BLACK_OX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">The palest ink is better than the best memory</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/blackox626" class="github-corner" title="Fo Fo Fo Follow me 😁" aria-label="Fo Fo Fo Follow me 😁" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2023/01/16/ffmpeg源码之xx学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ffmpeg源码之xx学习笔记
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2023-01-16 14:48:28" itemprop="dateCreated datePublished" datetime="2023-01-16T14:48:28+08:00">2023-01-16</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ffmepg/" itemprop="url" rel="index"><span itemprop="name">ffmepg</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2023/01/16/ffmpeg源码之xx学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2023/01/16/ffmpeg源码之xx学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2023/01/16/ffmpeg源码之xx学习笔记/" class="leancloud_visitors" data-flag-title="ffmpeg源码之xx学习笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">55k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">50 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="AVClass"><a href="#AVClass" class="headerlink" title="AVClass"></a>AVClass</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">AVFormatContext *s;</span><br><span class="line">s-&gt;av_class = &amp;av_format_context_class;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> AVClass av_format_context_class = &#123;</span><br><span class="line">    .class_name     = <span class="string">"AVFormatContext"</span>,</span><br><span class="line">    .item_name      = format_to_name,</span><br><span class="line">    .option         = avformat_options,</span><br><span class="line">    .version        = LIBAVUTIL_VERSION_INT,</span><br><span class="line">    .child_next     = format_child_next,</span><br><span class="line">    .child_class_iterate = format_child_class_iterate,</span><br><span class="line">    .category       = AV_CLASS_CATEGORY_MUXER,</span><br><span class="line">    .get_category   = get_category,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OFFSET(x) offsetof(AVFormatContext,x)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> AVOption avformat_options[] = &#123;</span><br><span class="line">&#123;<span class="string">"avioflags"</span>, <span class="literal">NULL</span>, OFFSET(avio_flags), AV_OPT_TYPE_FLAGS, &#123;.i64 = DEFAULT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"avioflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"direct"</span>, <span class="string">"reduce buffering"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVIO_FLAG_DIRECT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"avioflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"probesize"</span>, <span class="string">"set probing size"</span>, OFFSET(probesize), AV_OPT_TYPE_INT64, &#123;.i64 = <span class="number">5000000</span> &#125;, <span class="number">32</span>, INT64_MAX, D&#125;,</span><br><span class="line">&#123;<span class="string">"formatprobesize"</span>, <span class="string">"number of bytes to probe file format"</span>, OFFSET(format_probesize), AV_OPT_TYPE_INT, &#123;.i64 = PROBE_BUF_MAX&#125;, <span class="number">0</span>, INT_MAX<span class="number">-1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"packetsize"</span>, <span class="string">"set packet size"</span>, OFFSET(packet_size), AV_OPT_TYPE_INT, &#123;.i64 = DEFAULT &#125;, <span class="number">0</span>, INT_MAX, E&#125;,</span><br><span class="line">&#123;<span class="string">"fflags"</span>, <span class="literal">NULL</span>, OFFSET(flags), AV_OPT_TYPE_FLAGS, &#123;.i64 = AVFMT_FLAG_AUTO_BSF &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"flush_packets"</span>, <span class="string">"reduce the latency by flushing out packets immediately"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_FLUSH_PACKETS &#125;, INT_MIN, INT_MAX, E, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"ignidx"</span>, <span class="string">"ignore index"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_IGNIDX &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"genpts"</span>, <span class="string">"generate pts"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_GENPTS &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"nofillin"</span>, <span class="string">"do not fill in missing values that can be exactly calculated"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_NOFILLIN &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"noparse"</span>, <span class="string">"disable AVParsers, this needs nofillin too"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_NOPARSE &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"igndts"</span>, <span class="string">"ignore dts"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_IGNDTS &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"discardcorrupt"</span>, <span class="string">"discard corrupted frames"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_DISCARD_CORRUPT &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"sortdts"</span>, <span class="string">"try to interleave outputted packets by dts"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_SORT_DTS &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"fastseek"</span>, <span class="string">"fast but inaccurate seeks"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_FAST_SEEK &#125;, INT_MIN, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"nobuffer"</span>, <span class="string">"reduce the latency introduced by optional buffering"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_FLAG_NOBUFFER &#125;, <span class="number">0</span>, INT_MAX, D, <span class="string">"fflags"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"bitexact"</span>, <span class="string">"do not write random/volatile data"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123; .i64 = AVFMT_FLAG_BITEXACT &#125;, <span class="number">0</span>, <span class="number">0</span>, E, <span class="string">"fflags"</span> &#125;,</span><br><span class="line">&#123;<span class="string">"shortest"</span>, <span class="string">"stop muxing with the shortest stream"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123; .i64 = AVFMT_FLAG_SHORTEST &#125;, <span class="number">0</span>, <span class="number">0</span>, E, <span class="string">"fflags"</span> &#125;,</span><br><span class="line">&#123;<span class="string">"autobsf"</span>, <span class="string">"add needed bsfs automatically"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123; .i64 = AVFMT_FLAG_AUTO_BSF &#125;, <span class="number">0</span>, <span class="number">0</span>, E, <span class="string">"fflags"</span> &#125;,</span><br><span class="line">&#123;<span class="string">"seek2any"</span>, <span class="string">"allow seeking to non-keyframes on demuxer level when supported"</span>, OFFSET(seek2any), AV_OPT_TYPE_BOOL, &#123;.i64 = <span class="number">0</span> &#125;, <span class="number">0</span>, <span class="number">1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"analyzeduration"</span>, <span class="string">"specify how many microseconds are analyzed to probe the input"</span>, OFFSET(max_analyze_duration), AV_OPT_TYPE_INT64, &#123;.i64 = <span class="number">0</span> &#125;, <span class="number">0</span>, INT64_MAX, D&#125;,</span><br><span class="line">&#123;<span class="string">"cryptokey"</span>, <span class="string">"decryption key"</span>, OFFSET(key), AV_OPT_TYPE_BINARY, &#123;.dbl = <span class="number">0</span>&#125;, <span class="number">0</span>, <span class="number">0</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"indexmem"</span>, <span class="string">"max memory used for timestamp index (per stream)"</span>, OFFSET(max_index_size), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">1</span>&lt;&lt;<span class="number">20</span> &#125;, <span class="number">0</span>, INT_MAX, D&#125;,</span><br><span class="line">&#123;<span class="string">"rtbufsize"</span>, <span class="string">"max memory used for buffering real-time frames"</span>, OFFSET(max_picture_buffer), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">3041280</span> &#125;, <span class="number">0</span>, INT_MAX, D&#125;, <span class="comment">/* defaults to 1s of 15fps 352x288 YUYV422 video */</span></span><br><span class="line">&#123;<span class="string">"fdebug"</span>, <span class="string">"print specific debug info"</span>, OFFSET(debug), AV_OPT_TYPE_FLAGS, &#123;.i64 = DEFAULT &#125;, <span class="number">0</span>, INT_MAX, E|D, <span class="string">"fdebug"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"ts"</span>, <span class="literal">NULL</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_FDEBUG_TS &#125;, INT_MIN, INT_MAX, E|D, <span class="string">"fdebug"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"max_delay"</span>, <span class="string">"maximum muxing or demuxing delay in microseconds"</span>, OFFSET(max_delay), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">-1</span> &#125;, <span class="number">-1</span>, INT_MAX, E|D&#125;,</span><br><span class="line">&#123;<span class="string">"start_time_realtime"</span>, <span class="string">"wall-clock time when stream begins (PTS==0)"</span>, OFFSET(start_time_realtime), AV_OPT_TYPE_INT64, &#123;.i64 = AV_NOPTS_VALUE&#125;, INT64_MIN, INT64_MAX, E&#125;,</span><br><span class="line">&#123;<span class="string">"fpsprobesize"</span>, <span class="string">"number of frames used to probe fps"</span>, OFFSET(fps_probe_size), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">-1</span>&#125;, <span class="number">-1</span>, INT_MAX<span class="number">-1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"audio_preload"</span>, <span class="string">"microseconds by which audio packets should be interleaved earlier"</span>, OFFSET(audio_preload), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, INT_MAX<span class="number">-1</span>, E&#125;,</span><br><span class="line">&#123;<span class="string">"chunk_duration"</span>, <span class="string">"microseconds for each chunk"</span>, OFFSET(max_chunk_duration), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, INT_MAX<span class="number">-1</span>, E&#125;,</span><br><span class="line">&#123;<span class="string">"chunk_size"</span>, <span class="string">"size in bytes for each chunk"</span>, OFFSET(max_chunk_size), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, INT_MAX<span class="number">-1</span>, E&#125;,</span><br><span class="line"><span class="comment">/* this is a crutch for avconv, since it cannot deal with identically named options in different contexts.</span></span><br><span class="line"><span class="comment"> * to be removed when avconv is fixed */</span></span><br><span class="line">&#123;<span class="string">"f_err_detect"</span>, <span class="string">"set error detection flags (deprecated; use err_detect, save via avconv)"</span>, OFFSET(error_recognition), AV_OPT_TYPE_FLAGS, &#123;.i64 = AV_EF_CRCCHECK &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"err_detect"</span>, <span class="string">"set error detection flags"</span>, OFFSET(error_recognition), AV_OPT_TYPE_FLAGS, &#123;.i64 = AV_EF_CRCCHECK &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"crccheck"</span>, <span class="string">"verify embedded CRCs"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_CRCCHECK &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"bitstream"</span>, <span class="string">"detect bitstream specification deviations"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_BITSTREAM &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"buffer"</span>, <span class="string">"detect improper bitstream length"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_BUFFER &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"explode"</span>, <span class="string">"abort decoding on minor error detection"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_EXPLODE &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"ignore_err"</span>, <span class="string">"ignore errors"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_IGNORE_ERR &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"careful"</span>,    <span class="string">"consider things that violate the spec, are fast to check and have not been seen in the wild as errors"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_CAREFUL &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"compliant"</span>,  <span class="string">"consider all spec non compliancies as errors"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_COMPLIANT | AV_EF_CAREFUL &#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"aggressive"</span>, <span class="string">"consider things that a sane encoder shouldn't do as an error"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AV_EF_AGGRESSIVE | AV_EF_COMPLIANT | AV_EF_CAREFUL&#125;, INT_MIN, INT_MAX, D, <span class="string">"err_detect"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"use_wallclock_as_timestamps"</span>, <span class="string">"use wallclock as timestamps"</span>, OFFSET(use_wallclock_as_timestamps), AV_OPT_TYPE_BOOL, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, <span class="number">1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"skip_initial_bytes"</span>, <span class="string">"set number of bytes to skip before reading header and frames"</span>, OFFSET(skip_initial_bytes), AV_OPT_TYPE_INT64, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, INT64_MAX<span class="number">-1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"correct_ts_overflow"</span>, <span class="string">"correct single timestamp overflows"</span>, OFFSET(correct_ts_overflow), AV_OPT_TYPE_BOOL, &#123;.i64 = <span class="number">1</span>&#125;, <span class="number">0</span>, <span class="number">1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"flush_packets"</span>, <span class="string">"enable flushing of the I/O context after each packet"</span>, OFFSET(flush_packets), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">-1</span>&#125;, <span class="number">-1</span>, <span class="number">1</span>, E&#125;,</span><br><span class="line">&#123;<span class="string">"metadata_header_padding"</span>, <span class="string">"set number of bytes to be written as padding in a metadata header"</span>, OFFSET(metadata_header_padding), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">-1</span>&#125;, <span class="number">-1</span>, INT_MAX, E&#125;,</span><br><span class="line">&#123;<span class="string">"output_ts_offset"</span>, <span class="string">"set output timestamp offset"</span>, OFFSET(output_ts_offset), AV_OPT_TYPE_DURATION, &#123;.i64 = <span class="number">0</span>&#125;, -INT64_MAX, INT64_MAX, E&#125;,</span><br><span class="line">&#123;<span class="string">"max_interleave_delta"</span>, <span class="string">"maximum buffering duration for interleaving"</span>, OFFSET(max_interleave_delta), AV_OPT_TYPE_INT64, &#123; .i64 = <span class="number">10000000</span> &#125;, <span class="number">0</span>, INT64_MAX, E &#125;,</span><br><span class="line">&#123;<span class="string">"f_strict"</span>, <span class="string">"how strictly to follow the standards (deprecated; use strict, save via avconv)"</span>, OFFSET(strict_std_compliance), AV_OPT_TYPE_INT, &#123;.i64 = DEFAULT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"strict"</span>, <span class="string">"how strictly to follow the standards"</span>, OFFSET(strict_std_compliance), AV_OPT_TYPE_INT, &#123;.i64 = DEFAULT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"very"</span>, <span class="string">"strictly conform to a older more strict version of the spec or reference software"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_COMPLIANCE_VERY_STRICT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"strict"</span>, <span class="string">"strictly conform to all the things in the spec no matter what the consequences"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_COMPLIANCE_STRICT &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"normal"</span>, <span class="literal">NULL</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_COMPLIANCE_NORMAL &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"unofficial"</span>, <span class="string">"allow unofficial extensions"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_COMPLIANCE_UNOFFICIAL &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"experimental"</span>, <span class="string">"allow non-standardized experimental variants"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = FF_COMPLIANCE_EXPERIMENTAL &#125;, INT_MIN, INT_MAX, D|E, <span class="string">"strict"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"max_ts_probe"</span>, <span class="string">"maximum number of packets to read while waiting for the first timestamp"</span>, OFFSET(max_ts_probe), AV_OPT_TYPE_INT, &#123; .i64 = <span class="number">50</span> &#125;, <span class="number">0</span>, INT_MAX, D &#125;,</span><br><span class="line">&#123;<span class="string">"avoid_negative_ts"</span>, <span class="string">"shift timestamps so they start at 0"</span>, OFFSET(avoid_negative_ts), AV_OPT_TYPE_INT, &#123;.i64 = <span class="number">-1</span>&#125;, <span class="number">-1</span>, <span class="number">2</span>, E, <span class="string">"avoid_negative_ts"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"auto"</span>,              <span class="string">"enabled when required by target format"</span>,    <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_AVOID_NEG_TS_AUTO &#125;,              INT_MIN, INT_MAX, E, <span class="string">"avoid_negative_ts"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"disabled"</span>,          <span class="string">"do not change timestamps"</span>,                  <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_AVOID_NEG_TS_DISABLED &#125;,          INT_MIN, INT_MAX, E, <span class="string">"avoid_negative_ts"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"make_non_negative"</span>, <span class="string">"shift timestamps so they are non negative"</span>, <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_AVOID_NEG_TS_MAKE_NON_NEGATIVE &#125;, INT_MIN, INT_MAX, E, <span class="string">"avoid_negative_ts"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"make_zero"</span>,         <span class="string">"shift timestamps so they start at 0"</span>,       <span class="number">0</span>, AV_OPT_TYPE_CONST, &#123;.i64 = AVFMT_AVOID_NEG_TS_MAKE_ZERO &#125;,         INT_MIN, INT_MAX, E, <span class="string">"avoid_negative_ts"</span>&#125;,</span><br><span class="line">&#123;<span class="string">"dump_separator"</span>, <span class="string">"set information dump field separator"</span>, OFFSET(dump_separator), AV_OPT_TYPE_STRING, &#123;.str = <span class="string">", "</span>&#125;, <span class="number">0</span>, <span class="number">0</span>, D|E&#125;,</span><br><span class="line">&#123;<span class="string">"codec_whitelist"</span>, <span class="string">"List of decoders that are allowed to be used"</span>, OFFSET(codec_whitelist), AV_OPT_TYPE_STRING, &#123; .str = <span class="literal">NULL</span> &#125;,  <span class="number">0</span>, <span class="number">0</span>, D &#125;,</span><br><span class="line">&#123;<span class="string">"format_whitelist"</span>, <span class="string">"List of demuxers that are allowed to be used"</span>, OFFSET(format_whitelist), AV_OPT_TYPE_STRING, &#123; .str = <span class="literal">NULL</span> &#125;,  <span class="number">0</span>, <span class="number">0</span>, D &#125;,</span><br><span class="line">&#123;<span class="string">"protocol_whitelist"</span>, <span class="string">"List of protocols that are allowed to be used"</span>, OFFSET(protocol_whitelist), AV_OPT_TYPE_STRING, &#123; .str = <span class="literal">NULL</span> &#125;,  <span class="number">0</span>, <span class="number">0</span>, D &#125;,</span><br><span class="line">&#123;<span class="string">"protocol_blacklist"</span>, <span class="string">"List of protocols that are not allowed to be used"</span>, OFFSET(protocol_blacklist), AV_OPT_TYPE_STRING, &#123; .str = <span class="literal">NULL</span> &#125;,  <span class="number">0</span>, <span class="number">0</span>, D &#125;,</span><br><span class="line">&#123;<span class="string">"max_streams"</span>, <span class="string">"maximum number of streams"</span>, OFFSET(max_streams), AV_OPT_TYPE_INT, &#123; .i64 = <span class="number">1000</span> &#125;, <span class="number">0</span>, INT_MAX, D &#125;,</span><br><span class="line">&#123;<span class="string">"skip_estimate_duration_from_pts"</span>, <span class="string">"skip duration calculation in estimate_timings_from_pts"</span>, OFFSET(skip_estimate_duration_from_pts), AV_OPT_TYPE_BOOL, &#123;.i64 = <span class="number">0</span>&#125;, <span class="number">0</span>, <span class="number">1</span>, D&#125;,</span><br><span class="line">&#123;<span class="string">"max_probe_packets"</span>, <span class="string">"Maximum number of packets to probe a codec"</span>, OFFSET(max_probe_packets), AV_OPT_TYPE_INT, &#123; .i64 = <span class="number">2500</span> &#125;, <span class="number">0</span>, INT_MAX, D &#125;,</span><br><span class="line">&#123;<span class="literal">NULL</span>&#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">avformat_open_input</span><span class="params">(AVFormatContext **ps, <span class="keyword">const</span> <span class="keyword">char</span> *filename,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">const</span> AVInputFormat *fmt, AVDictionary **options)</span></span></span><br></pre></td></tr></table></figure>
+<p>以AVFormatContext来分析，av_format_context_class.option 是一个列表，基本对应着 AVFormatContext 内部成员。option 通过offset宏 来找到对应的成员的偏移位置。<br>在avformat_open_input方法中，会遍历外部传入的options参数，对AVFormatContext实例进行属性成员赋值。</p>
+<p>类似的这种用法 在ffmpeg中很常见，比如 AVIOContext、URLContext、AVCodecContext …</p>
+<h3 id="priv-data"><a href="#priv-data" class="headerlink" title="priv_data"></a>priv_data</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">URLContext</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> AVClass *av_class;    <span class="comment">/**&lt; information for av_log(). Set by url_open(). */</span></span><br><span class="line">    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">URLProtocol</span> *<span class="title">prot</span>;</span></span><br><span class="line">    <span class="keyword">void</span> *priv_data;</span><br><span class="line">    <span class="keyword">char</span> *filename;             <span class="comment">/**&lt; specified URL */</span></span><br><span class="line">    <span class="keyword">int</span> flags;</span><br><span class="line">    <span class="keyword">int</span> max_packet_size;        <span class="comment">/**&lt; if non zero, the stream is packetized with this max packet size */</span></span><br><span class="line">    <span class="keyword">int</span> is_streamed;            <span class="comment">/**&lt; true if streamed (no seek possible), default = false */</span></span><br><span class="line">    <span class="keyword">int</span> is_connected;</span><br><span class="line">    AVIOInterruptCB interrupt_callback;</span><br><span class="line">    <span class="keyword">int64_t</span> rw_timeout;         <span class="comment">/**&lt; maximum time to wait for (network) read/write operation completion, in mcs */</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *protocol_whitelist;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *protocol_blacklist;</span><br><span class="line">    <span class="keyword">int</span> min_packet_size;        <span class="comment">/**&lt; if non zero, the stream is packetized with this min packet size */</span></span><br><span class="line">&#125; URLContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> URLProtocol ff_https_protocol = &#123;</span><br><span class="line">    .name                = <span class="string">"https"</span>,</span><br><span class="line">    .url_open2           = http_open,</span><br><span class="line">    .url_read            = http_read,</span><br><span class="line">    .url_write           = http_write,</span><br><span class="line">    .url_seek            = http_seek,</span><br><span class="line">    .url_close           = http_close,</span><br><span class="line">    .url_get_file_handle = http_get_file_handle,</span><br><span class="line">    .url_get_short_seek  = http_get_short_seek,</span><br><span class="line">    .url_shutdown        = http_shutdown,</span><br><span class="line">    .priv_data_size      = <span class="keyword">sizeof</span>(HTTPContext),</span><br><span class="line">    .priv_data_class     = &amp;https_context_class,</span><br><span class="line">    .flags               = URL_PROTOCOL_FLAG_NETWORK,</span><br><span class="line">    .default_whitelist   = <span class="string">"http,https,tls,rtp,tcp,udp,crypto,httpproxy"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HTTP_CLASS(flavor)                          \</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> AVClass flavor ## _context_class = &#123;   \</span><br><span class="line">    .class_name = # flavor,                         \</span><br><span class="line">    .item_name  = av_default_item_name,             \</span><br><span class="line">    .option     = options,                          \</span><br><span class="line">    .version    = LIBAVUTIL_VERSION_INT,            \</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#<span class="keyword">if</span> CONFIG_HTTP_PROTOCOL</span><br><span class="line">HTTP_CLASS(http);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">HTTPContext</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> AVClass *<span class="class"><span class="keyword">class</span>;</span></span><br><span class="line">    URLContext *hd;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> buffer[BUFFER_SIZE], *buf_ptr, *buf_end;</span><br><span class="line">    <span class="keyword">int</span> line_count;</span><br><span class="line">    <span class="keyword">int</span> http_code;</span><br><span class="line">    <span class="comment">/* Used if "Transfer-Encoding: chunked" otherwise -1. */</span></span><br><span class="line">    <span class="keyword">uint64_t</span> chunksize;</span><br><span class="line">    <span class="keyword">int</span> chunkend;</span><br><span class="line">    <span class="keyword">uint64_t</span> off, end_off, filesize;</span><br><span class="line">    <span class="keyword">char</span> *uri;</span><br><span class="line">    <span class="keyword">char</span> *location;</span><br><span class="line">    HTTPAuthState auth_state;</span><br><span class="line">    HTTPAuthState proxy_auth_state;</span><br><span class="line">    <span class="keyword">char</span> *http_proxy;</span><br><span class="line">    <span class="keyword">char</span> *headers;</span><br><span class="line">    <span class="keyword">char</span> *mime_type;</span><br><span class="line">    <span class="keyword">char</span> *http_version;</span><br><span class="line">    <span class="keyword">char</span> *user_agent;</span><br><span class="line">    <span class="keyword">char</span> *referer;</span><br><span class="line">    <span class="keyword">char</span> *content_type;</span><br><span class="line">    <span class="comment">/* Set if the server correctly handles Connection: close and will close</span></span><br><span class="line"><span class="comment">     * the connection after feeding us the content. */</span></span><br><span class="line">    <span class="keyword">int</span> willclose;</span><br><span class="line">    <span class="keyword">int</span> seekable;           <span class="comment">/**&lt; Control seekability, 0 = disable, 1 = enable, -1 = probe. */</span></span><br><span class="line">    <span class="keyword">int</span> chunked_post;</span><br><span class="line">    <span class="comment">/* A flag which indicates if the end of chunked encoding has been sent. */</span></span><br><span class="line">    <span class="keyword">int</span> end_chunked_post;</span><br><span class="line">    <span class="comment">/* A flag which indicates we have finished to read POST reply. */</span></span><br><span class="line">    <span class="keyword">int</span> end_header;</span><br><span class="line">    <span class="comment">/* A flag which indicates if we use persistent connections. */</span></span><br><span class="line">    <span class="keyword">int</span> multiple_requests;</span><br><span class="line">    <span class="keyword">uint8_t</span> *post_data;</span><br><span class="line">    <span class="keyword">int</span> post_datalen;</span><br><span class="line">    <span class="keyword">int</span> is_akamai;</span><br><span class="line">    <span class="keyword">int</span> is_mediagateway;</span><br><span class="line">    <span class="keyword">char</span> *cookies;          <span class="comment">///&lt; holds newline (\n) delimited Set-Cookie header field values (without the "Set-Cookie: " field name)</span></span><br><span class="line">    <span class="comment">/* A dictionary containing cookies keyed by cookie name */</span></span><br><span class="line">    AVDictionary *cookie_dict;</span><br><span class="line">    <span class="keyword">int</span> icy;</span><br><span class="line">    <span class="comment">/* how much data was read since the last ICY metadata packet */</span></span><br><span class="line">    <span class="keyword">uint64_t</span> icy_data_read;</span><br><span class="line">    <span class="comment">/* after how many bytes of read data a new metadata packet will be found */</span></span><br><span class="line">    <span class="keyword">uint64_t</span> icy_metaint;</span><br><span class="line">    <span class="keyword">char</span> *icy_metadata_headers;</span><br><span class="line">    <span class="keyword">char</span> *icy_metadata_packet;</span><br><span class="line">    AVDictionary *metadata;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CONFIG_ZLIB</span></span><br><span class="line">    <span class="keyword">int</span> compressed;</span><br><span class="line">    z_stream inflate_stream;</span><br><span class="line">    <span class="keyword">uint8_t</span> *inflate_buffer;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* CONFIG_ZLIB */</span></span></span><br><span class="line">    AVDictionary *chained_options;</span><br><span class="line">    <span class="comment">/* -1 = try to send if applicable, 0 = always disabled, 1 = always enabled */</span></span><br><span class="line">    <span class="keyword">int</span> send_expect_100;</span><br><span class="line">    <span class="keyword">char</span> *method;</span><br><span class="line">    <span class="keyword">int</span> reconnect;</span><br><span class="line">    <span class="keyword">int</span> reconnect_at_eof;</span><br><span class="line">    <span class="keyword">int</span> reconnect_on_network_error;</span><br><span class="line">    <span class="keyword">int</span> reconnect_streamed;</span><br><span class="line">    <span class="keyword">int</span> reconnect_delay_max;</span><br><span class="line">    <span class="keyword">char</span> *reconnect_on_http_error;</span><br><span class="line">    <span class="keyword">int</span> listen;</span><br><span class="line">    <span class="keyword">char</span> *resource;</span><br><span class="line">    <span class="keyword">int</span> reply_code;</span><br><span class="line">    <span class="keyword">int</span> is_multi_client;</span><br><span class="line">    HandshakeState handshake_step;</span><br><span class="line">    <span class="keyword">int</span> is_connected_server;</span><br><span class="line">    <span class="keyword">int</span> short_seek_size;</span><br><span class="line">    <span class="keyword">int64_t</span> expires;</span><br><span class="line">    <span class="keyword">char</span> *new_location;</span><br><span class="line">    AVDictionary *redirect_cache;</span><br><span class="line">    <span class="keyword">uint64_t</span> filesize_from_content_range;</span><br><span class="line">&#125; HTTPContext;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">url_alloc_for_protocol</span><span class="params">(URLContext **puc, <span class="keyword">const</span> URLProtocol *up,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  <span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  <span class="keyword">const</span> AVIOInterruptCB *int_cb)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (up-&gt;priv_data_size) &#123;</span><br><span class="line">        uc-&gt;priv_data = av_mallocz(up-&gt;priv_data_size);</span><br><span class="line">        <span class="keyword">if</span> (!uc-&gt;priv_data) &#123;</span><br><span class="line">            err = AVERROR(ENOMEM);</span><br><span class="line">            <span class="keyword">goto</span> fail;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (up-&gt;priv_data_class) &#123;</span><br><span class="line">            <span class="keyword">char</span> *start;</span><br><span class="line">            *(<span class="keyword">const</span> AVClass **)uc-&gt;priv_data = up-&gt;priv_data_class;</span><br><span class="line">            av_opt_set_defaults(uc-&gt;priv_data);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以 URLContext 来分析，在 url_alloc_for_protocol 方法中，URLContext.priv_data 赋值的其实就是 对用的 URLProtocol的 priv_data_class实例，以http-protocol来举例，<br>URLContext.priv_data 就是 httpcontext， 而 httpcontext 也符合上面avclass那一套，通过option对 httpcontext实例的成员变量赋值。</p>
+<p>这里有个问题？<strong>URLContext 持有对应的 prot，为什么还要 弄一个 priv_data呢？ protocol里面有priv_data_class 、priv_data_size，也可以搞一个 priv_data，URLContext用过 prot来访问priv_data就好了。</strong></p>
+<p>类似的用法在ffmpeg中 也有很多，比如AVFormatContext，AVFormatContext.priv_data是处理 封装解封装的上下文，mp4格式对应的就是MOVContext. 比如 mp4格式的AVStream,AVStream.priv_data是 MOVStreamContext</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">AVFormatContext</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Format private data. This is an AVOptions-enabled struct</span></span><br><span class="line"><span class="comment">     * if and only if iformat/oformat.priv_class is not NULL.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * - muxing: set by avformat_write_header()</span></span><br><span class="line"><span class="comment">     * - demuxing: set by avformat_open_input()</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> *priv_data;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="internal"><a href="#internal" class="headerlink" title="internal"></a>internal</h3><p>在 <code>libavformat/internal.h</code> 文件中， FFFormatContext &amp; FFStream 定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">FFFormatContext</span> &#123;</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The public context.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    AVFormatContext pub;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">FFStream</span> &#123;</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The public context.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    AVStream pub;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AVFormatContext &amp; AVStream 都是作为第一个成员存在于FFFormatContext &amp; FFStream 结构体中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AVFormatContext *<span class="title">avformat_alloc_context</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FFFormatContext *<span class="keyword">const</span> si = av_mallocz(<span class="keyword">sizeof</span>(*si));</span><br><span class="line">    AVFormatContext *s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!si)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    s = &amp;si-&gt;pub;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">AVStream *<span class="title">avformat_new_stream</span><span class="params">(AVFormatContext *s, <span class="keyword">const</span> AVCodec *c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    FFStream *sti;</span><br><span class="line">    sti = av_mallocz(<span class="keyword">sizeof</span>(*sti));</span><br><span class="line"></span><br><span class="line">    AVStream *st;</span><br><span class="line"></span><br><span class="line">    st = &amp;sti-&gt;pub;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化逻辑都是通过创建 FFFormatContext &amp; FFStream 实例，然后取成员pub</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> av_always_inline FFFormatContext *<span class="title">ffformatcontext</span><span class="params">(AVFormatContext *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (FFFormatContext*)s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> av_always_inline FFStream *<span class="title">ffstream</span><span class="params">(AVStream *st)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (FFStream*)st;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> av_always_inline <span class="keyword">const</span> FFStream *<span class="title">cffstream</span><span class="params">(<span class="keyword">const</span> AVStream *st)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (FFStream*)st;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>av_always_inline 是编译器优化，强制内敛</p>
+<p>由于 AVFormatContext &amp; AVStream 作为第一个成员，所以二者可以跟FFFormatContext &amp; FFStream 做强制类型转换<br>从定义上看， 好像AVFormatContext &amp; AVStream 是应该作为internal，但是实际用法上，FFFormatContext &amp; FFStream才是作为internal 来辅助 AVFormatContext &amp; AVStream存储相关信息</p>
+<p>ffmepg中也不是 所有的internal 都是这种用法， AVCodecInternal、AVFilterInternal 就是 常规的 作为 AVCodecContext &amp; AVFilterContext 的 internal 成员存在的</p>
+<p>个人目前使用的ffmepg 是 5.x的version，早期4.x的时候，<strong>avformat &amp; avstream</strong> 也是类似 <strong>codec &amp; filter</strong> 这样常规的用法</p>
+
+      
+    </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2022/12/22/ffmepg源码之http学习笔记/" rel="bookmark">ffmepg源码之http学习笔记</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="BLACK_OX 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ffmepg/" rel="tag"><i class="fa fa-tag"></i> ffmepg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/12/22/ffmepg源码之http学习笔记/" rel="next" title="ffmepg源码之http学习笔记">
+                <i class="fa fa-chevron-left"></i> ffmepg源码之http学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="BLACK_OX">
+            
+              <p class="site-author-name" itemprop="name">BLACK_OX</p>
+              <div class="site-description motion-element" itemprop="description">Developer...</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/blackox626" title="GitHub &rarr; https://github.com/blackox626" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:blackox626@gmail.com" title="E-Mail &rarr; mailto:blackox626@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AVClass"><span class="nav-text">AVClass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#priv-data"><span class="nav-text">priv_data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#internal"><span class="nav-text">internal</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BLACK_OX</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">221k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:21</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div>
+
+
+
+
+<div class="visit-by">
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    <span id="busuanzi_value_site_pv"></span>
+  </span>
+
+  <span class="post-meta-divider">|</span>
+
+  <i class="fa fa-user"></i>
+    <span id="busuanzi_container_site_uv">
+      <span id="busuanzi_value_site_uv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: '98visuelOUQ19xFr1vzfJcKo-gzGzoHsz',
+    appKey: 'oS6B9UYaqn8BBWkzY9icYxB9',
+    placeholder: 'Just go go',
+    avatar: 'robohash',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/pangu/dist/pangu.min.js?v=3.3"></script>
+  <script>pangu.spacingPage();</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
