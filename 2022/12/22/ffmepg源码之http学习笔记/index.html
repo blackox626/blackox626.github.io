@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="respect致敬雷神  start从 AVFormatContext （解封装结构体） 入口开始吧 … 123456789101112131415161718192021222324252627282930libavformat/options.cAVFormatContext *avformat_alloc_context(void)&amp;#123;    FFFormatContext *con">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://img-blog.csdn.net/20130914204051125?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://blackox.cn/images/20130914204051125.jpeg">
 <meta property="og:image" content="https://blackox.cn/images/20230112_115542_image.png">
 <meta property="og:updated_time" content="2023-01-12T04:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ffmepg源码之http学习笔记">
 <meta name="twitter:description" content="respect致敬雷神  start从 AVFormatContext （解封装结构体） 入口开始吧 … 123456789101112131415161718192021222324252627282930libavformat/options.cAVFormatContext *avformat_alloc_context(void)&amp;#123;    FFFormatContext *con">
-<meta name="twitter:image" content="https://img-blog.csdn.net/20130914204051125?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta name="twitter:image" content="https://blackox.cn/images/20130914204051125.jpeg">
 
 
 
@@ -514,7 +514,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2:34</span>
+                <span title="阅读时长">2:33</span>
               
             </div>
           
@@ -535,7 +535,7 @@
 
       
         <h3 id="respect"><a href="#respect" class="headerlink" title="respect"></a>respect</h3><p>致敬雷神</p>
-<p><img src="https://img-blog.csdn.net/20130914204051125?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVpeGlhb2h1YTEwMjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="致敬雷神"></p>
+<p><img src="/images/20130914204051125.jpeg" alt="致敬雷神"></p>
 <h3 id="start"><a href="#start" class="headerlink" title="start"></a>start</h3><p>从 AVFormatContext （解封装结构体） 入口开始吧 …</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">libavformat/options.c</span><br><span class="line"></span><br><span class="line"><span class="function">AVFormatContext *<span class="title">avformat_alloc_context</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FFFormatContext *<span class="keyword">const</span> si = av_mallocz(<span class="keyword">sizeof</span>(*si));</span><br><span class="line">    AVFormatContext *s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!si)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    s = &amp;si-&gt;pub;</span><br><span class="line">    s-&gt;av_class = &amp;av_format_context_class;</span><br><span class="line">    <span class="comment">/// io入口 </span></span><br><span class="line">    s-&gt;io_open  = io_open_default;</span><br><span class="line">    s-&gt;io_close = ff_format_io_close_default;</span><br><span class="line">    s-&gt;io_close2= io_close2_default;</span><br><span class="line"></span><br><span class="line">    av_opt_set_defaults(s);</span><br><span class="line"></span><br><span class="line">    si-&gt;pkt = av_packet_alloc();</span><br><span class="line">    si-&gt;parse_pkt = av_packet_alloc();</span><br><span class="line">    <span class="keyword">if</span> (!si-&gt;pkt || !si-&gt;parse_pkt) &#123;</span><br><span class="line">        avformat_free_context(s);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    si-&gt;shortest_end = AV_NOPTS_VALUE;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
