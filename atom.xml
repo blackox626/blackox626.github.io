@@ -17,7 +17,7 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>OWT-client-ios信令交互</title>
+    <title>OWT-client-ios信令交互源码分析</title>
     <link href="https://blackox.cn/2023/02/15/OWT-client-ios%E4%BF%A1%E4%BB%A4%E4%BA%A4%E4%BA%92%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
     <id>https://blackox.cn/2023/02/15/OWT-client-ios信令交互源码分析/</id>
     <published>2023-02-15T07:55:21.000Z</published>
@@ -35,6 +35,14 @@
     
     </summary>
     
+      <category term="RTC" scheme="https://blackox.cn/categories/RTC/"/>
+    
+    
+      <category term="OWT" scheme="https://blackox.cn/tags/OWT/"/>
+    
+      <category term="webrtc" scheme="https://blackox.cn/tags/webrtc/"/>
+    
+      <category term="ios" scheme="https://blackox.cn/tags/ios/"/>
     
   </entry>
   
@@ -317,9 +325,9 @@
       <category term="media" scheme="https://blackox.cn/categories/media/"/>
     
     
-      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
-    
       <category term="media" scheme="https://blackox.cn/tags/media/"/>
+    
+      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
     
   </entry>
   
