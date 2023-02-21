@@ -25,13 +25,10 @@
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;token&quot;&gt;&lt;a href=&quot;#token&quot; class=&quot;headerlink&quot; title=&quot;token&quot;&gt;&lt;/a&gt;token&lt;/h3&gt;&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td
-        
-      
+      &lt;h3 id=&quot;OWT&quot;&gt;&lt;a href=&quot;#OWT&quot; class=&quot;headerlink&quot; title=&quot;OWT&quot;&gt;&lt;/a&gt;OWT&lt;/h3&gt;&lt;p&gt;OWT 信令交互过程:&lt;/p&gt;
+&lt;p&gt;A POST /tokens/&lt;br&gt;A SocketIO connect&lt;br&gt;A SocketIO login&lt;br&gt;A SocketIO publish&lt;br&gt;A SocketIO soac offer&lt;br&gt;A SocketIO soac candidate&lt;br&gt;Portal SocketIO soac answer&lt;/p&gt;
+&lt;p&gt;B POST /tokens/&lt;br&gt;B SocketIO connect&lt;br&gt;B SocketIO login&lt;br&gt;B SocketIO subscribe&lt;br&gt;B SocketIO soac offer&lt;br&gt;B SocketIO soac candidate&lt;br&gt;Portal SocketIO soac answer&lt;/p&gt;
+&lt;p&gt;SocketIO logout&lt;/p&gt;
     
     </summary>
     
