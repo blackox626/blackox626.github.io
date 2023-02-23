@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="SdpOfferAnswerHandler在 crateoffer &amp;amp;&amp;amp; setlocalDescription 之后就需要获取 candidate了，setlocalDescription 从 PeerConnection 进到 SdpOfferAnswerHandler 123456789101112webrtc/src/pc/sdp_offer_answer.ccvoid S">
+<meta name="keywords" content="ios,webrtc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webrtc-candidate源码分析">
+<meta property="og:url" content="https://blackox.cn/2023/02/23/webrtc-candidate源码分析/index.html">
+<meta property="og:site_name" content="BLACK_OX">
+<meta property="og:description" content="SdpOfferAnswerHandler在 crateoffer &amp;amp;&amp;amp; setlocalDescription 之后就需要获取 candidate了，setlocalDescription 从 PeerConnection 进到 SdpOfferAnswerHandler 123456789101112webrtc/src/pc/sdp_offer_answer.ccvoid S">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2023-02-23T03:20:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webrtc-candidate源码分析">
+<meta name="twitter:description" content="SdpOfferAnswerHandler在 crateoffer &amp;amp;&amp;amp; setlocalDescription 之后就需要获取 candidate了，setlocalDescription 从 PeerConnection 进到 SdpOfferAnswerHandler 123456789101112webrtc/src/pc/sdp_offer_answer.ccvoid S">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BLACK_OX" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://blackox.cn/2023/02/23/webrtc-candidate源码分析/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>webrtc-candidate源码分析 | BLACK_OX</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BLACK_OX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">The palest ink is better than the best memory</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/blackox626" class="github-corner" title="Fo Fo Fo Follow me 😁" aria-label="Fo Fo Fo Follow me 😁" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2023/02/23/webrtc-candidate源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webrtc-candidate源码分析
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2023-02-23 11:20:53" itemprop="dateCreated datePublished" datetime="2023-02-23T11:20:53+08:00">2023-02-23</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/RTC/" itemprop="url" rel="index"><span itemprop="name">RTC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2023/02/23/webrtc-candidate源码分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2023/02/23/webrtc-candidate源码分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2023/02/23/webrtc-candidate源码分析/" class="leancloud_visitors" data-flag-title="webrtc-candidate源码分析">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">112k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1:42</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="SdpOfferAnswerHandler"><a href="#SdpOfferAnswerHandler" class="headerlink" title="SdpOfferAnswerHandler"></a>SdpOfferAnswerHandler</h3><p>在 crateoffer &amp;&amp; setlocalDescription 之后就需要获取 candidate了，setlocalDescription 从 PeerConnection 进到 SdpOfferAnswerHandler</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">webrtc/src/pc/sdp_offer_answer.cc</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> SdpOfferAnswerHandler::DoSetLocalDescription(...) &#123;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="comment">// MaybeStartGathering needs to be called after informing the observer so that</span></span><br><span class="line">  <span class="comment">// we don't signal any candidates before signaling that SetLocalDescription</span></span><br><span class="line">  <span class="comment">// completed.</span></span><br><span class="line">  transport_controller_s()-&gt;MaybeStartGathering();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注释也说的很清楚了 <code>transport_controller_s()-&gt;MaybeStartGathering();</code> 获取 candidates 的入口。</p>
+<h3 id="MaybeStartGathering"><a href="#MaybeStartGathering" class="headerlink" title="MaybeStartGathering"></a>MaybeStartGathering</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">/Users/blackox626/webrtc/src/pc/peer_connection.cc</span><br><span class="line"></span><br><span class="line">PeerConnection::Initialize -&gt;  PeerConnection::InitializeTransportController_n</span><br><span class="line"></span><br><span class="line">JsepTransportController* PeerConnection::InitializeTransportController_n(</span><br><span class="line">    <span class="keyword">const</span> RTCConfiguration&amp; configuration,</span><br><span class="line">    <span class="keyword">const</span> PeerConnectionDependencies&amp; dependencies) &#123;</span><br><span class="line">  JsepTransportController::Config config;</span><br><span class="line">  config.redetermine_role_on_ice_restart =</span><br><span class="line">      configuration.redetermine_role_on_ice_restart;</span><br><span class="line">  config.ssl_max_version = options_.ssl_max_version;</span><br><span class="line">  config.disable_encryption = options_.disable_encryption;</span><br><span class="line">  config.bundle_policy = configuration.bundle_policy;</span><br><span class="line">  config.rtcp_mux_policy = configuration.rtcp_mux_policy;</span><br><span class="line">  <span class="comment">// TODO(bugs.webrtc.org/9891) - Remove options_.crypto_options then remove</span></span><br><span class="line">  <span class="comment">// this stub.</span></span><br><span class="line">  config.crypto_options = configuration.crypto_options.has_value()</span><br><span class="line">                              ? *configuration.crypto_options</span><br><span class="line">                              : options_.crypto_options;</span><br><span class="line">  config.transport_observer = <span class="keyword">this</span>;</span><br><span class="line">  config.rtcp_handler = InitializeRtcpCallback();</span><br><span class="line">  config.event_log = event_log_ptr_;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(ENABLE_EXTERNAL_AUTH)</span></span><br><span class="line">  config.enable_external_auth = <span class="literal">true</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  config.active_reset_srtp_params = configuration.active_reset_srtp_params;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// DTLS has to be enabled to use SCTP.</span></span><br><span class="line">  <span class="keyword">if</span> (dtls_enabled_) &#123;</span><br><span class="line">    config.sctp_factory = context_-&gt;sctp_transport_factory();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  config.ice_transport_factory = ice_transport_factory_.get();</span><br><span class="line">  config.on_dtls_handshake_error_ =</span><br><span class="line">      [weak_ptr = weak_factory_.GetWeakPtr()](rtc::SSLHandshakeError s) &#123;</span><br><span class="line">        <span class="keyword">if</span> (weak_ptr) &#123;</span><br><span class="line">          weak_ptr-&gt;OnTransportControllerDtlsHandshakeError(s);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">  config.field_trials = trials_.get();</span><br><span class="line"></span><br><span class="line">  transport_controller_.reset(</span><br><span class="line">      <span class="keyword">new</span> JsepTransportController(network_thread(), port_allocator_.get(),</span><br><span class="line">                                  async_dns_resolver_factory_.get(), config));</span><br><span class="line"></span><br><span class="line">  transport_controller_-&gt;SubscribeIceConnectionState(</span><br><span class="line">      [<span class="keyword">this</span>](cricket::IceConnectionState s) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        <span class="keyword">if</span> (s == cricket::kIceConnectionConnected) &#123;</span><br><span class="line">          ReportTransportStats();</span><br><span class="line">        &#125;</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, s]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              OnTransportControllerConnectionState(s);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeConnectionState(</span><br><span class="line">      [<span class="keyword">this</span>](PeerConnectionInterface::PeerConnectionState s) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, s]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              SetConnectionState(s);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeStandardizedIceConnectionState(</span><br><span class="line">      [<span class="keyword">this</span>](PeerConnectionInterface::IceConnectionState s) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, s]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              SetStandardizedIceConnectionState(s);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeIceGatheringState(</span><br><span class="line">      [<span class="keyword">this</span>](cricket::IceGatheringState s) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, s]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              OnTransportControllerGatheringState(s);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeIceCandidateGathered(</span><br><span class="line">      [<span class="keyword">this</span>](<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; transport,</span><br><span class="line">             <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cricket::Candidate&gt;&amp; candidates) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(),</span><br><span class="line">                     [<span class="keyword">this</span>, t = transport, c = candidates]() &#123;</span><br><span class="line">                       RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">                       OnTransportControllerCandidatesGathered(t, c);</span><br><span class="line">                     &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeIceCandidateError(</span><br><span class="line">      [<span class="keyword">this</span>](<span class="keyword">const</span> cricket::IceCandidateErrorEvent&amp; event) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, event = event]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              OnTransportControllerCandidateError(event);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeIceCandidatesRemoved(</span><br><span class="line">      [<span class="keyword">this</span>](<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cricket::Candidate&gt;&amp; c) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, c = c]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              OnTransportControllerCandidatesRemoved(c);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line">  transport_controller_-&gt;SubscribeIceCandidatePairChanged(</span><br><span class="line">      [<span class="keyword">this</span>](<span class="keyword">const</span> cricket::CandidatePairChangeEvent&amp; event) &#123;</span><br><span class="line">        RTC_DCHECK_RUN_ON(network_thread());</span><br><span class="line">        signaling_thread()-&gt;PostTask(</span><br><span class="line">            SafeTask(signaling_thread_safety_.flag(), [<span class="keyword">this</span>, event = event]() &#123;</span><br><span class="line">              RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">              OnTransportControllerCandidateChanged(event);</span><br><span class="line">            &#125;));</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">  transport_controller_-&gt;SetIceConfig(ParseIceConfig(configuration));</span><br><span class="line">  <span class="keyword">return</span> transport_controller_.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注册了 candidate 获取的回调： transport_controller_-&gt;SubscribeIceCandidateGathered</p>
+<p>先看下收集之后的行为 </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> PeerConnection::OnTransportControllerCandidatesGathered(</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; transport_name,</span><br><span class="line">    <span class="keyword">const</span> cricket::Candidates&amp; candidates) &#123;</span><br><span class="line">  <span class="comment">// TODO(bugs.webrtc.org/12427): Expect this to come in on the network thread</span></span><br><span class="line">  <span class="comment">// (not signaling as it currently does), handle appropriately.</span></span><br><span class="line">  <span class="keyword">int</span> sdp_mline_index;</span><br><span class="line">  <span class="keyword">if</span> (!GetLocalCandidateMediaIndex(transport_name, &amp;sdp_mline_index)) &#123;</span><br><span class="line">    RTC_LOG(LS_ERROR)</span><br><span class="line">        &lt;&lt; <span class="string">"OnTransportControllerCandidatesGathered: content name "</span></span><br><span class="line">        &lt;&lt; transport_name &lt;&lt; <span class="string">" not found"</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (cricket::Candidates::const_iterator citer = candidates.begin();</span><br><span class="line">       citer != candidates.end(); ++citer) &#123;</span><br><span class="line">    <span class="comment">// Use transport_name as the candidate media id.</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;JsepIceCandidate&gt; candidate(</span><br><span class="line">        <span class="keyword">new</span> JsepIceCandidate(transport_name, sdp_mline_index, *citer));</span><br><span class="line">    sdp_handler_-&gt;AddLocalIceCandidate(candidate.get());</span><br><span class="line">    OnIceCandidate(<span class="built_in">std</span>::move(candidate));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> PeerConnection::OnIceCandidate(</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;IceCandidateInterface&gt; candidate) &#123;</span><br><span class="line">  <span class="keyword">if</span> (IsClosed()) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  ReportIceCandidateCollected(candidate-&gt;candidate());</span><br><span class="line">  ClearStatsCache();</span><br><span class="line">  Observer()-&gt;OnIceCandidate(candidate.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先 sdp_handler_-&gt;AddLocalIceCandidate(candidate.get()); 设置本地ice candidate<br>然后 通过 OnIceCandidate 事件回调 传递到上层app ，app通过 signal message 发送到webrtc server，webrtc server 转发给对端</p>
+<p>app 同样也会收到 webrtc server转发过来的对端的 ice candidate</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> PeerConnection::AddIceCandidate(</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;IceCandidateInterface&gt; candidate,</span><br><span class="line">    <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(RTCError)&gt; callback) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(signaling_thread());</span><br><span class="line">  sdp_handler_-&gt;AddIceCandidate(<span class="built_in">std</span>::move(candidate),</span><br><span class="line">                                [<span class="keyword">this</span>, callback](webrtc::RTCError result) &#123;</span><br><span class="line">                                  ClearStatsCache();</span><br><span class="line">                                  callback(result);</span><br><span class="line">                                &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 sdp_handler_-&gt;AddIceCandidate 设置对端的ice candidate；</p>
+<h3 id="JsepTransportController"><a href="#JsepTransportController" class="headerlink" title="JsepTransportController"></a>JsepTransportController</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/webrtc/src/pc/jsep_transport_controller.cc</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> JsepTransportController::MaybeStartGathering() &#123;</span><br><span class="line">  <span class="keyword">if</span> (!network_thread_-&gt;IsCurrent()) &#123;</span><br><span class="line">    network_thread_-&gt;BlockingCall([&amp;] &#123; MaybeStartGathering(); &#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; dtls : GetDtlsTransports()) &#123;</span><br><span class="line">    dtls-&gt;ice_transport()-&gt;MaybeStartGathering();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先看下 DtlsTransports 的生产过程 </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SdpOfferAnswerHandler::DoSetLocalDescription -&gt;</span><br><span class="line">SdpOfferAnswerHandler::ApplyLocalDescription -&gt;</span><br><span class="line">SdpOfferAnswerHandler::PushdownTransportDescription -&gt; </span><br><span class="line"></span><br><span class="line">JsepTransportController::SetLocalDescription -&gt;</span><br><span class="line"></span><br><span class="line">JsepTransportController::ApplyDescription_n -&gt; </span><br><span class="line"></span><br><span class="line">RTCError JsepTransportController::ApplyDescription_n(</span><br><span class="line">    <span class="keyword">bool</span> local,</span><br><span class="line">    SdpType type,</span><br><span class="line">    <span class="keyword">const</span> cricket::SessionDescription* description) &#123;</span><br><span class="line">  TRACE_EVENT0(<span class="string">"webrtc"</span>, <span class="string">"JsepTransportController::ApplyDescription_n"</span>);</span><br><span class="line">  RTC_DCHECK(description);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (local) &#123;</span><br><span class="line">    local_desc_ = description;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    remote_desc_ = description;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  RTCError error;</span><br><span class="line">  error = ValidateAndMaybeUpdateBundleGroups(local, type, description);</span><br><span class="line">  <span class="keyword">if</span> (!error.ok()) &#123;</span><br><span class="line">    <span class="keyword">return</span> error;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="keyword">const</span> cricket::ContentGroup*, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;</span><br><span class="line">      merged_encrypted_extension_ids_by_bundle;</span><br><span class="line">  <span class="keyword">if</span> (!bundles_.bundle_groups().empty()) &#123;</span><br><span class="line">    merged_encrypted_extension_ids_by_bundle =</span><br><span class="line">        MergeEncryptedHeaderExtensionIdsForBundles(description);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> cricket::ContentInfo&amp; content_info : description-&gt;contents()) &#123;</span><br><span class="line">    <span class="comment">// Don't create transports for rejected m-lines and bundled m-lines.</span></span><br><span class="line">    <span class="keyword">if</span> (content_info.rejected ||</span><br><span class="line">        !bundles_.IsFirstMidInGroup(content_info.name)) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    error = MaybeCreateJsepTransport(local, content_info, *description);</span><br><span class="line">    <span class="keyword">if</span> (!error.ok()) &#123;</span><br><span class="line">      <span class="keyword">return</span> error;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  RTC_DCHECK(description-&gt;contents().size() ==</span><br><span class="line">             description-&gt;transport_infos().size());</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; description-&gt;contents().size(); ++i) &#123;</span><br><span class="line">    <span class="keyword">const</span> cricket::ContentInfo&amp; content_info = description-&gt;contents()[i];</span><br><span class="line">    <span class="keyword">const</span> cricket::TransportInfo&amp; transport_info =</span><br><span class="line">        description-&gt;transport_infos()[i];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (content_info.rejected) &#123;</span><br><span class="line">      <span class="comment">// This may cause groups to be removed from |bundles_.bundle_groups()|.</span></span><br><span class="line">      HandleRejectedContent(content_info);</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> cricket::ContentGroup* established_bundle_group =</span><br><span class="line">        bundles_.LookupGroupByMid(content_info.name);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// For bundle members that are not BUNDLE-tagged (not first in the group),</span></span><br><span class="line">    <span class="comment">// configure their transport to be the same as the BUNDLE-tagged transport.</span></span><br><span class="line">    <span class="keyword">if</span> (established_bundle_group &amp;&amp;</span><br><span class="line">        content_info.name != *established_bundle_group-&gt;FirstContentName()) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!HandleBundledContent(content_info, *established_bundle_group)) &#123;</span><br><span class="line">        <span class="keyword">return</span> RTCError(RTCErrorType::INVALID_PARAMETER,</span><br><span class="line">                        <span class="string">"Failed to process the bundled m= section with "</span></span><br><span class="line">                        <span class="string">"mid='"</span> +</span><br><span class="line">                            content_info.name + <span class="string">"'."</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    error = ValidateContent(content_info);</span><br><span class="line">    <span class="keyword">if</span> (!error.ok()) &#123;</span><br><span class="line">      <span class="keyword">return</span> error;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; extension_ids;</span><br><span class="line">    <span class="comment">// Is BUNDLE-tagged (first in the group)?</span></span><br><span class="line">    <span class="keyword">if</span> (established_bundle_group &amp;&amp;</span><br><span class="line">        content_info.name == *established_bundle_group-&gt;FirstContentName()) &#123;</span><br><span class="line">      <span class="keyword">auto</span> it = merged_encrypted_extension_ids_by_bundle.find(</span><br><span class="line">          established_bundle_group);</span><br><span class="line">      RTC_DCHECK(it != merged_encrypted_extension_ids_by_bundle.end());</span><br><span class="line">      extension_ids = it-&gt;second;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      extension_ids = GetEncryptedHeaderExtensionIds(content_info);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> rtp_abs_sendtime_extn_id =</span><br><span class="line">        GetRtpAbsSendTimeHeaderExtensionId(content_info);</span><br><span class="line"></span><br><span class="line">    cricket::JsepTransport* transport =</span><br><span class="line">        GetJsepTransportForMid(content_info.name);</span><br><span class="line">    RTC_DCHECK(transport);</span><br><span class="line"></span><br><span class="line">    SetIceRole_n(DetermineIceRole(transport, transport_info, type, local));</span><br><span class="line"></span><br><span class="line">    cricket::JsepTransportDescription jsep_description =</span><br><span class="line">        CreateJsepTransportDescription(content_info, transport_info,</span><br><span class="line">                                       extension_ids, rtp_abs_sendtime_extn_id);</span><br><span class="line">    <span class="keyword">if</span> (local) &#123;</span><br><span class="line">      error =</span><br><span class="line">          transport-&gt;SetLocalJsepTransportDescription(jsep_description, type);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      error =</span><br><span class="line">          transport-&gt;SetRemoteJsepTransportDescription(jsep_description, type);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!error.ok()) &#123;</span><br><span class="line">      LOG_AND_RETURN_ERROR(</span><br><span class="line">          RTCErrorType::INVALID_PARAMETER,</span><br><span class="line">          <span class="string">"Failed to apply the description for m= section with mid='"</span> +</span><br><span class="line">              content_info.name + <span class="string">"': "</span> + error.message());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (type == SdpType::kAnswer) &#123;</span><br><span class="line">    transports_.CommitTransports();</span><br><span class="line">    bundles_.Commit();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> RTCError::OK();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RTCError JsepTransportController::MaybeCreateJsepTransport(</span><br><span class="line">    <span class="keyword">bool</span> local,</span><br><span class="line">    <span class="keyword">const</span> cricket::ContentInfo&amp; content_info,</span><br><span class="line">    <span class="keyword">const</span> cricket::SessionDescription&amp; description) &#123;</span><br><span class="line">  cricket::JsepTransport* transport = GetJsepTransportByName(content_info.name);</span><br><span class="line">  <span class="keyword">if</span> (transport) &#123;</span><br><span class="line">    <span class="keyword">return</span> RTCError::OK();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> cricket::MediaContentDescription* content_desc =</span><br><span class="line">      content_info.media_description();</span><br><span class="line">  <span class="keyword">if</span> (certificate_ &amp;&amp; !content_desc-&gt;cryptos().empty()) &#123;</span><br><span class="line">    <span class="keyword">return</span> RTCError(RTCErrorType::INVALID_PARAMETER,</span><br><span class="line">                    <span class="string">"SDES and DTLS-SRTP cannot be enabled at the same time."</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  rtc::scoped_refptr&lt;webrtc::IceTransportInterface&gt; ice =</span><br><span class="line">      CreateIceTransport(content_info.name, <span class="comment">/*rtcp=*/</span><span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::DtlsTransportInternal&gt; rtp_dtls_transport =</span><br><span class="line">      CreateDtlsTransport(content_info, ice-&gt;internal());</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::DtlsTransportInternal&gt; rtcp_dtls_transport;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;RtpTransport&gt; unencrypted_rtp_transport;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;SrtpTransport&gt; sdes_transport;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;DtlsSrtpTransport&gt; dtls_srtp_transport;</span><br><span class="line"></span><br><span class="line">  rtc::scoped_refptr&lt;webrtc::IceTransportInterface&gt; rtcp_ice;</span><br><span class="line">  <span class="keyword">if</span> (config_.rtcp_mux_policy !=</span><br><span class="line">          PeerConnectionInterface::kRtcpMuxPolicyRequire &amp;&amp;</span><br><span class="line">      content_info.type == cricket::MediaProtocolType::kRtp) &#123;</span><br><span class="line">    rtcp_ice = CreateIceTransport(content_info.name, <span class="comment">/*rtcp=*/</span><span class="literal">true</span>);</span><br><span class="line">    rtcp_dtls_transport =</span><br><span class="line">        CreateDtlsTransport(content_info, rtcp_ice-&gt;internal());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (config_.disable_encryption) &#123;</span><br><span class="line">    RTC_LOG(LS_INFO)</span><br><span class="line">        &lt;&lt; <span class="string">"Creating UnencryptedRtpTransport, becayse encryption is disabled."</span>;</span><br><span class="line">    unencrypted_rtp_transport = CreateUnencryptedRtpTransport(</span><br><span class="line">        content_info.name, rtp_dtls_transport.get(), rtcp_dtls_transport.get());</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!content_desc-&gt;cryptos().empty()) &#123;</span><br><span class="line">    sdes_transport = CreateSdesTransport(</span><br><span class="line">        content_info.name, rtp_dtls_transport.get(), rtcp_dtls_transport.get());</span><br><span class="line">    RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Creating SdesTransport."</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Creating DtlsSrtpTransport."</span>;</span><br><span class="line">    dtls_srtp_transport = CreateDtlsSrtpTransport(</span><br><span class="line">        content_info.name, rtp_dtls_transport.get(), rtcp_dtls_transport.get());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::SctpTransportInternal&gt; sctp_transport;</span><br><span class="line">  <span class="keyword">if</span> (config_.sctp_factory) &#123;</span><br><span class="line">    sctp_transport =</span><br><span class="line">        config_.sctp_factory-&gt;CreateSctpTransport(rtp_dtls_transport.get());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::JsepTransport&gt; jsep_transport =</span><br><span class="line">      <span class="built_in">std</span>::make_unique&lt;cricket::JsepTransport&gt;(</span><br><span class="line">          content_info.name, certificate_, <span class="built_in">std</span>::move(ice), <span class="built_in">std</span>::move(rtcp_ice),</span><br><span class="line">          <span class="built_in">std</span>::move(unencrypted_rtp_transport), <span class="built_in">std</span>::move(sdes_transport),</span><br><span class="line">          <span class="built_in">std</span>::move(dtls_srtp_transport), <span class="built_in">std</span>::move(rtp_dtls_transport),</span><br><span class="line">          <span class="built_in">std</span>::move(rtcp_dtls_transport), <span class="built_in">std</span>::move(sctp_transport), [&amp;]() &#123;</span><br><span class="line">            RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">            UpdateAggregateStates_n();</span><br><span class="line">          &#125;);</span><br><span class="line"></span><br><span class="line">  jsep_transport-&gt;rtp_transport()-&gt;SignalRtcpPacketReceived.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnRtcpPacketReceived_n);</span><br><span class="line"></span><br><span class="line">  transports_.RegisterTransport(content_info.name, <span class="built_in">std</span>::move(jsep_transport));</span><br><span class="line">  UpdateAggregateStates_n();</span><br><span class="line">  <span class="keyword">return</span> RTCError::OK();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">rtc::scoped_refptr&lt;webrtc::IceTransportInterface&gt;</span><br><span class="line">JsepTransportController::CreateIceTransport(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; transport_name,</span><br><span class="line">                                            <span class="keyword">bool</span> rtcp) &#123;</span><br><span class="line">  <span class="keyword">int</span> component = rtcp ? cricket::ICE_CANDIDATE_COMPONENT_RTCP</span><br><span class="line">                       : cricket::ICE_CANDIDATE_COMPONENT_RTP;</span><br><span class="line"></span><br><span class="line">  IceTransportInit init;</span><br><span class="line">  init.set_port_allocator(port_allocator_);</span><br><span class="line">  init.set_async_dns_resolver_factory(async_dns_resolver_factory_);</span><br><span class="line">  init.set_event_log(config_.event_log);</span><br><span class="line">  init.set_field_trials(config_.field_trials);</span><br><span class="line">  <span class="keyword">auto</span> transport = config_.ice_transport_factory-&gt;CreateIceTransport(</span><br><span class="line">      transport_name, component, <span class="built_in">std</span>::move(init));</span><br><span class="line">  RTC_DCHECK(transport);</span><br><span class="line">  transport-&gt;internal()-&gt;SetIceRole(ice_role_);</span><br><span class="line">  transport-&gt;internal()-&gt;SetIceTiebreaker(ice_tiebreaker_);</span><br><span class="line">  transport-&gt;internal()-&gt;SetIceConfig(ice_config_);</span><br><span class="line">  <span class="keyword">return</span> transport;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::DtlsTransportInternal&gt;</span><br><span class="line">JsepTransportController::CreateDtlsTransport(</span><br><span class="line">    <span class="keyword">const</span> cricket::ContentInfo&amp; content_info,</span><br><span class="line">    cricket::IceTransportInternal* ice) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;cricket::DtlsTransportInternal&gt; dtls;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (config_.dtls_transport_factory) &#123;</span><br><span class="line">    dtls = config_.dtls_transport_factory-&gt;CreateDtlsTransport(</span><br><span class="line">        ice, config_.crypto_options, config_.ssl_max_version);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    dtls = <span class="built_in">std</span>::make_unique&lt;cricket::DtlsTransport&gt;(ice, config_.crypto_options,</span><br><span class="line">                                                    config_.event_log,</span><br><span class="line">                                                    config_.ssl_max_version);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  RTC_DCHECK(dtls);</span><br><span class="line">  RTC_DCHECK_EQ(ice, dtls-&gt;ice_transport());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (certificate_) &#123;</span><br><span class="line">    <span class="keyword">bool</span> set_cert_success = dtls-&gt;SetLocalCertificate(certificate_);</span><br><span class="line">    RTC_DCHECK(set_cert_success);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Connect to signals offered by the DTLS and ICE transport.</span></span><br><span class="line">  dtls-&gt;SignalWritableState.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportWritableState_n);</span><br><span class="line">  dtls-&gt;SignalReceivingState.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportReceivingState_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalGatheringState.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportGatheringState_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalCandidateGathered.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportCandidateGathered_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalCandidateError.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportCandidateError_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalCandidatesRemoved.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportCandidatesRemoved_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalRoleConflict.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportRoleConflict_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalStateChanged.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportStateChanged_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalIceTransportStateChanged.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportStateChanged_n);</span><br><span class="line">  dtls-&gt;ice_transport()-&gt;SignalCandidatePairChanged.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportCandidatePairChanged_n);</span><br><span class="line"></span><br><span class="line">  dtls-&gt;SubscribeDtlsHandshakeError(</span><br><span class="line">      [<span class="keyword">this</span>](rtc::SSLHandshakeError error) &#123; OnDtlsHandshakeError(error); &#125;);</span><br><span class="line">  <span class="keyword">return</span> dtls;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.../webrtc/src/p2p/base/default_ice_transport_factory.cc</span><br><span class="line"></span><br><span class="line">rtc::scoped_refptr&lt;IceTransportInterface&gt;</span><br><span class="line">DefaultIceTransportFactory::CreateIceTransport(</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; transport_name,</span><br><span class="line">    <span class="keyword">int</span> component,</span><br><span class="line">    IceTransportInit init) &#123;</span><br><span class="line">  BasicIceControllerFactory factory;</span><br><span class="line">  init.set_ice_controller_factory(&amp;factory);</span><br><span class="line">  <span class="keyword">return</span> rtc::make_ref_counted&lt;DefaultIceTransport&gt;(</span><br><span class="line">      cricket::P2PTransportChannel::Create(transport_name, component,</span><br><span class="line">                                           <span class="built_in">std</span>::move(init)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在来看 <code>dtls-&gt;ice_transport()-&gt;MaybeStartGathering()</code>    dtls-&gt;ice_transport() 就是 P2PTransportChannel</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">dtls-&gt;ice_transport()-&gt;SignalCandidateGathered.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;JsepTransportController::OnTransportCandidateGathered_n);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> JsepTransportController::OnTransportCandidateGathered_n(</span><br><span class="line">    cricket::IceTransportInternal* transport,</span><br><span class="line">    <span class="keyword">const</span> cricket::Candidate&amp; candidate) &#123;</span><br><span class="line">  <span class="comment">// We should never signal peer-reflexive candidates.</span></span><br><span class="line">  <span class="keyword">if</span> (candidate.type() == cricket::PRFLX_PORT_TYPE) &#123;</span><br><span class="line">    RTC_DCHECK_NOTREACHED();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  signal_ice_candidates_gathered_.Send(</span><br><span class="line">      transport-&gt;transport_name(), <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;cricket::Candidate&gt;&#123;candidate&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SubscribeIceCandidateGathered</span><span class="params">(F&amp;&amp; callback)</span> </span>&#123;</span><br><span class="line">    RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">    signal_ice_candidates_gathered_.AddReceiver(<span class="built_in">std</span>::forward&lt;F&gt;(callback));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这里就跟之前的peer_connection 中 SubscribeIceCandidateGathered 注册回调 对应上了 </p>
+<h3 id="P2PTransportChannel"><a href="#P2PTransportChannel" class="headerlink" title="P2PTransportChannel"></a>P2PTransportChannel</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.../webrtc/src/p2p/base/p2p_transport_channel.cc</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> P2PTransportChannel::MaybeStartGathering() &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="comment">// TODO(bugs.webrtc.org/14605): ensure tie_breaker_ is set.</span></span><br><span class="line">  <span class="keyword">if</span> (ice_parameters_.ufrag.empty() || ice_parameters_.pwd.empty()) &#123;</span><br><span class="line">    RTC_LOG(LS_ERROR)</span><br><span class="line">        &lt;&lt; <span class="string">"Cannot gather candidates because ICE parameters are empty"</span></span><br><span class="line">           <span class="string">" ufrag: "</span></span><br><span class="line">        &lt;&lt; ice_parameters_.ufrag &lt;&lt; <span class="string">" pwd: "</span> &lt;&lt; ice_parameters_.pwd;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Start gathering if we never started before, or if an ICE restart occurred.</span></span><br><span class="line">  <span class="keyword">if</span> (allocator_sessions_.empty() ||</span><br><span class="line">      IceCredentialsChanged(allocator_sessions_.back()-&gt;ice_ufrag(),</span><br><span class="line">                            allocator_sessions_.back()-&gt;ice_pwd(),</span><br><span class="line">                            ice_parameters_.ufrag, ice_parameters_.pwd)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (gathering_state_ != kIceGatheringGathering) &#123;</span><br><span class="line">      gathering_state_ = kIceGatheringGathering;</span><br><span class="line">      SignalGatheringState(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!allocator_sessions_.empty()) &#123;</span><br><span class="line">      IceRestartState state;</span><br><span class="line">      <span class="keyword">if</span> (writable()) &#123;</span><br><span class="line">        state = IceRestartState::CONNECTED;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (IsGettingPorts()) &#123;</span><br><span class="line">        state = IceRestartState::CONNECTING;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        state = IceRestartState::DISCONNECTED;</span><br><span class="line">      &#125;</span><br><span class="line">      RTC_HISTOGRAM_ENUMERATION(<span class="string">"WebRTC.PeerConnection.IceRestartState"</span>,</span><br><span class="line">                                <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(state),</span><br><span class="line">                                <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(IceRestartState::MAX_VALUE));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; session : allocator_sessions_) &#123;</span><br><span class="line">      <span class="keyword">if</span> (session-&gt;IsStopped()) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      session-&gt;StopGettingPorts();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Time for a new allocator.</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;PortAllocatorSession&gt; pooled_session =</span><br><span class="line">        allocator_-&gt;TakePooledSession(transport_name(), component(),</span><br><span class="line">                                      ice_parameters_.ufrag,</span><br><span class="line">                                      ice_parameters_.pwd);</span><br><span class="line">    <span class="keyword">if</span> (pooled_session) &#123;</span><br><span class="line">      pooled_session-&gt;set_ice_tiebreaker(tiebreaker_);</span><br><span class="line">      AddAllocatorSession(<span class="built_in">std</span>::move(pooled_session));</span><br><span class="line">      PortAllocatorSession* raw_pooled_session =</span><br><span class="line">          allocator_sessions_.back().get();</span><br><span class="line">      <span class="comment">// Process the pooled session's existing candidates/ports, if they exist.</span></span><br><span class="line">      OnCandidatesReady(raw_pooled_session,</span><br><span class="line">                        raw_pooled_session-&gt;ReadyCandidates());</span><br><span class="line">      <span class="keyword">for</span> (PortInterface* port : allocator_sessions_.back()-&gt;ReadyPorts()) &#123;</span><br><span class="line">        OnPortReady(raw_pooled_session, port);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (allocator_sessions_.back()-&gt;CandidatesAllocationDone()) &#123;</span><br><span class="line">        OnCandidatesAllocationDone(raw_pooled_session);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      AddAllocatorSession(allocator_-&gt;CreateSession(</span><br><span class="line">          transport_name(), component(), ice_parameters_.ufrag,</span><br><span class="line">          ice_parameters_.pwd));</span><br><span class="line">      allocator_sessions_.back()-&gt;set_ice_tiebreaker(tiebreaker_);</span><br><span class="line">      allocator_sessions_.back()-&gt;StartGettingPorts();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> P2PTransportChannel::OnCandidatesReady(</span><br><span class="line">    PortAllocatorSession* session,</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Candidate&gt;&amp; candidates) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; candidates.size(); ++i) &#123;</span><br><span class="line">    SignalCandidateGathered(<span class="keyword">this</span>, candidates[i]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.../webrtc/src/p2p/client/basic_port_allocator.cc</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::StartGettingPorts() &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  state_ = SessionState::GATHERING;</span><br><span class="line"></span><br><span class="line">  network_thread_-&gt;PostTask(</span><br><span class="line">      SafeTask(network_safety_.flag(), [<span class="keyword">this</span>] &#123; GetPortConfigurations(); &#125;));</span><br><span class="line"></span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Start getting ports with turn_port_prune_policy "</span></span><br><span class="line">                   &lt;&lt; turn_port_prune_policy_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::GetPortConfigurations() &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">auto</span> config = <span class="built_in">std</span>::make_unique&lt;PortConfiguration&gt;(</span><br><span class="line">      allocator_-&gt;stun_servers(), username(), password(),</span><br><span class="line">      allocator()-&gt;field_trials());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> RelayServerConfig&amp; turn_server : allocator_-&gt;turn_servers()) &#123;</span><br><span class="line">    config-&gt;AddRelay(turn_server);</span><br><span class="line">  &#125;</span><br><span class="line">  ConfigReady(<span class="built_in">std</span>::move(config));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::ConfigReady(PortConfiguration* config) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  ConfigReady(absl::WrapUnique(config));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::ConfigReady(</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;PortConfiguration&gt; config) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  network_thread_-&gt;PostTask(SafeTask(</span><br><span class="line">      network_safety_.flag(), [<span class="keyword">this</span>, config = <span class="built_in">std</span>::move(config)]() <span class="keyword">mutable</span> &#123;</span><br><span class="line">        OnConfigReady(<span class="built_in">std</span>::move(config));</span><br><span class="line">      &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Adds a configuration to the list.</span></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::OnConfigReady(</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;PortConfiguration&gt; config) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="keyword">if</span> (config)</span><br><span class="line">    configs_.push_back(<span class="built_in">std</span>::move(config));</span><br><span class="line"></span><br><span class="line">  AllocatePorts();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::AllocatePorts() &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  network_thread_-&gt;PostTask(SafeTask(</span><br><span class="line">      network_safety_.flag(), [<span class="keyword">this</span>, allocation_epoch = allocation_epoch_] &#123;</span><br><span class="line">        OnAllocate(allocation_epoch);</span><br><span class="line">      &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::OnAllocate(<span class="keyword">int</span> allocation_epoch) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="keyword">if</span> (allocation_epoch != allocation_epoch_)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (network_manager_started_ &amp;&amp; !IsStopped()) &#123;</span><br><span class="line">    <span class="keyword">bool</span> disable_equivalent_phases = <span class="literal">true</span>;</span><br><span class="line">    DoAllocate(disable_equivalent_phases);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  allocation_started_ = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::DoAllocate(<span class="keyword">bool</span> disable_equivalent) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="keyword">bool</span> done_signal_needed = <span class="literal">false</span>;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">const</span> rtc::Network*&gt; networks = GetNetworks();</span><br><span class="line">  <span class="keyword">if</span> (networks.empty()) &#123;</span><br><span class="line">    RTC_LOG(LS_WARNING)</span><br><span class="line">        &lt;&lt; <span class="string">"Machine has no networks; no ports will be allocated"</span>;</span><br><span class="line">    done_signal_needed = <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Allocate ports on "</span> &lt;&lt; NetworksToString(networks);</span><br><span class="line">    PortConfiguration* config =</span><br><span class="line">        configs_.empty() ? <span class="literal">nullptr</span> : configs_.back().get();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">uint32_t</span> i = <span class="number">0</span>; i &lt; networks.size(); ++i) &#123;</span><br><span class="line">      <span class="keyword">uint32_t</span> sequence_flags = flags();</span><br><span class="line">      <span class="keyword">if</span> ((sequence_flags &amp; DISABLE_ALL_PHASES) == DISABLE_ALL_PHASES) &#123;</span><br><span class="line">        <span class="comment">// If all the ports are disabled we should just fire the allocation</span></span><br><span class="line">        <span class="comment">// done event and return.</span></span><br><span class="line">        done_signal_needed = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!config || config-&gt;relays.empty()) &#123;</span><br><span class="line">        <span class="comment">// No relay ports specified in this config.</span></span><br><span class="line">        sequence_flags |= PORTALLOCATOR_DISABLE_RELAY;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!(sequence_flags &amp; PORTALLOCATOR_ENABLE_IPV6) &amp;&amp;</span><br><span class="line">          networks[i]-&gt;GetBestIP().family() == AF_INET6) &#123;</span><br><span class="line">        <span class="comment">// Skip IPv6 networks unless the flag's been set.</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!(sequence_flags &amp; PORTALLOCATOR_ENABLE_IPV6_ON_WIFI) &amp;&amp;</span><br><span class="line">          networks[i]-&gt;GetBestIP().family() == AF_INET6 &amp;&amp;</span><br><span class="line">          networks[i]-&gt;type() == rtc::ADAPTER_TYPE_WIFI) &#123;</span><br><span class="line">        <span class="comment">// Skip IPv6 Wi-Fi networks unless the flag's been set.</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (disable_equivalent) &#123;</span><br><span class="line">        <span class="comment">// Disable phases that would only create ports equivalent to</span></span><br><span class="line">        <span class="comment">// ones that we have already made.</span></span><br><span class="line">        DisableEquivalentPhases(networks[i], config, &amp;sequence_flags);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((sequence_flags &amp; DISABLE_ALL_PHASES) == DISABLE_ALL_PHASES) &#123;</span><br><span class="line">          <span class="comment">// New AllocationSequence would have nothing to do, so don't make it.</span></span><br><span class="line">          <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      AllocationSequence* sequence =</span><br><span class="line">          <span class="keyword">new</span> AllocationSequence(<span class="keyword">this</span>, networks[i], config, sequence_flags,</span><br><span class="line">                                 [<span class="keyword">this</span>, safety_flag = network_safety_.flag()] &#123;</span><br><span class="line">                                   <span class="keyword">if</span> (safety_flag-&gt;alive())</span><br><span class="line">                                     OnPortAllocationComplete();</span><br><span class="line">                                 &#125;);</span><br><span class="line">      sequence-&gt;Init();</span><br><span class="line">      sequence-&gt;Start();</span><br><span class="line">      sequences_.push_back(sequence);</span><br><span class="line">      done_signal_needed = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (done_signal_needed) &#123;</span><br><span class="line">    network_thread_-&gt;PostTask(SafeTask(network_safety_.flag(), [<span class="keyword">this</span>] &#123;</span><br><span class="line">      OnAllocationSequenceObjectsCreated();</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> AllocationSequence::Start() &#123;</span><br><span class="line">  state_ = kRunning;</span><br><span class="line"></span><br><span class="line">  session_-&gt;network_thread()-&gt;PostTask(</span><br><span class="line">      SafeTask(safety_.flag(), [<span class="keyword">this</span>, epoch = epoch_] &#123; Process(epoch); &#125;));</span><br><span class="line">  <span class="comment">// Take a snapshot of the best IP, so that when DisableEquivalentPhases is</span></span><br><span class="line">  <span class="comment">// called next time, we enable all phases if the best IP has since changed.</span></span><br><span class="line">  previous_best_ip_ = network_-&gt;GetBestIP();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> AllocationSequence::Process(<span class="keyword">int</span> epoch) &#123;</span><br><span class="line">  RTC_DCHECK(rtc::Thread::Current() == session_-&gt;network_thread());</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> PHASE_NAMES[kNumPhases] = &#123;<span class="string">"Udp"</span>, <span class="string">"Relay"</span>, <span class="string">"Tcp"</span>&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (epoch != epoch_)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Perform all of the phases in the current step.</span></span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; network_-&gt;ToString()</span><br><span class="line">                   &lt;&lt; <span class="string">": Allocation Phase="</span> &lt;&lt; PHASE_NAMES[phase_];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">switch</span> (phase_) &#123;</span><br><span class="line">    <span class="keyword">case</span> PHASE_UDP:</span><br><span class="line">      CreateUDPPorts();</span><br><span class="line">      CreateStunPorts();</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> PHASE_RELAY:</span><br><span class="line">      CreateRelayPorts();</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> PHASE_TCP:</span><br><span class="line">      CreateTCPPorts();</span><br><span class="line">      state_ = kCompleted;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      RTC_DCHECK_NOTREACHED();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (state() == kRunning) &#123;</span><br><span class="line">    ++phase_;</span><br><span class="line">    session_-&gt;network_thread()-&gt;PostDelayedTask(</span><br><span class="line">        SafeTask(safety_.flag(), [<span class="keyword">this</span>, epoch = epoch_] &#123; Process(epoch); &#125;),</span><br><span class="line">        TimeDelta::Millis(session_-&gt;allocator()-&gt;step_delay()));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// No allocation steps needed further if all phases in AllocationSequence</span></span><br><span class="line">    <span class="comment">// are completed. Cause further Process calls in the previous epoch to be</span></span><br><span class="line">    <span class="comment">// ignored.</span></span><br><span class="line">    ++epoch_;</span><br><span class="line">    port_allocation_complete_callback_();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> AllocationSequence::CreateUDPPorts() &#123;</span><br><span class="line">  <span class="keyword">if</span> (IsFlagSet(PORTALLOCATOR_DISABLE_UDP)) &#123;</span><br><span class="line">    RTC_LOG(LS_VERBOSE) &lt;&lt; <span class="string">"AllocationSequence: UDP ports disabled, skipping."</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// TODO(mallinath) - Remove UDPPort creating socket after shared socket</span></span><br><span class="line">  <span class="comment">// is enabled completely.</span></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;UDPPort&gt; port;</span><br><span class="line">  <span class="keyword">bool</span> emit_local_candidate_for_anyaddress =</span><br><span class="line">      !IsFlagSet(PORTALLOCATOR_DISABLE_DEFAULT_LOCAL_CANDIDATE);</span><br><span class="line">  <span class="keyword">if</span> (IsFlagSet(PORTALLOCATOR_ENABLE_SHARED_SOCKET) &amp;&amp; udp_socket_) &#123;</span><br><span class="line">    port = UDPPort::Create(</span><br><span class="line">        session_-&gt;network_thread(), session_-&gt;socket_factory(), network_,</span><br><span class="line">        udp_socket_.get(), session_-&gt;username(), session_-&gt;password(),</span><br><span class="line">        emit_local_candidate_for_anyaddress,</span><br><span class="line">        session_-&gt;allocator()-&gt;stun_candidate_keepalive_interval(),</span><br><span class="line">        session_-&gt;allocator()-&gt;field_trials());</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    port = UDPPort::Create(</span><br><span class="line">        session_-&gt;network_thread(), session_-&gt;socket_factory(), network_,</span><br><span class="line">        session_-&gt;allocator()-&gt;min_port(), session_-&gt;allocator()-&gt;max_port(),</span><br><span class="line">        session_-&gt;username(), session_-&gt;password(),</span><br><span class="line">        emit_local_candidate_for_anyaddress,</span><br><span class="line">        session_-&gt;allocator()-&gt;stun_candidate_keepalive_interval(),</span><br><span class="line">        session_-&gt;allocator()-&gt;field_trials());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (port) &#123;</span><br><span class="line">    port-&gt;SetIceTiebreaker(session_-&gt;ice_tiebreaker());</span><br><span class="line">    <span class="comment">// If shared socket is enabled, STUN candidate will be allocated by the</span></span><br><span class="line">    <span class="comment">// UDPPort.</span></span><br><span class="line">    <span class="keyword">if</span> (IsFlagSet(PORTALLOCATOR_ENABLE_SHARED_SOCKET)) &#123;</span><br><span class="line">      udp_port_ = port.get();</span><br><span class="line">      port-&gt;SubscribePortDestroyed(</span><br><span class="line">          [<span class="keyword">this</span>](PortInterface* port) &#123; OnPortDestroyed(port); &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// If STUN is not disabled, setting stun server address to port.</span></span><br><span class="line">      <span class="keyword">if</span> (!IsFlagSet(PORTALLOCATOR_DISABLE_STUN)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (config_ &amp;&amp; !config_-&gt;StunServers().empty()) &#123;</span><br><span class="line">          RTC_LOG(LS_INFO)</span><br><span class="line">              &lt;&lt; <span class="string">"AllocationSequence: UDPPort will be handling the "</span></span><br><span class="line">                 <span class="string">"STUN candidate generation."</span>;</span><br><span class="line">          port-&gt;set_server_addresses(config_-&gt;StunServers());</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    session_-&gt;AddAllocatedPort(port.release(), <span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::AddAllocatedPort(Port* port,</span><br><span class="line">                                                 AllocationSequence* seq) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  <span class="keyword">if</span> (!port)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Adding allocated port for "</span> &lt;&lt; content_name();</span><br><span class="line">  port-&gt;set_content_name(content_name());</span><br><span class="line">  port-&gt;set_component(component());</span><br><span class="line">  port-&gt;set_generation(generation());</span><br><span class="line">  <span class="keyword">if</span> (allocator_-&gt;proxy().type != rtc::PROXY_NONE)</span><br><span class="line">    port-&gt;set_proxy(allocator_-&gt;user_agent(), allocator_-&gt;proxy());</span><br><span class="line">  port-&gt;set_send_retransmit_count_attribute(</span><br><span class="line">      (flags() &amp; PORTALLOCATOR_ENABLE_STUN_RETRANSMIT_ATTRIBUTE) != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="function">PortData <span class="title">data</span><span class="params">(port, seq)</span></span>;</span><br><span class="line">  ports_.push_back(data);</span><br><span class="line"></span><br><span class="line">  port-&gt;SignalCandidateReady.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;BasicPortAllocatorSession::OnCandidateReady);</span><br><span class="line">  port-&gt;SignalCandidateError.connect(</span><br><span class="line">      <span class="keyword">this</span>, &amp;BasicPortAllocatorSession::OnCandidateError);</span><br><span class="line">  port-&gt;SignalPortComplete.connect(<span class="keyword">this</span>,</span><br><span class="line">                                   &amp;BasicPortAllocatorSession::OnPortComplete);</span><br><span class="line">  port-&gt;SubscribePortDestroyed(</span><br><span class="line">      [<span class="keyword">this</span>](PortInterface* port) &#123; OnPortDestroyed(port); &#125;);</span><br><span class="line"></span><br><span class="line">  port-&gt;SignalPortError.connect(<span class="keyword">this</span>, &amp;BasicPortAllocatorSession::OnPortError);</span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; port-&gt;ToString() &lt;&lt; <span class="string">": Added port to allocator"</span>;</span><br><span class="line"></span><br><span class="line">  port-&gt;PrepareAddress();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::OnCandidateReady(Port* port,</span><br><span class="line">                                                 <span class="keyword">const</span> Candidate&amp; c) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  PortData* data = FindPort(port);</span><br><span class="line">  RTC_DCHECK(data != <span class="literal">NULL</span>);</span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; port-&gt;ToString()</span><br><span class="line">                   &lt;&lt; <span class="string">": Gathered candidate: "</span> &lt;&lt; c.ToSensitiveString();</span><br><span class="line">  <span class="comment">// Discarding any candidate signal if port allocation status is</span></span><br><span class="line">  <span class="comment">// already done with gathering.</span></span><br><span class="line">  <span class="keyword">if</span> (!data-&gt;inprogress()) &#123;</span><br><span class="line">    RTC_LOG(LS_WARNING)</span><br><span class="line">        &lt;&lt; <span class="string">"Discarding candidate because port is already done gathering."</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Mark that the port has a pairable candidate, either because we have a</span></span><br><span class="line">  <span class="comment">// usable candidate from the port, or simply because the port is bound to the</span></span><br><span class="line">  <span class="comment">// any address and therefore has no host candidate. This will trigger the port</span></span><br><span class="line">  <span class="comment">// to start creating candidate pairs (connections) and issue connectivity</span></span><br><span class="line">  <span class="comment">// checks. If port has already been marked as having a pairable candidate,</span></span><br><span class="line">  <span class="comment">// do nothing here.</span></span><br><span class="line">  <span class="comment">// Note: We should check whether any candidates may become ready after this</span></span><br><span class="line">  <span class="comment">// because there we will check whether the candidate is generated by the ready</span></span><br><span class="line">  <span class="comment">// ports, which may include this port.</span></span><br><span class="line">  <span class="keyword">bool</span> pruned = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (CandidatePairable(c, port) &amp;&amp; !data-&gt;has_pairable_candidate()) &#123;</span><br><span class="line">    data-&gt;set_has_pairable_candidate(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (port-&gt;Type() == RELAY_PORT_TYPE) &#123;</span><br><span class="line">      <span class="keyword">if</span> (turn_port_prune_policy_ == webrtc::KEEP_FIRST_READY) &#123;</span><br><span class="line">        pruned = PruneNewlyPairableTurnPort(data);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (turn_port_prune_policy_ == webrtc::PRUNE_BASED_ON_PRIORITY) &#123;</span><br><span class="line">        pruned = PruneTurnPorts(port);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If the current port is not pruned yet, SignalPortReady.</span></span><br><span class="line">    <span class="keyword">if</span> (!data-&gt;pruned()) &#123;</span><br><span class="line">      RTC_LOG(LS_INFO) &lt;&lt; port-&gt;ToString() &lt;&lt; <span class="string">": Port ready."</span>;</span><br><span class="line">      SignalPortReady(<span class="keyword">this</span>, port);</span><br><span class="line">      port-&gt;KeepAliveUntilPruned();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (data-&gt;ready() &amp;&amp; CheckCandidateFilter(c)) &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Candidate&gt; candidates;</span><br><span class="line">    candidates.push_back(allocator_-&gt;SanitizeCandidate(c));</span><br><span class="line">    SignalCandidatesReady(<span class="keyword">this</span>, candidates);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    RTC_LOG(LS_INFO) &lt;&lt; <span class="string">"Discarding candidate because it doesn't match filter."</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// If we have pruned any port, maybe need to signal port allocation done.</span></span><br><span class="line">  <span class="keyword">if</span> (pruned) &#123;</span><br><span class="line">    MaybeSignalCandidatesAllocationDone();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> BasicPortAllocatorSession::OnPortComplete(Port* port) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(network_thread_);</span><br><span class="line">  RTC_LOG(LS_INFO) &lt;&lt; port-&gt;ToString()</span><br><span class="line">                   &lt;&lt; <span class="string">": Port completed gathering candidates."</span>;</span><br><span class="line">  PortData* data = FindPort(port);</span><br><span class="line">  RTC_DCHECK(data != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Ignore any late signals.</span></span><br><span class="line">  <span class="keyword">if</span> (!data-&gt;inprogress()) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Moving to COMPLETE state.</span></span><br><span class="line">  data-&gt;set_state(PortData::STATE_COMPLETE);</span><br><span class="line">  <span class="comment">// Send candidate allocation complete signal if this was the last port.</span></span><br><span class="line">  MaybeSignalCandidatesAllocationDone();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终PortAllocator 通过 udp 连接到 ice server ， OnCandidateReady 回调 就跟前面 p2p_transport_channel  OnCandidateReady 对应上了  </p>
+<p>so ，整个 Candidate 的 收集过程就走完了。。。</p>
+
+      
+    </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2023/02/15/OWT-client-ios信令交互源码分析/" rel="bookmark">OWT-client-ios信令交互源码分析</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2020/03/10/flutter共享engine/" rel="bookmark">flutter共享engine</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2022/11/04/ios获取udid/" rel="bookmark">ios获取udid</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="BLACK_OX 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ios/" rel="tag"><i class="fa fa-tag"></i> ios</a>
+          
+            <a href="/tags/webrtc/" rel="tag"><i class="fa fa-tag"></i> webrtc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023/02/15/OWT-client-ios信令交互源码分析/" rel="next" title="OWT-client-ios信令交互源码分析">
+                <i class="fa fa-chevron-left"></i> OWT-client-ios信令交互源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="BLACK_OX">
+            
+              <p class="site-author-name" itemprop="name">BLACK_OX</p>
+              <div class="site-description motion-element" itemprop="description">Developer...</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/blackox626" title="GitHub &rarr; https://github.com/blackox626" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:blackox626@gmail.com" title="E-Mail &rarr; mailto:blackox626@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SdpOfferAnswerHandler"><span class="nav-text">SdpOfferAnswerHandler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MaybeStartGathering"><span class="nav-text">MaybeStartGathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JsepTransportController"><span class="nav-text">JsepTransportController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2PTransportChannel"><span class="nav-text">P2PTransportChannel</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BLACK_OX</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">339k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:08</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div>
+
+
+
+
+<div class="visit-by">
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    <span id="busuanzi_value_site_pv"></span>
+  </span>
+
+  <span class="post-meta-divider">|</span>
+
+  <i class="fa fa-user"></i>
+    <span id="busuanzi_container_site_uv">
+      <span id="busuanzi_value_site_uv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: '98visuelOUQ19xFr1vzfJcKo-gzGzoHsz',
+    appKey: 'oS6B9UYaqn8BBWkzY9icYxB9',
+    placeholder: 'Just go go',
+    avatar: 'robohash',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/pangu/dist/pangu.min.js?v=3.3"></script>
+  <script>pangu.spacingPage();</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

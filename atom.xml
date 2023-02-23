@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox.cn/"/>
-  <updated>2023-02-15T07:55:21.000Z</updated>
+  <updated>2023-02-23T03:20:53.000Z</updated>
   <id>https://blackox.cn/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>webrtc-candidate源码分析</title>
+    <link href="https://blackox.cn/2023/02/23/webrtc-candidate%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    <id>https://blackox.cn/2023/02/23/webrtc-candidate源码分析/</id>
+    <published>2023-02-23T03:20:53.000Z</published>
+    <updated>2023-02-23T03:20:53.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;SdpOfferAnswerHandler&quot;&gt;&lt;a href=&quot;#SdpOfferAnswerHandler&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="RTC" scheme="https://blackox.cn/categories/RTC/"/>
+    
+    
+      <category term="ios" scheme="https://blackox.cn/tags/ios/"/>
+    
+      <category term="webrtc" scheme="https://blackox.cn/tags/webrtc/"/>
+    
+  </entry>
   
   <entry>
     <title>OWT-client-ios信令交互源码分析</title>
@@ -37,9 +65,9 @@
     
       <category term="ios" scheme="https://blackox.cn/tags/ios/"/>
     
-      <category term="OWT" scheme="https://blackox.cn/tags/OWT/"/>
-    
       <category term="webrtc" scheme="https://blackox.cn/tags/webrtc/"/>
+    
+      <category term="OWT" scheme="https://blackox.cn/tags/OWT/"/>
     
   </entry>
   
@@ -512,31 +540,6 @@
       <category term="flutter" scheme="https://blackox.cn/tags/flutter/"/>
     
       <category term="dart" scheme="https://blackox.cn/tags/dart/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>flutter共享engine</title>
-    <link href="https://blackox.cn/2020/03/10/flutter%E5%85%B1%E4%BA%ABengine/"/>
-    <id>https://blackox.cn/2020/03/10/flutter共享engine/</id>
-    <published>2020-03-10T15:00:08.000Z</published>
-    <updated>2020-03-13T09:11:36.450Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;flutter-共享引擎-问题记录&quot;&gt;&lt;a href=&quot;#flutter-共享引擎-问题记录&quot; class=&quot;headerlink&quot; title=&quot;flutter 共享引擎 问题记录&quot;&gt;&lt;/a&gt;flutter 共享引擎 问题记录&lt;/h2&gt;&lt;p&gt;共享引擎，就是只有一个 &lt;em&gt;flutter engine&lt;/em&gt;，每个页面一个 flutterviewcontroller。&lt;br&gt;flutter页面 切换，引擎会相应的 &lt;em&gt;detach&lt;/em&gt; &lt;em&gt;atach&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;最近 升级 flutter 到 v1.12.13 版本后，贡献引擎遇到的几个问题 记录下 &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="flutter" scheme="https://blackox.cn/categories/flutter/"/>
-    
-    
-      <category term="flutter" scheme="https://blackox.cn/tags/flutter/"/>
-    
-      <category term="dart" scheme="https://blackox.cn/tags/dart/"/>
-    
-      <category term="ios" scheme="https://blackox.cn/tags/ios/"/>
     
   </entry>
   
