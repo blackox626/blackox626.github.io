@@ -25,13 +25,14 @@
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;SdpOfferAnswerHandler&quot;&gt;&lt;a href=&quot;#SdpOfferAnswerHandler&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h3 id=&quot;webrtc-信令&quot;&gt;&lt;a href=&quot;#webrtc-信令&quot; class=&quot;headerlink&quot; title=&quot;webrtc 信令&quot;&gt;&lt;/a&gt;webrtc 信令&lt;/h3&gt;&lt;p&gt;来自ChatGPT&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;WebRTC（Web Real-Time Communication）是一种可以在浏览器之间实现实时音视频通信的技术。信令是 WebRTC 中的一部分，用于管理会话的建立、维护和结束。简单来说，信令是用于交换元数据以建立连接的过程。&lt;/p&gt;
+&lt;p&gt;在 WebRTC 中，需要进行一些信令交换步骤来建立连接，例如：&lt;/p&gt;
+&lt;p&gt;交换SDP（Session Description Protocol）：每个端点都需要将其本地的SDP发送给对方，并且解析对方发来的SDP。&lt;br&gt;交换ICE（Interactive Connectivity Establishment）候选项：WebRTC 会在两个端点之间建立多个连接，并尝试找到最佳的连接。ICE候选项是一组网络地址和端口，用于在对等方之间建立连接。&lt;br&gt;交换网络信息：包括网络类型、带宽和网络状况等信息，以帮助双方选择最佳的连接。&lt;br&gt;以上这些步骤需要通过信令服务器来完成。信令服务器负责协调连接双方之间的通信，并确保会话能够顺利进行。&lt;/p&gt;
+&lt;p&gt;WebRTC 并没有规定信令协议，因此开发人员可以自行选择适合自己应用的协议，例如 SIP（Session Initiation Protocol）、XMPP（Extensible Messaging and Presence Protocol）或 WebSocket 等。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本文看下是如何获取ICE候选项 &lt;code&gt;ice candidate&lt;/code&gt;&lt;/p&gt;
     
     </summary>
     
