@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox.cn/"/>
-  <updated>2023-02-23T03:20:53.000Z</updated>
+  <updated>2023-03-01T08:37:34.000Z</updated>
   <id>https://blackox.cn/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>webrtc video流程分析</title>
+    <link href="https://blackox.cn/2023/03/01/webrtc-video%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/"/>
+    <id>https://blackox.cn/2023/03/01/webrtc-video流程分析/</id>
+    <published>2023-03-01T08:37:34.000Z</published>
+    <updated>2023-03-01T08:37:34.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;video&quot;&gt;&lt;a href=&quot;#video&quot; class=&quot;headerlink&quot; title=&quot;video&quot;&gt;&lt;/a&gt;video&lt;/h3&gt;&lt;p&gt;收集candidate之后，就可以建立好数据传输的通道了，现在通过源码走读下视频数据是如何 采集 &amp;amp; 编码 &amp;amp; 传输的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png&quot; alt&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="RTC" scheme="https://blackox.cn/categories/RTC/"/>
+    
+    
+      <category term="ios" scheme="https://blackox.cn/tags/ios/"/>
+    
+      <category term="webrtc" scheme="https://blackox.cn/tags/webrtc/"/>
+    
+  </entry>
   
   <entry>
     <title>webrtc-candidate源码分析</title>
@@ -509,29 +532,6 @@
 &lt;h2 id=&quot;App产物&quot;&gt;&lt;a
         
       
-    
-    </summary>
-    
-      <category term="flutter" scheme="https://blackox.cn/categories/flutter/"/>
-    
-    
-      <category term="flutter" scheme="https://blackox.cn/tags/flutter/"/>
-    
-      <category term="dart" scheme="https://blackox.cn/tags/dart/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>flutter tool debug</title>
-    <link href="https://blackox.cn/2020/03/13/flutter-tool-debug/"/>
-    <id>https://blackox.cn/2020/03/13/flutter-tool-debug/</id>
-    <published>2020-03-13T05:02:04.000Z</published>
-    <updated>2020-03-13T09:15:00.317Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;Flutter&quot;&gt;&lt;a href=&quot;#Flutter&quot; class=&quot;headerlink&quot; title=&quot;Flutter&quot;&gt;&lt;/a&gt;Flutter&lt;/h2&gt;&lt;p&gt;flutter 开发过程中，少不了会运行一些 flutter 命令 ，比如 flutter build xxx 、 flutter run  等等&lt;br&gt;看下 bin/flutter 脚本，背后都是 flutter_tool 在执行各种操作。&lt;/p&gt;
-&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;FLUTTER_TOOLS_DIR=&quot;$FLUTTER_ROOT/packages/flutter_tools&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SNAPSHOT_PATH=&quot;$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;STAMP_PATH=&quot;$FLUTTER_ROOT/bin/cache/flutter_tools.stamp&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;SCRIPT_PATH=&quot;$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;DART_SDK_PATH=&quot;$FLUTTER_ROOT/bin/cache/dart-sdk&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&quot;$DART&quot; --packages=&quot;$FLUTTER_TOOLS_DIR/.packages&quot; $FLUTTER_TOOL_ARGS &quot;$SNAPSHOT_PATH&quot; &quot;$@&quot;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
