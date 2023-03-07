@@ -497,7 +497,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">164k</span>
+                <span title="本文字数">165k</span>
               
 
               
@@ -511,7 +511,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2:29</span>
+                <span title="阅读时长">2:30</span>
               
             </div>
           
@@ -581,6 +581,10 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">.../webrtc/src/p2p/base/port.cc</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Port::AddAddress(<span class="keyword">const</span> rtc::SocketAddress&amp; address,</span><br><span class="line">                      <span class="keyword">const</span> rtc::SocketAddress&amp; base_address,</span><br><span class="line">                      <span class="keyword">const</span> rtc::SocketAddress&amp; related_address,</span><br><span class="line">                      absl::string_view protocol,</span><br><span class="line">                      absl::string_view relay_protocol,</span><br><span class="line">                      absl::string_view tcptype,</span><br><span class="line">                      absl::string_view type,</span><br><span class="line">                      <span class="keyword">uint32_t</span> type_preference,</span><br><span class="line">                      <span class="keyword">uint32_t</span> relay_preference,</span><br><span class="line">                      absl::string_view url,</span><br><span class="line">                      <span class="keyword">bool</span> is_final) &#123;</span><br><span class="line">  RTC_DCHECK_RUN_ON(thread_);</span><br><span class="line">  <span class="keyword">if</span> (protocol == TCP_PROTOCOL_NAME &amp;&amp; type == LOCAL_PORT_TYPE) &#123;</span><br><span class="line">    RTC_DCHECK(!tcptype.empty());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">string</span> foundation =</span><br><span class="line">      ComputeFoundation(type, protocol, relay_protocol, base_address);</span><br><span class="line">  <span class="function">Candidate <span class="title">c</span><span class="params">(component_, protocol, address, <span class="number">0U</span>, username_fragment(), password_,</span></span></span><br><span class="line"><span class="function"><span class="params">              type, generation_, foundation, network_-&gt;id(), network_cost_)</span></span>;</span><br><span class="line">  c.set_priority(</span><br><span class="line">      c.GetPriority(type_preference, network_-&gt;preference(), relay_preference));</span><br><span class="line">  c.set_relay_protocol(relay_protocol);</span><br><span class="line">  c.set_tcptype(tcptype);</span><br><span class="line">  c.set_network_name(network_-&gt;name());</span><br><span class="line">  c.set_network_type(network_-&gt;type());</span><br><span class="line">  c.set_underlying_type_for_vpn(network_-&gt;underlying_type_for_vpn());</span><br><span class="line">  c.set_url(url);</span><br><span class="line">  c.set_related_address(related_address);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">bool</span> pending = MaybeObfuscateAddress(&amp;c, type, is_final);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!pending) &#123;</span><br><span class="line">    FinishAddingAddress(c, is_final);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Port::FinishAddingAddress(<span class="keyword">const</span> Candidate&amp; c, <span class="keyword">bool</span> is_final) &#123;</span><br><span class="line">  candidates_.push_back(c);</span><br><span class="line">  SignalCandidateReady(<span class="keyword">this</span>, c);</span><br><span class="line"></span><br><span class="line">  PostAddAddress(is_final);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> Port::PostAddAddress(<span class="keyword">bool</span> is_final) &#123;</span><br><span class="line">  <span class="keyword">if</span> (is_final) &#123;</span><br><span class="line">    SignalPortComplete(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>AddAddress 创建 Candidate，通过 SignalCandidateReady 层层回调返回 回去….</p>
 <h3 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h3><p>整个 Candidate 的 收集过程就走完了 ~ OVER ~</p>
+<p>在 WebRTC 中，ICE 协议使用 ICE Candidate 信息来描述设备的网络地址。ICE Candidate 包含以下信息：</p>
+<p>媒体类型（音频或视频）<br>协议类型（UDP 或 TCP）<br>IP 地址<br>端口号<br>套接字类型（IPv4 或 IPv6）<br>优先级<br>基础地址类型（服务器反射地址、对称 NAT 地址、中继地址等）<br>根据 ICE Candidate 中的基础地址类型，可以将 ICE Candidate 分为以下四种类型：</p>
+<p>主机候选（host candidate）：主机候选是指设备的本地地址，即通过 STUN 服务器获取的本地 IP 地址和端口号。主机候选可以直接用于通信，是 ICE 协议中优先级最高的候选类型。<br>服务器反射候选（server reflexive candidate）：服务器反射候选是指通过 STUN 服务器获取的公网 IP 地址和端口号。服务器反射候选可以用于 NAT 环境下的通信，优先级次于主机候选。（stun bingding request）<br>中继候选（relay candidate）：中继候选是指通过 TURN 服务器获取的 IP 地址和端口号。中继候选可以用于 NAT 环境下的通信，但通信质量可能会较差，优先级最低。</p>
+<p>连通性测试过程中，在来自对方的数据报文里看到的地址（peer reflexive，缩写为prflx） （Connection Request）</p>
 <h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a href="https://github.com/aggresss/spec/blob/master/RFC/RFC8829_zh-CN.md" target="_blank" rel="noopener">JSEP</a></p>
 
       
@@ -609,6 +613,13 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
       
     </li>
@@ -617,13 +628,6 @@
       
       
       <div class="popular-posts-title"><a href="/2020/03/10/flutter共享engine/" rel="bookmark">flutter共享engine</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
       
     </li>
   
@@ -964,7 +968,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">476k</span>
+    <span title="站点总字数">477k</span>
   
 
   
@@ -973,7 +977,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">7:13</span>
+    <span title="站点阅读时长">7:14</span>
   
 </div>
 
