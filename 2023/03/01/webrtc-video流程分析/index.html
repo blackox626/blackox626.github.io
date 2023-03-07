@@ -104,12 +104,12 @@
 <meta property="og:site_name" content="BLACK_OX">
 <meta property="og:description" content="video收集candidate之后，就可以建立好数据传输的通道了，现在通过源码走读下视频数据是如何 采集 &amp;amp; 编码 &amp;amp; 传输的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://blackox.cn/2023/03/01/webrtc-video流程分析/assets/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png">
+<meta property="og:image" content="https://blackox.cn/images/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png">
 <meta property="og:updated_time" content="2023-03-01T08:37:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webrtc video流程分析">
 <meta name="twitter:description" content="video收集candidate之后，就可以建立好数据传输的通道了，现在通过源码走读下视频数据是如何 采集 &amp;amp; 编码 &amp;amp; 传输的">
-<meta name="twitter:image" content="https://blackox.cn/2023/03/01/webrtc-video流程分析/assets/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png">
+<meta name="twitter:image" content="https://blackox.cn/images/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png">
 
 
 
@@ -534,7 +534,7 @@
 
       
         <h3 id="video"><a href="#video" class="headerlink" title="video"></a>video</h3><p>收集candidate之后，就可以建立好数据传输的通道了，现在通过源码走读下视频数据是如何 采集 &amp; 编码 &amp; 传输的</p>
-<p><img src="assets/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png" alt></p>
+<p><img src="/images/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png" alt></p>
 <a id="more"></a>
 <h3 id="videosource-amp-amp-videotrack"><a href="#videosource-amp-amp-videotrack" class="headerlink" title="videosource &amp;&amp; videotrack"></a>videosource &amp;&amp; videotrack</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_localVideoTrack = [self createLocalVideoTrack];</span><br><span class="line"><span class="keyword">if</span> (_localVideoTrack)</span><br><span class="line">    [_peerConnection addTrack:_localVideoTrack streamIds:@[ kARDMediaStreamId ]];</span><br><span class="line"></span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line">```c++</span><br><span class="line">- (RTC_OBJC_TYPE(RTCVideoTrack) *)createLocalVideoTrack &#123;</span><br><span class="line">  <span class="keyword">if</span> ([_settings currentAudioOnlySettingFromStore]) &#123;</span><br><span class="line">    <span class="keyword">return</span> nil;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  RTC_OBJC_TYPE(RTCVideoSource) *source = [_factory videoSource];</span><br><span class="line">  <span class="keyword">return</span> [_factory videoTrackWithSource:source trackId:kARDVideoTrackId];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里的 videosource 跟 videotrack 就是 后面 capture的过程的 delegate</p>
@@ -642,14 +642,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
       
     </li>
   

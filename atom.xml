@@ -26,7 +26,7 @@
     <summary type="html">
     
       &lt;h3 id=&quot;video&quot;&gt;&lt;a href=&quot;#video&quot; class=&quot;headerlink&quot; title=&quot;video&quot;&gt;&lt;/a&gt;video&lt;/h3&gt;&lt;p&gt;收集candidate之后，就可以建立好数据传输的通道了，现在通过源码走读下视频数据是如何 采集 &amp;amp; 编码 &amp;amp; 传输的&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;assets/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/20230301_164144_361d2680-06b6-4110-9f92-fa40e8bc4341.png&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
@@ -374,9 +374,9 @@
       <category term="media" scheme="https://blackox.cn/categories/media/"/>
     
     
-      <category term="media" scheme="https://blackox.cn/tags/media/"/>
-    
       <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
+    
+      <category term="media" scheme="https://blackox.cn/tags/media/"/>
     
   </entry>
   
