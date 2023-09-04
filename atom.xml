@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://blackox.cn/"/>
-  <updated>2023-03-01T08:37:34.000Z</updated>
+  <updated>2023-09-04T08:40:31.000Z</updated>
   <id>https://blackox.cn/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>usbcamera android 4k支持</title>
+    <link href="https://blackox.cn/2023/09/04/usbcamera-android-4k%E6%94%AF%E6%8C%81/"/>
+    <id>https://blackox.cn/2023/09/04/usbcamera-android-4k支持/</id>
+    <published>2023-09-04T08:40:31.000Z</published>
+    <updated>2023-09-04T08:40:31.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;usbcamera&quot;&gt;&lt;a href=&quot;#usbcamera&quot; class=&quot;headerlink&quot; title=&quot;usbcamera&quot;&gt;&lt;/a&gt;usbcamera&lt;/h3&gt;&lt;p&gt;android 外接 usbcamera，已经有比较成熟的技术方案&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="media" scheme="https://blackox.cn/categories/media/"/>
+    
+    
+      <category term="camera" scheme="https://blackox.cn/tags/camera/"/>
+    
+      <category term="android" scheme="https://blackox.cn/tags/android/"/>
+    
+      <category term="usb" scheme="https://blackox.cn/tags/usb/"/>
+    
+  </entry>
   
   <entry>
     <title>webrtc video流程分析</title>
@@ -453,9 +483,9 @@
       <category term="HDR" scheme="https://blackox.cn/categories/HDR/"/>
     
     
-      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
-    
       <category term="HDR" scheme="https://blackox.cn/tags/HDR/"/>
+    
+      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
     
       <category term="OPENGL" scheme="https://blackox.cn/tags/OPENGL/"/>
     
@@ -503,35 +533,6 @@
       &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;flutter 升级到 1.17之后，app ios 线上遇到一个crash ,通过官方的 符号表文件 flutter.dsym 还原出堆栈如下&lt;/p&gt;
 &lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt; auto fml::internal::CopyableLambda&amp;lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&amp;lt;flutter::Surface, std::__1::default_delete&amp;lt;flutter::Surface&amp;gt; &amp;gt;)::$_8&amp;gt;::operator()&amp;lt;&amp;gt;() &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; (in Flutter) (make_copyable.h:&lt;span class=&quot;number&quot;&gt;24&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; auto fml::internal::CopyableLambda&amp;lt;flutter::Shell::OnPlatformViewCreated(std::__1::unique_ptr&amp;lt;flutter::Surface, std::__1::default_delete&amp;lt;flutter::Surface&amp;gt; &amp;gt;)::$_8&amp;gt;::operator()&amp;lt;&amp;gt;() &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt; (in Flutter) (make_copyable.h:&lt;span class=&quot;number&quot;&gt;24&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;2&lt;/span&gt; fml::MessageLoopImpl::FlushTasks(fml::FlushType) (in Flutter) (message_loop_impl.cc:&lt;span class=&quot;number&quot;&gt;129&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;3&lt;/span&gt; fml::MessageLoopDarwin::OnTimerFire(__CFRunLoopTimer*, fml::MessageLoopDarwin*) (in Flutter) (message_loop_darwin.mm:&lt;span class=&quot;number&quot;&gt;76&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;9&lt;/span&gt; fml::MessageLoopDarwin::Run() (in Flutter) (message_loop_darwin.mm:&lt;span class=&quot;number&quot;&gt;47&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt;* std::__1::__thread_proxy&amp;lt;std::__1::tuple&amp;lt;std::__1::unique_ptr&amp;lt;std::__1::__thread_struct, std::__1::default_delete&amp;lt;std::__1::__thread_struct&amp;gt; &amp;gt;, fml::Thread::Thread(std::__1::basic_string&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;, std::__1::char_traits&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;&amp;gt;, std::__1::allocator&amp;lt;&lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;&amp;gt; &amp;gt; &lt;span class=&quot;keyword&quot;&gt;const&lt;/span&gt;&amp;amp;)::$_0&amp;gt; &amp;gt;(&lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt;*) (in Flutter) (thread:&lt;span class=&quot;number&quot;&gt;352&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;这里还只能看到crash在engine的c++代码中，具体原因未知&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="flutter" scheme="https://blackox.cn/categories/flutter/"/>
-    
-    
-      <category term="flutter" scheme="https://blackox.cn/tags/flutter/"/>
-    
-      <category term="dart" scheme="https://blackox.cn/tags/dart/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>flutter 1.17升级</title>
-    <link href="https://blackox.cn/2020/05/21/flutter-1-17%E5%8D%87%E7%BA%A7/"/>
-    <id>https://blackox.cn/2020/05/21/flutter-1-17升级/</id>
-    <published>2020-05-21T04:04:56.000Z</published>
-    <updated>2020-05-21T11:48:01.372Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;升级&quot;&gt;&lt;a href=&quot;#升级&quot; class=&quot;headerlink&quot; title=&quot;升级&quot;&gt;&lt;/a&gt;升级&lt;/h2&gt;&lt;p&gt;最近官方发布了flutter 稳定版本1.17.0 ，记录下升级1.17 ios上碰到的的问题&lt;/p&gt;
-&lt;h2 id=&quot;App产物&quot;&gt;&lt;a
-        
-      
     
     </summary>
     

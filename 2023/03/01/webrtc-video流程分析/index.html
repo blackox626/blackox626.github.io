@@ -513,7 +513,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">5:06</span>
+                <span title="阅读时长">5:07</span>
               
             </div>
           
@@ -612,7 +612,17 @@
 <p>UDPPort::SendTo -&gt;</p>
 <p>Socket -&gt; send </p>
 <p>到这里 图中的 左半部分 send的过程 结束了 </p>
-<h3 id="receive"><a href="#receive" class="headerlink" title="receive"></a>receive</h3><p>…<br>RtpTransport::OnReadPacket-&gt;<br>RtpTransport::OnRtpPacketReceived -&gt;<br>…<br>BaseChannel::OnRtpPacket -&gt;<br>MediaChannel::OnPacketReceived -&gt;<br>…</p>
+<h3 id="receive"><a href="#receive" class="headerlink" title="receive"></a>receive</h3><p>…<br>RtpTransport::OnReadPacket-&gt;<br>RtpTransport::OnRtpPacketReceived -&gt;<br>…<br>BaseChannel::OnRtpPacket -&gt;<br>MediaChannel::OnPacketReceived -&gt;</p>
+<p>Call::DeliverRtpPacket -&gt;<br>RtpStreamReceiverController::OnRtpPacket -&gt;</p>
+<p>RtpVideoStreamReceiver2::OnRtpPacket -&gt; </p>
+<p>RtpVideoStreamReceiver2::OnCompleteFrames -&gt;</p>
+<p>VideoReceiveStream2::OnCompleteFrame -&gt;</p>
+<p>VideoReceiveStream2::OnFrame -&gt;</p>
+<p>WebRtcVideoReceiveStream::OnFrame -&gt;</p>
+<p>VideoBroadcaster::OnFrame -&gt; </p>
+<p>VideoRendererAdapter OnFrame -&gt;</p>
+<p>RTCEAGLVideoView renderFrame</p>
+<p>…</p>
 <p>receive 就是 send 逆向的过程,不重复了</p>
 <p>over ….</p>
 
@@ -642,6 +652,13 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
       
     </li>
@@ -650,13 +667,6 @@
       
       
       <div class="popular-posts-title"><a href="/2020/03/10/flutter共享engine/" rel="bookmark">flutter共享engine</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
       
     </li>
   
@@ -731,6 +741,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2023/09/04/usbcamera-android-4k支持/" rel="prev" title="usbcamera android 4k支持">
+                usbcamera android 4k支持 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -804,7 +818,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -888,7 +902,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -993,7 +1011,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">477k</span>
+    <span title="站点总字数">482k</span>
   
 
   
@@ -1002,7 +1020,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">7:14</span>
+    <span title="站点阅读时长">7:18</span>
   
 </div>
 
