@@ -536,6 +536,7 @@
         <h3 id="usbcamera"><a href="#usbcamera" class="headerlink" title="usbcamera"></a>usbcamera</h3><p>android 外接 usbcamera，已经有比较成熟的技术方案<a href="https://github.com/saki4510t/UVCCamera" target="_blank" rel="noopener">UVCCamera</a>,参考这个库，配置Andoird工程，依赖库接入，把外接usbcamera 流程跑通不难。</p>
 <p>手头设备是海康威视的4K摄像头，run起立 camera画面也正常出来了。 如果都这么顺利的话，那就没这篇文章了 😂😂😂</p>
 <h3 id="4k"><a href="#4k" class="headerlink" title="4k"></a>4k</h3><p>画面是出来了，发现分辨率最多只拉到2k（2560 x 1440），完全没有发挥出4k的能力。 比较容易想到的是 线 或者 hub 用的是usb2.0的（480Mbit/s），传输速度不够，所以出不了4K。<br>搞一根3.0的线 确定口子也是3.0的之后，再次跑起来，发现4k画面花了，只有顶上一点点内容，绝大部分是灰的，懵逼开始…</p>
+<a id="more"></a>
 <h3 id="libXXX"><a href="#libXXX" class="headerlink" title="libXXX"></a>libXXX</h3><p>懵逼没用 还是要解决问题的</p>
 <p>简单梳理之后，问题应该不是android侧的，并没有什么java层的异常日志。 也是因为到目前为止，我们的工作也只是在android侧，各种lib 接入之后，目前不知道具体在做什么。</p>
 <p>开始了解底层 native jni。</p>

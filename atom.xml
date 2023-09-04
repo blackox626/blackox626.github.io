@@ -25,13 +25,9 @@
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h3 id=&quot;usbcamera&quot;&gt;&lt;a href=&quot;#usbcamera&quot; class=&quot;headerlink&quot; title=&quot;usbcamera&quot;&gt;&lt;/a&gt;usbcamera&lt;/h3&gt;&lt;p&gt;android 外接 usbcamera，已经有比较成熟的技术方案&lt;a
-        
-      
+      &lt;h3 id=&quot;usbcamera&quot;&gt;&lt;a href=&quot;#usbcamera&quot; class=&quot;headerlink&quot; title=&quot;usbcamera&quot;&gt;&lt;/a&gt;usbcamera&lt;/h3&gt;&lt;p&gt;android 外接 usbcamera，已经有比较成熟的技术方案&lt;a href=&quot;https://github.com/saki4510t/UVCCamera&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;UVCCamera&lt;/a&gt;,参考这个库，配置Andoird工程，依赖库接入，把外接usbcamera 流程跑通不难。&lt;/p&gt;
+&lt;p&gt;手头设备是海康威视的4K摄像头，run起立 camera画面也正常出来了。 如果都这么顺利的话，那就没这篇文章了 😂😂😂&lt;/p&gt;
+&lt;h3 id=&quot;4k&quot;&gt;&lt;a href=&quot;#4k&quot; class=&quot;headerlink&quot; title=&quot;4k&quot;&gt;&lt;/a&gt;4k&lt;/h3&gt;&lt;p&gt;画面是出来了，发现分辨率最多只拉到2k（2560 x 1440），完全没有发挥出4k的能力。 比较容易想到的是 线 或者 hub 用的是usb2.0的（480Mbit/s），传输速度不够，所以出不了4K。&lt;br&gt;搞一根3.0的线 确定口子也是3.0的之后，再次跑起来，发现4k画面花了，只有顶上一点点内容，绝大部分是灰的，懵逼开始…&lt;/p&gt;
     
     </summary>
     
