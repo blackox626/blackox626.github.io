@@ -11,6 +11,7 @@
         <tag>camera</tag>
         <tag>android</tag>
         <tag>usb</tag>
+        <tag>uvc</tag>
       </tags>
   </entry>
   <entry>
@@ -168,8 +169,8 @@
         <category>media</category>
       </categories>
       <tags>
-        <tag>YUV</tag>
         <tag>media</tag>
+        <tag>YUV</tag>
       </tags>
   </entry>
   <entry>

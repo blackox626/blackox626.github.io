@@ -44,6 +44,8 @@
     
       <category term="usb" scheme="https://blackox.cn/tags/usb/"/>
     
+      <category term="uvc" scheme="https://blackox.cn/tags/uvc/"/>
+    
   </entry>
   
   <entry>
@@ -404,9 +406,9 @@
       <category term="media" scheme="https://blackox.cn/categories/media/"/>
     
     
-      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
-    
       <category term="media" scheme="https://blackox.cn/tags/media/"/>
+    
+      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
     
   </entry>
   
