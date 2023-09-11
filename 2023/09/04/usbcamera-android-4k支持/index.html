@@ -499,7 +499,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">14k</span>
+                <span title="本文字数">17k</span>
               
 
               
@@ -513,7 +513,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">12 分钟</span>
+                <span title="阅读时长">15 分钟</span>
               
             </div>
           
@@ -578,7 +578,9 @@
 </ol>
 <p>最终 两种方案 尝试下 都可以解决问题。。</p>
 <p>happy …</p>
-
+<h3 id="other"><a href="#other" class="headerlink" title="other"></a>other</h3><p>针对这两点 官方代码的提交历史</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">libuvc </span><br><span class="line"></span><br><span class="line">Updating LibUVC; Adds support SS USB, Modify to support MSFT UVC metadata, Fix hang during stop, Add NV12 support, Remove debug message in release build</span><br><span class="line"></span><br><span class="line">86ad9640 Wes Barcalow &lt;wesbarc@microsoft.com&gt; on 2019/5/10 at 07:34</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">libusb</span><br><span class="line"></span><br><span class="line">linux_usbfs: Improve isochronous transfer submission and error reporting</span><br><span class="line"></span><br><span class="line">The Linux kernel has changed the maximum allowed packet length per</span><br><span class="line">isochronous packet numerous times, which can create difficulties in</span><br><span class="line">trying to report appropriate errors back to the user when submitting too</span><br><span class="line">large of a packet on older kernels.</span><br><span class="line"></span><br><span class="line">In an attempt to improve this situation, this commit adds logic that</span><br><span class="line">will use different per-packet limits based on the detected kernel</span><br><span class="line">version. Additionally, the logic has been improved to split URBs based</span><br><span class="line">on the number of isochronous packets per URB, which is currently (and</span><br><span class="line">has been forever) limited to 128.</span><br><span class="line"></span><br><span class="line">Finally, the error reporting during URB submission has been improved to</span><br><span class="line">catch and report errors relating to the transfer length being too large.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">8aad7fd1 Chris Dickens &lt;christopher.a.dickens@gmail.com&gt; on 2017/12/27 at 11:15</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -904,7 +906,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#usbcamera"><span class="nav-text">usbcamera</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4k"><span class="nav-text">4k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#libXXX"><span class="nav-text">libXXX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闪烁"><span class="nav-text">闪烁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log"><span class="nav-text">log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uvc-usb"><span class="nav-text">uvc/usb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#happy"><span class="nav-text">happy</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#usbcamera"><span class="nav-text">usbcamera</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4k"><span class="nav-text">4k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#libXXX"><span class="nav-text">libXXX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闪烁"><span class="nav-text">闪烁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log"><span class="nav-text">log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uvc-usb"><span class="nav-text">uvc/usb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#happy"><span class="nav-text">happy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other"><span class="nav-text">other</span></a></li></ol></div>
             
 
           </div>
@@ -938,7 +940,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">482k</span>
+    <span title="站点总字数">483k</span>
   
 
   
@@ -947,7 +949,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">7:18</span>
+    <span title="站点阅读时长">7:19</span>
   
 </div>
 
