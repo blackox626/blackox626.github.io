@@ -402,9 +402,9 @@
       <category term="media" scheme="https://blackox.cn/categories/media/"/>
     
     
-      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
-    
       <category term="media" scheme="https://blackox.cn/tags/media/"/>
+    
+      <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
     
   </entry>
   
@@ -457,7 +457,7 @@
     <link href="https://blackox.cn/2022/08/18/HDR%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox.cn/2022/08/18/HDR笔记/</id>
     <published>2022-08-18T09:43:46.000Z</published>
-    <updated>2022-09-13T02:35:07.814Z</updated>
+    <updated>2023-09-12T03:14:36.165Z</updated>
     
     <summary type="html">
     
@@ -481,9 +481,9 @@
       <category term="HDR" scheme="https://blackox.cn/categories/HDR/"/>
     
     
-      <category term="HDR" scheme="https://blackox.cn/tags/HDR/"/>
-    
       <category term="YUV" scheme="https://blackox.cn/tags/YUV/"/>
+    
+      <category term="HDR" scheme="https://blackox.cn/tags/HDR/"/>
     
       <category term="OPENGL" scheme="https://blackox.cn/tags/OPENGL/"/>
     
