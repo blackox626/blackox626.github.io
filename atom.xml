@@ -228,7 +228,7 @@
     <link href="https://blackox.cn/2022/10/28/MP4%E7%AC%94%E8%AE%B0/"/>
     <id>https://blackox.cn/2022/10/28/MP4笔记/</id>
     <published>2022-10-28T08:34:53.000Z</published>
-    <updated>2022-11-01T01:50:45.103Z</updated>
+    <updated>2023-12-12T08:34:53.000Z</updated>
     
     <summary type="html">
     
@@ -237,6 +237,8 @@
     </summary>
     
       <category term="media" scheme="https://blackox.cn/categories/media/"/>
+    
+      <category term="h264" scheme="https://blackox.cn/categories/media/h264/"/>
     
     
       <category term="media" scheme="https://blackox.cn/tags/media/"/>
