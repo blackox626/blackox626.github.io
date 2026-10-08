@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在 Spine 角色换装场景里，骨骼和动画可以复用，但身体、眼睛、头发、服饰等部件会带来大量纹理。PNG 在磁盘上看起来并不大，加载成 GPU 纹理之后，占用却可能增长很多。 这次给 Spine iOS 接入 ASTC，主要想解决三个问题：让运行时能够读取 ASTC 文件，避免把压缩纹理展开成 RGBA，并把这些纹理传到现有的 Metal 渲染器。动画、骨骼和换装逻辑继续沿用 Spine。 本文以">
+<meta name="keywords" content="metal,ios,Spine,ASTC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让 Spine iOS 支持 ASTC：从纹理加载到 Metal 渲染">
+<meta property="og:url" content="https://blackox.cn/2026/10/08/spine-ios-astc/index.html">
+<meta property="og:site_name" content="BLACK_OX">
+<meta property="og:description" content="在 Spine 角色换装场景里，骨骼和动画可以复用，但身体、眼睛、头发、服饰等部件会带来大量纹理。PNG 在磁盘上看起来并不大，加载成 GPU 纹理之后，占用却可能增长很多。 这次给 Spine iOS 接入 ASTC，主要想解决三个问题：让运行时能够读取 ASTC 文件，避免把压缩纹理展开成 RGBA，并把这些纹理传到现有的 Metal 渲染器。动画、骨骼和换装逻辑继续沿用 Spine。 本文以">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://blackox.cn/images/spine-ios-astc-pipeline.svg">
+<meta property="og:updated_time" content="2026-10-08T10:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="让 Spine iOS 支持 ASTC：从纹理加载到 Metal 渲染">
+<meta name="twitter:description" content="在 Spine 角色换装场景里，骨骼和动画可以复用，但身体、眼睛、头发、服饰等部件会带来大量纹理。PNG 在磁盘上看起来并不大，加载成 GPU 纹理之后，占用却可能增长很多。 这次给 Spine iOS 接入 ASTC，主要想解决三个问题：让运行时能够读取 ASTC 文件，避免把压缩纹理展开成 RGBA，并把这些纹理传到现有的 Metal 渲染器。动画、骨骼和换装逻辑继续沿用 Spine。 本文以">
+<meta name="twitter:image" content="https://blackox.cn/images/spine-ios-astc-pipeline.svg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="BLACK_OX" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://blackox.cn/2026/10/08/spine-ios-astc/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>让 Spine iOS 支持 ASTC：从纹理加载到 Metal 渲染 | BLACK_OX</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BLACK_OX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">The palest ink is better than the best memory</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/blackox626" class="github-corner" title="Fo Fo Fo Follow me 😁" aria-label="Fo Fo Fo Follow me 😁" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blackox.cn/2026/10/08/spine-ios-astc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BLACK_OX">
+      <meta itemprop="description" content="Developer...">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BLACK_OX">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">让 Spine iOS 支持 ASTC：从纹理加载到 Metal 渲染
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2026-10-08 18:00:00" itemprop="dateCreated datePublished" datetime="2026-10-08T18:00:00+08:00">2026-10-08</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ios/" itemprop="url" rel="index"><span itemprop="name">ios</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2026/10/08/spine-ios-astc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2026/10/08/spine-ios-astc/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2026/10/08/spine-ios-astc/" class="leancloud_visitors" data-flag-title="让 Spine iOS 支持 ASTC：从纹理加载到 Metal 渲染">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">47k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">43 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在 Spine 角色换装场景里，骨骼和动画可以复用，但身体、眼睛、头发、服饰等部件会带来大量纹理。PNG 在磁盘上看起来并不大，加载成 GPU 纹理之后，占用却可能增长很多。</p>
+<p>这次给 Spine iOS 接入 ASTC，主要想解决三个问题：让运行时能够读取 ASTC 文件，避免把压缩纹理展开成 RGBA，并把这些纹理传到现有的 Metal 渲染器。动画、骨骼和换装逻辑继续沿用 Spine。</p>
+<p>本文以 <code>4.2_astc</code> 分支的三个提交为线索，记录资源转换、加载、渲染接入和多页换装的实现，也说明当前方案还需要补齐的地方。</p>
+<a id="more"></a>
+<h2 id="背景：PNG-文件大小与纹理内存是两回事"><a href="#背景：PNG-文件大小与纹理内存是两回事" class="headerlink" title="背景：PNG 文件大小与纹理内存是两回事"></a>背景：PNG 文件大小与纹理内存是两回事</h2><p>原来的 Spine iOS 加载链路可以概括为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PNG 文件 → UIImage / CGImage → MTKTextureLoader → RGBA 纹理 → Metal 渲染</span><br></pre></td></tr></table></figure>
+<p>PNG 是图片文件的压缩格式。经过图片解码后，假设创建的是 RGBA8 纹理，每个像素需要 4 字节。只考虑一层 mipmap 的像素数据，计算方式是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RGBA8 数据大小 = width × height × 4</span><br></pre></td></tr></table></figure>
+<p>仓库里的 spineboy 页尺寸为 <code>1024 × 256</code>，对应：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1024 × 256 × 4 = 1,048,576 字节 = 1 MiB</span><br></pre></td></tr></table></figure>
+<p>这张 PNG 的文件大小是 <code>244,861</code> 字节，约 <code>239 KiB</code>。文件压得小，上传后的 RGBA 数据仍然有 <code>1 MiB</code>。资源页越多，这个差异越值得关注。</p>
+<p>ASTC（Adaptive Scalable Texture Compression）是一种面向 GPU 的有损纹理压缩格式。支持它的硬件能够直接采样压缩纹理，在采样过程中解码，因此 CPU 不需要先把整张图片展开为 RGBA。</p>
+<p>目标链路变成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ASTC 文件 → 读取压缩块 → ASTC 格式的 MTLTexture → Metal 渲染</span><br></pre></td></tr></table></figure>
+<p><img src="/images/spine-ios-astc-pipeline.svg" alt="Spine iOS 的 PNG 与 ASTC 纹理加载链路"></p>
+<p>ASTC 省下的是纹理数据和图片解码工作。文件读取、文件头解析、暂存 buffer 和 GPU 上传仍然存在，不能把它理解成整个加载过程没有 CPU 开销。</p>
+<h2 id="ASTC-的块大小如何影响体积"><a href="#ASTC-的块大小如何影响体积" class="headerlink" title="ASTC 的块大小如何影响体积"></a>ASTC 的块大小如何影响体积</h2><p>ASTC 每个压缩块固定为 <code>128 bit</code>，也就是 <code>16</code> 字节。块覆盖的像素越多，每个像素平均分到的 bit 越少。</p>
+<table>
+<thead>
+<tr>
+<th>块大小</th>
+<th>平均 bit / pixel</th>
+<th>大尺寸、整块图片相对 RGBA8 的数据量比值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4×4</td>
+<td>8.00</td>
+<td>约 4 倍</td>
+</tr>
+<tr>
+<td>6×6</td>
+<td>3.56</td>
+<td>约 9 倍</td>
+</tr>
+<tr>
+<td>8×8</td>
+<td>2.00</td>
+<td>约 16 倍</td>
+</tr>
+<tr>
+<td>12×12</td>
+<td>0.89</td>
+<td>约 36 倍</td>
+</tr>
+</tbody>
+</table>
+<p>这些比值只比较基础层的纹理数据，不包含 GPU 分配对齐、文件头或 mipmap。</p>
+<p>对于二维 ASTC，精确的压缩数据大小是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">blocksWide = ceil(width / blockX)</span><br><span class="line">blocksHigh = ceil(height / blockY)</span><br><span class="line">payloadBytes = blocksWide × blocksHigh × 16</span><br><span class="line">fileBytes = 16 + payloadBytes</span><br></pre></td></tr></table></figure>
+<p>这里前面的 <code>16</code> 是裸 <code>.astc</code> 文件头。宽高不必是块大小的整数倍，边缘不足一个块的区域也占一个完整压缩块。</p>
+<p>spineboy 使用 <code>8×8</code>，因此：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ceil(1024 / 8) × ceil(256 / 8) × 16</span><br><span class="line">= 128 × 32 × 16</span><br><span class="line">= 65,536 字节</span><br></pre></td></tr></table></figure>
+<p>加上文件头，文件正好是 <code>65,552</code> 字节。与同尺寸 RGBA8 的基础层数据相比，减少了 <code>16</code> 倍。</p>
+<p>块越大，编码误差通常越明显。细线、眼睛、透明边缘和渐变不一定适合直接用 <code>8×8</code>，可以从 <code>4×4</code>、<code>6×6</code> 开始比较。这个项目的示例统一用了 <code>8×8</code>，它是本次资源的选择，并不是所有 Spine 角色的最佳参数。</p>
+<h2 id="实现过程：三个提交分别完成了什么"><a href="#实现过程：三个提交分别完成了什么" class="headerlink" title="实现过程：三个提交分别完成了什么"></a>实现过程：三个提交分别完成了什么</h2><p>对照基础分支 <code>4.2</code>，ASTC 分支只有三次新增提交：</p>
+<table>
+<thead>
+<tr>
+<th>提交</th>
+<th>日期</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cfa4c8c1d</code> · spine astc ios demo</td>
+<td>2026-07-28</td>
+<td>增加 ASTC 加载器与扩展 API，打通 Metal 渲染，接入 spineboy 示例</td>
+</tr>
+<tr>
+<td><code>6219ef34a</code> · convert sh</td>
+<td>2026-07-28</td>
+<td>增加 PNG → ASTC 转换脚本</td>
+</tr>
+<tr>
+<td><code>98b5d1ace</code> · spine astc</td>
+<td>2026-07-30</td>
+<td>增加 189 页 ASTC 资源和动态组合皮肤示例</td>
+</tr>
+</tbody>
+</table>
+<p>第一笔完成了核心实现。第二、三笔没有继续修改 <code>Sources/Spine</code> 中的 ASTC 加载器或渲染器，分别补充资源生产工具和复杂业务场景。</p>
+<p>这个区分很有用：第三笔可以说明方案接入了多页换装示例，但不能据此认定加载失败、页索引或设备兼容问题已经修复。</p>
+<h2 id="代码结构：从文件到渲染器"><a href="#代码结构：从文件到渲染器" class="headerlink" title="代码结构：从文件到渲染器"></a>代码结构：从文件到渲染器</h2><p>这次主要涉及六个文件，均位于 <code>spine-ios/Sources/Spine/</code>：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SpineASTCLoader.swift</code></td>
+<td>检测数据格式，解析 ASTC 头，创建并上传 Metal 纹理；普通图片交给 MTKTextureLoader</td>
+</tr>
+<tr>
+<td><code>Spine.Generated+Extensions+ASTC.swift</code></td>
+<td>解析 atlas、选择页文件，返回 <code>Atlas</code> 与 <code>[MTLTexture]</code></td>
+</tr>
+<tr>
+<td><code>SkeletonDrawableWrapper+ASTC.swift</code></td>
+<td>加载骨骼，将 Metal 纹理保存到 drawable wrapper</td>
+</tr>
+<tr>
+<td><code>SpineUIView+ASTC.swift</code></td>
+<td>提供带 <code>useASTCIfAvailable</code> 参数的 Bundle 加载入口</td>
+</tr>
+<tr>
+<td><code>SpineUIView.swift</code></td>
+<td>从 drawable 取出纹理并传给渲染器</td>
+</tr>
+<tr>
+<td><code>Metal/SpineRenderer.swift</code></td>
+<td>优先使用已加载的 Metal 纹理，按 atlas 页索引绑定纹理</td>
+</tr>
+</tbody>
+</table>
+<p>具体调用链如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SpineUIView(useASTCIfAvailable: true)</span><br><span class="line">    ↓</span><br><span class="line">SkeletonDrawableWrapper.fromBundleWithASTCSupport(...)</span><br><span class="line">    ↓</span><br><span class="line">Atlas.fromBundleWithMetalTextures(...)</span><br><span class="line">    ↓</span><br><span class="line">SpineASTCLoader.loadMetalTexture(...)</span><br><span class="line">    ↓</span><br><span class="line">MTLTexture 数组保存在 SkeletonDrawableWrapper 中</span><br><span class="line">    ↓</span><br><span class="line">SpineUIView.load(drawable:)</span><br><span class="line">    ↓</span><br><span class="line">SpineRenderer 按 renderCommand.atlasPage 取纹理</span><br></pre></td></tr></table></figure>
+<p>Spine 的 C++ atlas 解析、骨骼数据加载、动画更新和顶点生成仍然沿用原有实现。ASTC 接入集中在资源加载与纹理传递这两段。</p>
+<h3 id="先由-atlas-决定页顺序，再选择页文件"><a href="#先由-atlas-决定页顺序，再选择页文件" class="headerlink" title="先由 atlas 决定页顺序，再选择页文件"></a>先由 atlas 决定页顺序，再选择页文件</h3><p>Atlas 扩展先通过 <code>spine_atlas_load</code> 解析文本，然后按原生 atlas 的页顺序取得文件名。</p>
+<p>Bundle 加载时，文件选择逻辑是：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> nameWithoutExt = (name <span class="keyword">as</span> <span class="type">NSString</span>).deletingPathExtension</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> astcPath = bundle.path(</span><br><span class="line">    forResource: nameWithoutExt,</span><br><span class="line">    ofType: <span class="string">"astc"</span></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">try</span> <span class="type">Data</span>(contentsOf: <span class="type">URL</span>(fileURLWithPath: astcPath))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">try</span> await <span class="type">FileSource</span>.bundle(</span><br><span class="line">    fileName: name,</span><br><span class="line">    bundle: bundle</span><br><span class="line">).load()</span><br></pre></td></tr></table></figure>
+<p>例如 atlas 引用的是 <code>spineboy-pma.png</code>，加载器会先寻找 <code>spineboy-pma.astc</code>。找不到时才读取原来的 PNG，所以接入 ASTC 并不一定要改 atlas。</p>
+<p>分支中还提供了 <code>Atlas.fromFileWithMetalTextures</code>，用于从 atlas 所在文件夹查找页资源。但是 UIView 和 wrapper 的便利 ASTC 入口目前只实现了 Bundle 版本；原有文件、HTTP 入口不会自动切换到这套逻辑。</p>
+<p>这里的回退有一个边界：它只处理“同名 ASTC 不存在”。如果 ASTC 存在但损坏或无法上传，并不会重试 PNG。如果 atlas 本身引用 <code>.astc</code>，文件不存在后再加载原文件，仍然是在找同一个 <code>.astc</code>，也不能自动回退到 PNG。</p>
+<h3 id="Wrapper-如何兼容原来的-UIImage-API"><a href="#Wrapper-如何兼容原来的-UIImage-API" class="headerlink" title="Wrapper 如何兼容原来的 UIImage API"></a>Wrapper 如何兼容原来的 UIImage API</h3><p>原来的 <code>SkeletonDrawableWrapper</code> 接收 <code>atlasPages: [UIImage]</code>。这次没有直接改掉这个公开接口，而是为每个 Metal 纹理创建一个 <code>1×1</code> 的 UIImage 占位，再通过 Objective-C 关联对象保存真实纹理：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">objc_setAssociatedObject(</span><br><span class="line">    wrapper,</span><br><span class="line">    &amp;<span class="type">AssociatedKeys</span>.metalTextures,</span><br><span class="line">    metalTextures,</span><br><span class="line">    .<span class="type">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>渲染时取的是 <code>wrapper.metalTextures</code>，占位图不包含原始图片像素，也不会被用于 ASTC 渲染。</p>
+<p>这样能够较少改动现有 API，但也有代价：<code>atlasPages</code> 不再代表真实纹理的尺寸和内容。其他读取 UIImage、做导出或 CPU 绘制的功能，不能假设 ASTC drawable 中的这些占位图仍然可用。长期维护时，可以考虑把真实纹理和资源所有权变成 wrapper 的明确属性。</p>
+<h2 id="加载核心：ASTC-压缩数据如何上传到-Metal"><a href="#加载核心：ASTC-压缩数据如何上传到-Metal" class="headerlink" title="加载核心：ASTC 压缩数据如何上传到 Metal"></a>加载核心：ASTC 压缩数据如何上传到 Metal</h2><h3 id="读取-16-字节文件头"><a href="#读取-16-字节文件头" class="headerlink" title="读取 16 字节文件头"></a>读取 16 字节文件头</h3><p>这套实现读取的是裸 <code>.astc</code> 文件，而不是 KTX / KTX2 容器。文件头布局如下：</p>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>字节数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>Magic，文件字节为 <code>13 AB A1 5C</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>blockX</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>blockY</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>blockZ</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>width，小端整数</td>
+</tr>
+<tr>
+<td>10</td>
+<td>3</td>
+<td>height，小端整数</td>
+</tr>
+<tr>
+<td>13</td>
+<td>3</td>
+<td>depth，小端整数</td>
+</tr>
+</tbody>
+</table>
+<p>Magic 按小端解释为 <code>0x5CA1AB13</code>。本项目使用二维 LDR 纹理，因此正常资源的 <code>blockZ</code> 和 <code>depth</code> 都是 <code>1</code>。</p>
+<p>分支中的宽高解析代码是：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> blockX = header[<span class="number">4</span>]</span><br><span class="line"><span class="keyword">let</span> blockY = header[<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> width = <span class="type">Int</span>(header[<span class="number">7</span>])</span><br><span class="line">    | (<span class="type">Int</span>(header[<span class="number">8</span>]) &lt;&lt; <span class="number">8</span>)</span><br><span class="line">    | (<span class="type">Int</span>(header[<span class="number">9</span>]) &lt;&lt; <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> height = <span class="type">Int</span>(header[<span class="number">10</span>])</span><br><span class="line">    | (<span class="type">Int</span>(header[<span class="number">11</span>]) &lt;&lt; <span class="number">8</span>)</span><br><span class="line">    | (<span class="type">Int</span>(header[<span class="number">12</span>]) &lt;&lt; <span class="number">16</span>)</span><br></pre></td></tr></table></figure>
+<p>文件头本身没有一个字段能直接告诉加载器应该用 LDR linear 还是 sRGB 采样，编码方式与 Metal 像素格式需要由资源流程约定。</p>
+<h3 id="创建压缩纹理"><a href="#创建压缩纹理" class="headerlink" title="创建压缩纹理"></a>创建压缩纹理</h3><p>根据块尺寸映射 Metal 格式。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">4×4   → .astc_4x4_ldr</span><br><span class="line">6×6   → .astc_6x6_ldr</span><br><span class="line">8×8   → .astc_8x8_ldr</span><br><span class="line">12×12 → .astc_12x12_ldr</span><br></pre></td></tr></table></figure>
+<p>完整映射支持 14 种标准二维块尺寸，包括 <code>5×4</code>、<code>8×6</code> 等非正方形块。创建纹理时使用该压缩格式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> descriptor = <span class="type">MTLTextureDescriptor</span>.texture2DDescriptor(</span><br><span class="line">    pixelFormat: pixelFormat,</span><br><span class="line">    width: width,</span><br><span class="line">    height: height,</span><br><span class="line">    mipmapped: <span class="literal">false</span></span><br><span class="line">)</span><br><span class="line">descriptor.usage = .shaderRead</span><br><span class="line">descriptor.storageMode = .<span class="keyword">private</span></span><br></pre></td></tr></table></figure>
+<p>这里的 <code>pixelFormat</code> 不能换成 <code>.rgba8Unorm</code>，否则纹理不再是 ASTC。当前纹理只有基础层，不生成 mipmap。</p>
+<h3 id="通过-staging-buffer-和-blit-上传"><a href="#通过-staging-buffer-和-blit-上传" class="headerlink" title="通过 staging buffer 和 blit 上传"></a>通过 staging buffer 和 blit 上传</h3><p><code>.private</code> 纹理由 GPU 使用，因此先把压缩数据放入 CPU 可写的共享 buffer，再通过 blit 复制到纹理。</p>
+<p>下面是分支中的核心上传代码摘录，省略了纹理、队列和 buffer 创建时的错误处理：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> imageData = data.subdata(<span class="keyword">in</span>: <span class="number">16</span>..&lt;data.<span class="built_in">count</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> blocksWide = (width + <span class="type">Int</span>(blockX) - <span class="number">1</span>) / <span class="type">Int</span>(blockX)</span><br><span class="line"><span class="keyword">let</span> bytesPerRow = blocksWide * <span class="number">16</span></span><br><span class="line"></span><br><span class="line">blitEncoder.copy(</span><br><span class="line">    from: buffer,</span><br><span class="line">    sourceOffset: <span class="number">0</span>,</span><br><span class="line">    sourceBytesPerRow: bytesPerRow,</span><br><span class="line">    sourceBytesPerImage: imageData.<span class="built_in">count</span>,</span><br><span class="line">    sourceSize: <span class="type">MTLSize</span>(width: width, height: height, depth: <span class="number">1</span>),</span><br><span class="line">    to: texture,</span><br><span class="line">    destinationSlice: <span class="number">0</span>,</span><br><span class="line">    destinationLevel: <span class="number">0</span>,</span><br><span class="line">    destinationOrigin: <span class="type">MTLOrigin</span>(x: <span class="number">0</span>, y: <span class="number">0</span>, z: <span class="number">0</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">blitEncoder.endEncoding()</span><br><span class="line">commandBuffer.commit()</span><br><span class="line">commandBuffer.waitUntilCompleted()</span><br></pre></td></tr></table></figure>
+<p><code>bytesPerRow</code> 按“每行压缩块数 × 16”计算，不能沿用 RGBA 的 <code>width × 4</code>。上传的 buffer 不包含文件头；copy 中的纹理尺寸仍然用原始像素宽高。</p>
+<p>实际上传还需要满足目标设备的 Metal blit 对齐和压缩格式边界要求。应打开 Metal API Validation 验证整块尺寸、非整块尺寸和很小的纹理，不能仅根据文件长度正确就认定 GPU 上传一定成功。</p>
+<p>当前实现每页都会新建 command queue，并同步等待上传完成。这样便于保证返回的纹理已就绪，但多页资源的加载成本会累加。后续可以复用队列、批量上传和异步通知，同时保持渲染前的同步关系。</p>
+<h2 id="渲染接入：沿用现有-Shader"><a href="#渲染接入：沿用现有-Shader" class="headerlink" title="渲染接入：沿用现有 Shader"></a>渲染接入：沿用现有 Shader</h2><p>渲染器原来只接收 <code>[UIImage]</code>，内部再创建纹理。现在同时支持外部传入的 <code>[MTLTexture]</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> metalTextures = metalTextures &#123;</span><br><span class="line">    textures = metalTextures</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">let</span> atlasPages = atlasPages &#123;</span><br><span class="line">    <span class="comment">// 保留原来的 UIImage → MTKTextureLoader 路径</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="type">SpineError</span>(<span class="string">"No textures provided"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是分支初始化逻辑的简化摘录。有 Metal 纹理时直接使用，避免再次走 UIImage 转换。</p>
+<p>绘制时仍然根据 <code>renderCommand.atlasPage</code>，从 <code>textures</code> 数组中取出纹理并绑定给 fragment shader。Shader 的采样方式不需要为 ASTC 增加分支：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const half4 colorSample = colorTexture.sample(</span><br><span class="line">    textureSampler,</span><br><span class="line">    in.textureCoordinate</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">return simd_float4(colorSample) * in.color;</span><br></pre></td></tr></table></figure>
+<p>压缩格式由 Metal 纹理对象描述，解码由支持 ASTC 的 GPU 完成。动画状态、UV、顶点颜色和混合模式仍按原有逻辑处理。</p>
+<p>需要注意，本分支 Shader 的 min / mag filter 仍然是 <code>nearest</code>。即使 atlas 写了 <code>filter: Linear, Linear</code>，也没有在这次接入中增加按 atlas 配置创建 sampler 的逻辑。ASTC 支持与采样过滤是两个独立问题。</p>
+<h2 id="色彩和透明度：编码器与渲染配置必须一致"><a href="#色彩和透明度：编码器与渲染配置必须一致" class="headerlink" title="色彩和透明度：编码器与渲染配置必须一致"></a>色彩和透明度：编码器与渲染配置必须一致</h2><h3 id="为什么使用-cl-和-LDR-格式"><a href="#为什么使用-cl-和-LDR-格式" class="headerlink" title="为什么使用 -cl 和 LDR 格式"></a>为什么使用 -cl 和 LDR 格式</h3><p>原来的普通图片纹理加载配置是：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">options: [</span><br><span class="line">    .textureUsage: <span class="type">NSNumber</span>(</span><br><span class="line">        value: <span class="type">MTLTextureUsage</span>.shaderRead.rawValue</span><br><span class="line">    ),</span><br><span class="line">    .<span class="type">SRGB</span>: <span class="literal">false</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>这次 ASTC 使用 <code>.astc_*_ldr</code>，脚本使用 <code>astcenc -cl</code>，与现有“不进行 sRGB 采样转换”的行为保持一致。</p>
+<p>这里容易混淆两个概念：</p>
+<ul>
+<li><code>.SRGB: false</code> 表示采样时不做 sRGB 到线性的转换，不代表 PNG 原始像素已经变成线性光数据。</li>
+<li>编码器的 <code>-cl</code> / <code>-cs</code> 是编码 profile，Metal 的 <code>_ldr</code> / <code>_srgb</code> 决定纹理采样的解释；单改其中一个并不能保证颜色正确。</li>
+</ul>
+<p>如果之后将整个渲染链路切换为线性光照或 sRGB 输出，需要一起检查图片像素、编码 profile、纹理格式、顶点颜色、混合和渲染目标。</p>
+<p>提交历史里第一笔就已经使用 LDR，第二笔只是补上匹配的转换脚本。仓库说明文档里仍有 sRGB 的旧描述，本文以实际 Swift 枚举和脚本参数为准，不把它写成一次独立的色差修复。</p>
+<h3 id="PMA-不会因为-ASTC-接入而自动处理"><a href="#PMA-不会因为-ASTC-接入而自动处理" class="headerlink" title="PMA 不会因为 ASTC 接入而自动处理"></a>PMA 不会因为 ASTC 接入而自动处理</h3><p>Spine atlas 中的 <code>pma: true</code> 表示使用预乘 alpha：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">storedRGB = originalRGB × alpha</span><br></pre></td></tr></table></figure>
+<p>渲染器继续从 <code>atlas.isPma</code> 决定混合因子。ASTC 加载器不会对像素做预乘，也不会替资源修正 atlas 的 PMA 声明。</p>
+<p>因此源 PNG 已经是 PMA 时，转换后仍应保持 PMA，不能再次预乘；源图片使用 straight alpha 时，则需要让 atlas 和混合方式与之匹配。编码器提供 <code>-pp-premultiply</code>，但本文脚本没有启用它，不能仅凭文件名带 <code>pma</code> 就决定加上这个参数。</p>
+<p>检查画质时，建议把角色分别放到浅色、深色和棋盘背景上，特别观察发丝、眼睛、轮廓和半透明部件。这些位置最容易暴露预乘状态不一致或压缩误差。</p>
+<h2 id="资源转换脚本：参数、完整代码与使用方式"><a href="#资源转换脚本：参数、完整代码与使用方式" class="headerlink" title="资源转换脚本：参数、完整代码与使用方式"></a>资源转换脚本：参数、完整代码与使用方式</h2><h3 id="安装编码器与单文件转换"><a href="#安装编码器与单文件转换" class="headerlink" title="安装编码器与单文件转换"></a>安装编码器与单文件转换</h3><p>转换发生在离线资源生产阶段，iOS 运行时不负责 ASTC 编码。macOS 可以安装 Arm 的 astcenc：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install astc-encoder</span><br><span class="line"></span><br><span class="line">astcenc -cl spineboy-pma.png spineboy-pma.astc 8x8 -medium</span><br></pre></td></tr></table></figure>
+<p>参数从左到右分别是：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-cl</code></td>
+<td>编码为 LDR linear profile，匹配当前运行时约定</td>
+</tr>
+<tr>
+<td><code>spineboy-pma.png</code></td>
+<td>输入图片</td>
+</tr>
+<tr>
+<td><code>spineboy-pma.astc</code></td>
+<td>输出裸 ASTC 文件</td>
+</tr>
+<tr>
+<td><code>8x8</code></td>
+<td>块大小，决定固定尺寸图片的压缩数据量</td>
+</tr>
+<tr>
+<td><code>-medium</code></td>
+<td>编码搜索质量预设</td>
+</tr>
+</tbody>
+</table>
+<p>在尺寸和块大小相同的情况下，<code>-medium</code> 换成 <code>-thorough</code>，不会改变文件的数据量，主要改变离线编码时间和重建画质。它与调小块尺寸不是同一种优化。</p>
+<h3 id="仓库脚本做了什么"><a href="#仓库脚本做了什么" class="headerlink" title="仓库脚本做了什么"></a>仓库脚本做了什么</h3><p><code>6219ef34a</code> 增加的脚本位于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spine-ios/Example/convert_astc.sh</span><br></pre></td></tr></table></figure>
+<p>它定位脚本旁的 <code>Spine iOS Example/Assets/spineboy</code> 文件夹，转换其中的 PNG。块大小取第一个参数，默认 <code>8x8</code>；编码质量取第二个参数，默认 <code>-medium</code>。</p>
+<p>已有 ASTC 会先备份为 <code>.bak</code>。转换后打印 PNG 与 ASTC 的文件大小比值，再复制 atlas，把 <code>.png</code> 替换成 <code>.astc</code>，生成 <code>*-astc.atlas</code>。</p>
+<p>下面保留提交中的完整脚本，可以<a href="/downloads/code/spine-ios-astc/convert_astc.sh">下载 convert_astc.sh</a>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Spine ASTC 纹理转换脚本</span></span><br><span class="line"><span class="comment"># 使用 Linear 色彩空间以匹配 Spine iOS 的 PNG 加载方式</span></span><br><span class="line"></span><br><span class="line">SCRIPT_DIR=<span class="string">"<span class="variable">$(cd "$(dirname "$0")</span>"</span> &amp;&amp; <span class="built_in">pwd</span>)<span class="string">"</span></span><br><span class="line"><span class="string">ASSETS_DIR="</span><span class="variable">$SCRIPT_DIR</span>/Spine iOS Example/Assets/spineboy<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo "</span>╔══════════════════════════════════════════════════════════════════╗<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>║          Spine ASTC Texture Conversion                          ║<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>╚══════════════════════════════════════════════════════════════════╝<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span><span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 检查 astcenc</span></span><br><span class="line"><span class="string">if ! command -v astcenc &amp;&gt; /dev/null; then</span></span><br><span class="line"><span class="string">    echo "</span>❌ Error: astcenc not found<span class="string">"</span></span><br><span class="line"><span class="string">    echo "</span>Install: brew install astc-encoder<span class="string">"</span></span><br><span class="line"><span class="string">    echo "</span>https://github.com/ARM-software/astc-encoder/releases<span class="string">"</span></span><br><span class="line"><span class="string">    exit 1</span></span><br><span class="line"><span class="string">fi</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">cd "</span><span class="variable">$ASSETS_DIR</span><span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 转换参数</span></span><br><span class="line"><span class="string">BLOCK_SIZE="</span><span class="variable">$&#123;1:-8x8&#125;</span><span class="string">"      # 默认 8x8</span></span><br><span class="line"><span class="string">QUALITY="</span><span class="variable">$&#123;2:--medium&#125;</span><span class="string">"      # 默认 -medium</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo "</span>Settings:<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>  Block size: <span class="variable">$BLOCK_SIZE</span><span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>  Quality: <span class="variable">$QUALITY</span><span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>  Color space: Linear (-cl)<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span><span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">for png in *.png; do</span></span><br><span class="line"><span class="string">    if [ -f "</span><span class="variable">$png</span><span class="string">" ]; then</span></span><br><span class="line"><span class="string">        base="</span><span class="variable">$&#123;png%.png&#125;</span><span class="string">"</span></span><br><span class="line"><span class="string">        astc="</span><span class="variable">$&#123;base&#125;</span>.astc<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        echo "</span>Converting: <span class="variable">$png</span> → <span class="variable">$astc</span><span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        # 备份如果存在</span></span><br><span class="line"><span class="string">        [ -f "</span><span class="variable">$astc</span><span class="string">" ] &amp;&amp; cp "</span><span class="variable">$astc</span><span class="string">" "</span><span class="variable">$&#123;astc&#125;</span>.bak<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        # 转换 (Linear 色彩空间)</span></span><br><span class="line"><span class="string">        astcenc -cl "</span><span class="variable">$png</span><span class="string">" "</span><span class="variable">$astc</span><span class="string">" "</span><span class="variable">$BLOCK_SIZE</span><span class="string">" "</span><span class="variable">$QUALITY</span><span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        if [ $? -eq 0 ]; then</span></span><br><span class="line"><span class="string">            size_png=<span class="variable">$(stat -f%z "$png" 2&gt;/dev/null || stat -c%s "$png")</span></span></span><br><span class="line"><span class="string">            size_astc=<span class="variable">$(stat -f%z "$astc" 2&gt;/dev/null || stat -c%s "$astc")</span></span></span><br><span class="line"><span class="string">            ratio=<span class="variable">$(echo "scale=1; $size_png / $size_astc" | bc)</span></span></span><br><span class="line"><span class="string">            echo "</span>  ✓ <span class="variable">$png</span> (<span class="variable">$size_png</span> bytes) → <span class="variable">$astc</span> (<span class="variable">$size_astc</span> bytes) - <span class="variable">$&#123;ratio&#125;</span>× compression<span class="string">"</span></span><br><span class="line"><span class="string">        else</span></span><br><span class="line"><span class="string">            echo "</span>  ✗ Failed<span class="string">"</span></span><br><span class="line"><span class="string">        fi</span></span><br><span class="line"><span class="string">        echo "</span><span class="string">"</span></span><br><span class="line"><span class="string">    fi</span></span><br><span class="line"><span class="string">done</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 更新 atlas 文件</span></span><br><span class="line"><span class="string">for atlas in *.atlas; do</span></span><br><span class="line"><span class="string">    if [ -f "</span><span class="variable">$atlas</span><span class="string">" ] &amp;&amp; [[ "</span><span class="variable">$atlas</span><span class="string">" != *"</span>-astc.atlas<span class="string">" ]]; then</span></span><br><span class="line"><span class="string">        base="</span><span class="variable">$&#123;atlas%.atlas&#125;</span><span class="string">"</span></span><br><span class="line"><span class="string">        astc_atlas="</span><span class="variable">$&#123;base&#125;</span>-astc.atlas<span class="string">"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        echo "</span>Creating: <span class="variable">$astc_atlas</span><span class="string">"</span></span><br><span class="line"><span class="string">        sed 's/\.png/.astc/g' "</span><span class="variable">$atlas</span><span class="string">" &gt; "</span><span class="variable">$astc_atlas</span><span class="string">"</span></span><br><span class="line"><span class="string">        echo "</span>  ✓ Created <span class="variable">$astc_atlas</span><span class="string">"</span></span><br><span class="line"><span class="string">    fi</span></span><br><span class="line"><span class="string">done</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo "</span><span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>✅ Conversion complete!<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span><span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>Format: LDR/Linear (matches PNG loading)<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span>Metal: MTLPixelFormatASTC_<span class="variable">$&#123;BLOCK_SIZE&#125;</span>_LDR<span class="string">"</span></span><br><span class="line"><span class="string">echo "</span><span class="string">"</span></span><br></pre></td></tr></table></figure>
+<h3 id="如何运行"><a href="#如何运行" class="headerlink" title="如何运行"></a>如何运行</h3><p>在 Spine 仓库根目录执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 8×8、medium，使用默认参数</span></span><br><span class="line">bash spine-ios/Example/convert_astc.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调小块尺寸并提高离线编码质量</span></span><br><span class="line">bash spine-ios/Example/convert_astc.sh 6x6 -thorough</span><br></pre></td></tr></table></figure>
+<p>生成的资源包括：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Assets/spineboy/</span><br><span class="line">├── spineboy-pma.png</span><br><span class="line">├── spineboy-pma.atlas</span><br><span class="line">├── spineboy-pma.astc</span><br><span class="line">└── spineboy-pma-astc.atlas</span><br></pre></td></tr></table></figure>
+<p>下载版与仓库版一致，资源路径也是固定的。单独下载后，应把它放到同样的 Example 目录结构中，或者修改 <code>ASSETS_DIR</code> 指向自己的资源文件夹。它不接受“输入目录”参数，也不递归扫描子文件夹。</p>
+<p>如果保留原 atlas 的 PNG 引用，ASTC 入口也能通过同名优先策略找到压缩纹理，并在缺少该 ASTC 时尝试 PNG。如果使用生成的 ASTC 专用 atlas，就明确依赖其中的 ASTC 文件。</p>
+<h3 id="脚本当前适用范围"><a href="#脚本当前适用范围" class="headerlink" title="脚本当前适用范围"></a>脚本当前适用范围</h3><p>这个脚本适合示例资源，接入正式资源流水线时还有几个地方要完善：</p>
+<ul>
+<li>只转换当前文件夹的 <code>*.png</code>，不处理 JPG 或子目录。</li>
+<li>atlas 替换使用全局 <code>sed</code>，适用于本例命名；更通用的实现应只修改页文件名，避免误改 region 名称。</li>
+<li>单张转换失败后继续执行，还可能生成 ASTC atlas。CI 中应检查失败并返回非零退出码，确认所有页成功后再生成 atlas。</li>
+<li>大小统计依赖 <code>stat</code> 和 <code>bc</code>；打印的是文件大小比值，不是 GPU 内存统计。</li>
+<li>脚本不生成 mipmap，不处理 PMA，也不做设备能力检查。备份文件不必加入 App 的资源 target。</li>
+</ul>
+<h2 id="接入示例与动态换装"><a href="#接入示例与动态换装" class="headerlink" title="接入示例与动态换装"></a>接入示例与动态换装</h2><h3 id="UIKit-Objective-C-入口"><a href="#UIKit-Objective-C-入口" class="headerlink" title="UIKit / Objective-C 入口"></a>UIKit / Objective-C 入口</h3><p>分支中的 spineboy 示例使用 ASTC 专用 atlas，并显式打开 ASTC：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SpineUIView *spineView = [[SpineUIView alloc]</span><br><span class="line">    initWithAtlasFileName:<span class="string">@"spineboy-pma-astc.atlas"</span></span><br><span class="line">    skeletonFileName:<span class="string">@"spineboy-pro.skel"</span></span><br><span class="line">    bundle:[<span class="built_in">NSBundle</span> mainBundle]</span><br><span class="line">    controller:<span class="keyword">self</span>.spineController</span><br><span class="line">    mode:ContentModeFit</span><br><span class="line">    alignment:AlignmentCenter</span><br><span class="line">    boundsProvider:[[SpineSetupPoseBounds alloc] init]</span><br><span class="line">    backgroundColor:[<span class="built_in">UIColor</span> clearColor]</span><br><span class="line">    useASTCIfAvailable:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<p><code>useASTCIfAvailable</code> 是选择加载路径的开关，不是完整的设备能力探测。它在这个初始化方法中是必传参数，注释中的“默认 true”并没有对应的 Swift 默认值。</p>
+<p><code>.astc</code> 和 <code>.atlas</code> 需要进入 App bundle。提交里已经把这两个资源加入示例项目的 Copy Bundle Resources；自己的工程接入时也要确认 target membership，只有磁盘上存在文件还不够。</p>
+<h3 id="加载后再组合皮肤"><a href="#加载后再组合皮肤" class="headerlink" title="加载后再组合皮肤"></a>加载后再组合皮肤</h3><p>第三笔提交加入 <code>SkinnedAnimationViewController</code>，加载 <code>skin.atlas</code> 与 <code>skin.skel</code>。拿到 drawable 后，再查找并组合身体、眼睛、头发和服装部件：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SpineSkin *customSkin =</span><br><span class="line">    [SpineSkin createWithName:<span class="string">@"custom-skin"</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">NSString</span> *skinPartName <span class="keyword">in</span> skinParts) &#123;</span><br><span class="line">    SpineSkin *partSkin =</span><br><span class="line">        [<span class="keyword">self</span>.drawable.skeletonData findSkinWithName:skinPartName];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (partSkin) &#123;</span><br><span class="line">        [customSkin addSkinWithOther:partSkin];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">self</span>.drawable.skeleton.skin = customSkin;</span><br><span class="line">[<span class="keyword">self</span>.drawable.skeleton setToSetupPose];</span><br></pre></td></tr></table></figure>
+<p><code>updateSkinParts:</code> 用相同方式替换组合皮肤。换装复用已加载的 drawable 和纹理，不需要在每次换装时重新转换或加载 ASTC。</p>
+<p>但这个示例会预先加载 atlas 的全部 189 页，并没有按当前皮肤实现懒加载。ASTC 降低了每页纹理的数据量，不等于只加载了当前可见部件。另外，自建的 <code>SpineSkin</code> 需要管理原生资源生命周期，正式实现应明确保存和释放替换下来的皮肤。</p>
+<h2 id="数据核对与验证方式"><a href="#数据核对与验证方式" class="headerlink" title="数据核对与验证方式"></a>数据核对与验证方式</h2><h3 id="能从仓库资源确认的收益"><a href="#能从仓库资源确认的收益" class="headerlink" title="能从仓库资源确认的收益"></a>能从仓库资源确认的收益</h3><p>对实际文件头和压缩数据进行统计，得到：</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>页数</th>
+<th>相同尺寸的 RGBA8 基础层数据</th>
+<th>ASTC 压缩块数据</th>
+<th>RGBA8 / ASTC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spineboy</td>
+<td>1</td>
+<td>1,048,576 字节，1 MiB</td>
+<td>65,536 字节，64 KiB</td>
+<td>16 倍</td>
+</tr>
+<tr>
+<td>换装 skin</td>
+<td>189</td>
+<td>13,679,832 字节，约 13.05 MiB</td>
+<td>897,552 字节，约 0.86 MiB</td>
+<td>约 15.24 倍</td>
+</tr>
+</tbody>
+</table>
+<p>换装资源的 ASTC 文件总大小还要加上 <code>189 × 16</code> 字节文件头，合计 <code>900,576</code> 字节。189 页都使用 <code>8×8</code>，其中 185 页至少有一个维度不是 8 的整数倍，所以整体比值低于 16。</p>
+<p>上述统计只说明资源数据量。实际 GPU allocation 可能包含对齐、页粒度和其他开销，加载峰值也包括 Data 副本、数组和 staging buffer。不能把这里的比值当成 Instruments 的完整应用内存结果。</p>
+<p>仓库文档有“加载时间约 50ms → 15ms”的描述，但没有配套的设备、采样方式或测试记录，因此不作为本文的已验证性能结论。</p>
+<h3 id="检查文件头"><a href="#检查文件头" class="headerlink" title="检查文件头"></a>检查文件头</h3><p>可以直接查看前 16 字节：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -l 16 <span class="string">"spine-ios/Example/Spine iOS Example/Assets/spineboy/spineboy-pma.astc"</span></span><br></pre></td></tr></table></figure>
+<p>本例输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00000000: 13ab a15c 0808 0100 0400 0001 0001 0000</span><br></pre></td></tr></table></figure>
+<p>对应 magic 正确、块尺寸 <code>8×8×1</code>、图片尺寸 <code>1024×256×1</code>。</p>
+<h3 id="在目标设备上验证"><a href="#在目标设备上验证" class="headerlink" title="在目标设备上验证"></a>在目标设备上验证</h3><p>文件和代码核对之后，还需要在支持 ASTC 的目标真机上检查：</p>
+<ol>
+<li>用 GPU Frame Capture 确认纹理格式是 <code>.astc_8x8_ldr</code>，尺寸与 atlas 一致；不要只根据“Loaded with ASTC support”日志判断。</li>
+<li>打开 Metal API Validation，覆盖多页、非整块尺寸、小尺寸纹理和上传失败。</li>
+<li>对照 PNG 路径，检查亮度、颜色、透明边缘和各种混合模式。ASTC 是有损压缩，允许压缩误差，不应要求像素完全相同。</li>
+<li>保持设备、动画和渲染尺寸一致，分别统计加载耗时、CPU 峰值、Metal 资源分配以及退出页面后的资源释放。</li>
+<li>检查缺少 ASTC、损坏 ASTC 和设备不支持三种情况；这三种情况不能用同一条“fallback 成功”日志代替。</li>
+</ol>
+<h2 id="当前实现还需要补齐的地方"><a href="#当前实现还需要补齐的地方" class="headerlink" title="当前实现还需要补齐的地方"></a>当前实现还需要补齐的地方</h2><h3 id="页索引必须保持一致"><a href="#页索引必须保持一致" class="headerlink" title="页索引必须保持一致"></a>页索引必须保持一致</h3><p>目前 ASTC atlas 加载循环用 <code>try?</code> 忽略纹理加载错误，只把成功的纹理追加到数组。假设原来的页顺序是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">atlas 页索引：0=A，1=B，2=C</span><br><span class="line">B 加载失败：textures 变成 [A, C]</span><br></pre></td></tr></table></figure>
+<p>渲染命令仍然用原页索引，此时页 1 会取到 C，页 2 则越界。渲染器越界时没有停止绘制，也可能继续使用此前绑定的纹理。</p>
+<p>正式实现应保持每个 atlas 页和纹理槽一一对应：优先重试该页的普通图片；仍失败时明确报错终止，或者在同一索引保存明确的占位纹理。不能静默缩短数组。</p>
+<h3 id="文件校验与上传错误"><a href="#文件校验与上传错误" class="headerlink" title="文件校验与上传错误"></a>文件校验与上传错误</h3><p>当前加载器检查了 magic、最小头长度和二维块尺寸，但没有完整检查宽高、<code>blockZ</code>、depth 以及压缩数据长度。</p>
+<p>可以先按块数计算预期长度，再确认基础层数据完整，最后创建纹理。最初 magic 检测使用 <code>UnsafeRawBufferPointer.load(as: UInt32.self)</code>，也依赖指针对齐；逐字节比较或使用支持版本内的非对齐读取更稳妥。</p>
+<p><code>waitUntilCompleted()</code> 只代表命令结束，不保证执行成功。还应检查 command buffer 的 status 和 error，把 GPU 上传失败传回调用方。</p>
+<h3 id="生命周期、设备和线程"><a href="#生命周期、设备和线程" class="headerlink" title="生命周期、设备和线程"></a>生命周期、设备和线程</h3><p>页文件读取异常时，原生 atlas 已经创建但还未交给 wrapper 管理，需要在失败路径调用 <code>spine_atlas_dispose</code>。骨骼或 wrapper 构造失败时也要清理已创建的原生资源。</p>
+<p>关联的 Metal 纹理会随 wrapper 的对象生命周期释放，但当前 <code>dispose()</code> 没有主动清除这份关联对象；渲染器还可能持有同一批纹理，释放时需要一起考虑。</p>
+<p>当前 wrapper 强制解包 <code>MTLCreateSystemDefaultDevice()</code>，并未实现 ASTC 设备能力检查。生产实现应显式处理无设备和不支持格式的情况，让纹理与渲染器使用同一个 Metal device，并决定是否回退普通图片。</p>
+<p>UIView 扩展通过 <code>Task.detached</code> 加载，最终更新视图状态必须回到 MainActor。采用新 SDK 和严格并发检查时，还需要验证这条线程边界。后台完成文件读取与资源处理，再在主线程接入视图，是更明确的安排。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://github.com/ARM-software/astc-encoder" target="_blank" rel="noopener">Arm ASTC Encoder：编码器、参数与质量选择</a></li>
+<li><a href="https://registry.khronos.org/OpenGL/extensions/KHR/KHR_texture_compression_astc_ldr.txt" target="_blank" rel="noopener">Khronos ASTC LDR 扩展规范</a></li>
+<li><a href="https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf" target="_blank" rel="noopener">Apple Metal Feature Set Tables：设备与格式支持</a></li>
+<li><a href="https://developer.apple.com/documentation/metal/mtlpixelformat" target="_blank" rel="noopener">Apple MTLPixelFormat</a></li>
+<li><a href="https://developer.apple.com/documentation/metal/mtlblitcommandencoder" target="_blank" rel="noopener">Apple MTLBlitCommandEncoder</a></li>
+<li><a href="https://esotericsoftware.com/spine-ios" target="_blank" rel="noopener">Spine iOS Runtime</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2022/08/08/coreimage-with-metal-笔记/" rel="bookmark">coreimage with metal 笔记</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2019/10/21/flutter-eventChannel-crash-on-ios/" rel="bookmark">flutter eventChannel crash on ios</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2020/03/10/flutter共享engine/" rel="bookmark">flutter共享engine</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2019/10/14/flutter-ios-13-dark-mode/" rel="bookmark">flutter ios 13 dark mode</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/2022/11/04/ios获取udid/" rel="bookmark">ios获取udid</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="BLACK_OX 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/metal/" rel="tag"><i class="fa fa-tag"></i> metal</a>
+          
+            <a href="/tags/ios/" rel="tag"><i class="fa fa-tag"></i> ios</a>
+          
+            <a href="/tags/Spine/" rel="tag"><i class="fa fa-tag"></i> Spine</a>
+          
+            <a href="/tags/ASTC/" rel="tag"><i class="fa fa-tag"></i> ASTC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023/12/07/videotoolbox-硬解-H264-annexb/" rel="next" title="videotoolbox 硬解 H264 annexb">
+                <i class="fa fa-chevron-left"></i> videotoolbox 硬解 H264 annexb
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="BLACK_OX">
+            
+              <p class="site-author-name" itemprop="name">BLACK_OX</p>
+              <div class="site-description motion-element" itemprop="description">Developer...</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/blackox626" title="GitHub &rarr; https://github.com/blackox626" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:blackox626@gmail.com" title="E-Mail &rarr; mailto:blackox626@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景：PNG-文件大小与纹理内存是两回事"><span class="nav-text">背景：PNG 文件大小与纹理内存是两回事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ASTC-的块大小如何影响体积"><span class="nav-text">ASTC 的块大小如何影响体积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现过程：三个提交分别完成了什么"><span class="nav-text">实现过程：三个提交分别完成了什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码结构：从文件到渲染器"><span class="nav-text">代码结构：从文件到渲染器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先由-atlas-决定页顺序，再选择页文件"><span class="nav-text">先由 atlas 决定页顺序，再选择页文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wrapper-如何兼容原来的-UIImage-API"><span class="nav-text">Wrapper 如何兼容原来的 UIImage API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载核心：ASTC-压缩数据如何上传到-Metal"><span class="nav-text">加载核心：ASTC 压缩数据如何上传到 Metal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读取-16-字节文件头"><span class="nav-text">读取 16 字节文件头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建压缩纹理"><span class="nav-text">创建压缩纹理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-staging-buffer-和-blit-上传"><span class="nav-text">通过 staging buffer 和 blit 上传</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染接入：沿用现有-Shader"><span class="nav-text">渲染接入：沿用现有 Shader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#色彩和透明度：编码器与渲染配置必须一致"><span class="nav-text">色彩和透明度：编码器与渲染配置必须一致</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用-cl-和-LDR-格式"><span class="nav-text">为什么使用 -cl 和 LDR 格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PMA-不会因为-ASTC-接入而自动处理"><span class="nav-text">PMA 不会因为 ASTC 接入而自动处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源转换脚本：参数、完整代码与使用方式"><span class="nav-text">资源转换脚本：参数、完整代码与使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装编码器与单文件转换"><span class="nav-text">安装编码器与单文件转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#仓库脚本做了什么"><span class="nav-text">仓库脚本做了什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何运行"><span class="nav-text">如何运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本当前适用范围"><span class="nav-text">脚本当前适用范围</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接入示例与动态换装"><span class="nav-text">接入示例与动态换装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UIKit-Objective-C-入口"><span class="nav-text">UIKit / Objective-C 入口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载后再组合皮肤"><span class="nav-text">加载后再组合皮肤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据核对与验证方式"><span class="nav-text">数据核对与验证方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#能从仓库资源确认的收益"><span class="nav-text">能从仓库资源确认的收益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查文件头"><span class="nav-text">检查文件头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在目标设备上验证"><span class="nav-text">在目标设备上验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#当前实现还需要补齐的地方"><span class="nav-text">当前实现还需要补齐的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#页索引必须保持一致"><span class="nav-text">页索引必须保持一致</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件校验与上传错误"><span class="nav-text">文件校验与上传错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期、设备和线程"><span class="nav-text">生命周期、设备和线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2026</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BLACK_OX</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">512k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">7:46</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div>
+
+
+
+
+<div class="visit-by">
+  <i class="fa fa-eye"></i>
+  <span id="busuanzi_container_site_pv">
+    <span id="busuanzi_value_site_pv"></span>
+  </span>
+
+  <span class="post-meta-divider">|</span>
+
+  <i class="fa fa-user"></i>
+    <span id="busuanzi_container_site_uv">
+      <span id="busuanzi_value_site_uv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: '98visuelOUQ19xFr1vzfJcKo-gzGzoHsz',
+    appKey: 'oS6B9UYaqn8BBWkzY9icYxB9',
+    placeholder: 'Just go go',
+    avatar: 'robohash',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/pangu/dist/pangu.min.js?v=3.3"></script>
+  <script>pangu.spacingPage();</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

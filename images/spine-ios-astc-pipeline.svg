@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Spine iOS：PNG 与 ASTC 的纹理加载链路</title>
+  <desc id="desc">PNG 经过 UIImage、CGImage 和 MTKTextureLoader 创建 RGBA 纹理；ASTC 读取压缩块，通过共享 buffer 和 blit 上传为压缩 Metal 纹理，再由 SpineRenderer 采样。</desc>
+  <defs>
+    <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#64748b"/></marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#14836a"/></marker>
+    <style>
+      text {font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;}
+      .heading {font-size:30px;font-weight:700;fill:#15243a}
+      .sub {font-size:17px;fill:#526178}
+      .row-heading {font-size:23px;font-weight:700;fill:#15243a}
+      .node-title {font-size:19px;font-weight:600;fill:#15243a;text-anchor:middle}
+      .node-sub {font-size:15px;fill:#526178;text-anchor:middle}
+      .arrow {fill:none;stroke-width:2.5}
+      .foot {font-size:16px;fill:#526178}
+    </style>
+  </defs>
+  <rect width="1280" height="720" rx="24" fill="#f8fafc"/>
+  <text class="heading" x="42" y="58">Spine iOS 纹理加载：从 PNG 到 ASTC</text>
+  <text class="sub" x="42" y="89">以 1024 × 256、8×8 块的 spineboy 资源为例，只比较基础层纹理数据</text>
+
+  <rect x="24" y="120" width="1232" height="206" rx="18" fill="#fff" stroke="#dbe3ee"/>
+  <text class="row-heading" x="44" y="156">PNG 路径</text>
+  <text class="sub" x="198" y="156">解码后创建 RGBA 纹理</text>
+  <g>
+    <rect x="44" y="181" width="168" height="94" rx="12" fill="#eef2f7" stroke="#cbd5e1"/>
+    <text class="node-title" x="128" y="216">PNG 文件</text>
+    <text class="node-sub" x="128" y="244">约 239 KiB</text>
+    <path class="arrow" d="M214 228H240" stroke="#64748b" marker-end="url(#arrow-gray)"/>
+    <rect x="248" y="181" width="168" height="94" rx="12" fill="#eef2f7" stroke="#cbd5e1"/>
+    <text class="node-title" x="332" y="216">UIImage</text>
+    <text class="node-sub" x="332" y="244">图片读取 / 解码</text>
+    <path class="arrow" d="M418 228H444" stroke="#64748b" marker-end="url(#arrow-gray)"/>
+    <rect x="452" y="181" width="168" height="94" rx="12" fill="#eef2f7" stroke="#cbd5e1"/>
+    <text class="node-title" x="536" y="216">CGImage</text>
+    <text class="node-sub" x="536" y="244">提供图片像素</text>
+    <path class="arrow" d="M622 228H648" stroke="#64748b" marker-end="url(#arrow-gray)"/>
+    <rect x="656" y="181" width="168" height="94" rx="12" fill="#eef2f7" stroke="#cbd5e1"/>
+    <text class="node-title" x="740" y="216">MTKTextureLoader</text>
+    <text class="node-sub" x="740" y="244">创建 Metal 纹理</text>
+    <path class="arrow" d="M826 228H852" stroke="#64748b" marker-end="url(#arrow-gray)"/>
+    <rect x="860" y="181" width="168" height="94" rx="12" fill="#fff1eb" stroke="#f0b99b"/>
+    <text class="node-title" x="944" y="216">RGBA8 纹理</text>
+    <text class="node-sub" x="944" y="244">数据量 1 MiB</text>
+    <path class="arrow" d="M1030 228H1056" stroke="#64748b" marker-end="url(#arrow-gray)"/>
+    <rect x="1064" y="181" width="168" height="94" rx="12" fill="#eef2f7" stroke="#cbd5e1"/>
+    <text class="node-title" x="1148" y="216">SpineRenderer</text>
+    <text class="node-sub" x="1148" y="244">绑定纹理并绘制</text>
+  </g>
+  <text class="foot" x="44" y="303">PNG 的文件压缩率不会直接变成 GPU 上的纹理压缩率。</text>
+
+  <rect x="24" y="346" width="1232" height="226" rx="18" fill="#fff" stroke="#bddfd5"/>
+  <text class="row-heading" x="44" y="383">ASTC 路径</text>
+  <text class="sub" x="208" y="383">压缩块直接上传，硬件在采样时解码</text>
+  <g>
+    <rect x="44" y="409" width="168" height="94" rx="12" fill="#eaf7f1" stroke="#9cd3bd"/>
+    <text class="node-title" x="128" y="444">ASTC 文件</text>
+    <text class="node-sub" x="128" y="472">65,552 字节</text>
+    <path class="arrow" d="M214 456H240" stroke="#14836a" marker-end="url(#arrow-green)"/>
+    <rect x="248" y="409" width="168" height="94" rx="12" fill="#eaf7f1" stroke="#9cd3bd"/>
+    <text class="node-title" x="332" y="444">解析文件头</text>
+    <text class="node-sub" x="332" y="472">块大小 / 纹理尺寸</text>
+    <path class="arrow" d="M418 456H444" stroke="#14836a" marker-end="url(#arrow-green)"/>
+    <rect x="452" y="409" width="168" height="94" rx="12" fill="#eaf7f1" stroke="#9cd3bd"/>
+    <text class="node-title" x="536" y="444">Staging Buffer</text>
+    <text class="node-sub" x="536" y="472">压缩块 / shared</text>
+    <path class="arrow" d="M622 456H648" stroke="#14836a" marker-end="url(#arrow-green)"/>
+    <rect x="656" y="409" width="168" height="94" rx="12" fill="#eaf7f1" stroke="#9cd3bd"/>
+    <text class="node-title" x="740" y="444">Blit 上传</text>
+    <text class="node-sub" x="740" y="472">Buffer → Texture</text>
+    <path class="arrow" d="M826 456H852" stroke="#14836a" marker-end="url(#arrow-green)"/>
+    <rect x="860" y="409" width="168" height="94" rx="12" fill="#d9f2e6" stroke="#74bd9f"/>
+    <text class="node-title" x="944" y="444">ASTC 纹理</text>
+    <text class="node-sub" x="944" y="472">数据量 64 KiB</text>
+    <path class="arrow" d="M1030 456H1056" stroke="#14836a" marker-end="url(#arrow-green)"/>
+    <rect x="1064" y="409" width="168" height="94" rx="12" fill="#eaf7f1" stroke="#9cd3bd"/>
+    <text class="node-title" x="1148" y="444">SpineRenderer</text>
+    <text class="node-sub" x="1148" y="472">沿用现有 Shader</text>
+  </g>
+  <text class="foot" x="44" y="534">纹理通过 Wrapper → SpineUIView 传递到渲染器；图片像素不经过 UIImage 展开。</text>
+  <text class="foot" x="44" y="556">文件读取、临时 buffer 与上传仍有成本；实际 GPU 分配需要在目标设备上测量。</text>
+
+  <rect x="24" y="594" width="1232" height="102" rx="18" fill="#15243a"/>
+  <text x="44" y="630" fill="#fff" font-size="21" font-weight="600">同尺寸基础层数据：1 MiB → 64 KiB，约减少 16 倍</text>
+  <text x="44" y="662" fill="#c7d5e7" font-size="16">不含 GPU 对齐、mipmap、骨骼数据与上传峰值；ASTC 是有损格式，需要核对画质和设备支持。</text>
+</svg>
+
